@@ -1,7 +1,9 @@
 extends Area2D
 
+class_name torch
+
 signal hit_torch
 
 func _on_Torch_body_entered(body):
-	emit_signal("hit_torch")
+	body.rpc("hit_torch")
 	queue_free()

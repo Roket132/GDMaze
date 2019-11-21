@@ -8,16 +8,32 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Area2D",
+"class": "bonfire",
+"language": "GDScript",
+"path": "res://StaticObjects/Bonfire.gd"
+}, {
+"base": "Area2D",
+"class": "torch",
+"language": "GDScript",
+"path": "res://StaticObjects/Torch.gd"
+} ]
 _global_script_class_icons={
-
+"bonfire": "",
+"torch": ""
 }
 
 [application]
 
 config/name="PectiMaze_GODOT"
-run/main_scene="res://Map/Map.tscn"
+run/main_scene="res://Network/Lobby.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+gamestate="*res://Network/gamestate.gd"
+Map="*res://Map/Map.gd"
 
 [display]
 
