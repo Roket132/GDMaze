@@ -1,7 +1,8 @@
 extends KinematicBody2D
 
 export var speed = 200
-export var step_size = 160
+export var BLOCK_SIZE = 64
+export var DIFF = 32
 
 puppet var puppet_pos = Vector2()
 
@@ -16,6 +17,8 @@ var settings = {
 }
 
 func _ready():
+	set_as_toplevel(true)
+	
 	puppet_pos = position
 	new_pos = position
 	last_pos = position
@@ -41,8 +44,8 @@ func make_step(x, y):
 	if new_pos == position: #if player don't motion
 		$AnimatedSprite.animation = "move_forward"
 		last_pos = position
-		new_pos.x = position.x + step_size * x
-		new_pos.y = position.y + step_size * y
+		new_pos.x = position.x + BLOCK_SIZE * x
+		new_pos.y = position.y + BLOCK_SIZE * y
 		if settings["rest_of_bonfire"] != 0:
 			settings["rest_of_bonfire"] -= 1
 
@@ -55,25 +58,24 @@ func make_puppet_step(puppet_pos):
 func move_player():
 	if get_slide_count() != 0:
 		var collision = get_slide_collision(0)
-		print("Collided with: ", collision.collider.name)
 		new_pos = last_pos
 		
-	print(settings["rest_of_bonfire"])
 	var velocity = (new_pos - position).normalized() * speed
 	if (new_pos - position).length() > 5:
 		velocity = move_and_slide(velocity)
 	elif position != new_pos:
 		position.x = new_pos.x
 		position.y = new_pos.y
+		player_cell = (position + Vector2(DIFF, DIFF)) / BLOCK_SIZE
 		$AnimatedSprite.animation = "stay_forward"
+		
 	if settings["rest_of_bonfire"] == 0:
 		$Camera2D.zoom = Vector2(0.5, 0.5)
 	else:
 		$Camera2D.zoom = Vector2(0.643, 0.643)
 		
-	player_cell = (position + Vector2(32,32)) / 64
-	
-	rset("puppet_pos", position)
+	if is_network_master():
+		rset("puppet_pos", position)
 
 func set_player_name(name):
 	settings.player_name = name
