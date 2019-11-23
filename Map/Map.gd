@@ -7,12 +7,15 @@ export var name_dictionary = {}
 var BLOCK_SIZE = 64
 var DIFF = 32
 
+# height and width will init from input
+var height
+var width
+
 var map
 var items_dict = {}
 var spawn_positions = []
 
 func _ready():
-#	$players.set_as_toplevel(true)
 	load_map("C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt")
 	draw_map(map)
 
@@ -23,6 +26,9 @@ func load_map(patch):
 	var file = File.new()
 	file.open(patch, file.READ)
 	var n = file.get_csv_line(" ")
+	height = n[0] as int
+	width = n[1] as int
+	
 	map = create_2d_array(n[0], n[1])
 	
 	for i in range(n[0]):
@@ -43,9 +49,7 @@ func draw_map(map):
 			if type != "0" and type != "1" and scenes_dictionary.has(type):
 				var item = Scenes[scenes_dictionary[map[i][j]]].instance()
 				add_child(item)
-				print(i," ", j)
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
-				print("add")
 				items_dict[item.position] = item
 				#item.connect("hit_" + name_dictionary[type], $Player, "hit_" + name_dictionary[type])
 
@@ -58,8 +62,3 @@ func create_2d_array(n, m):
 		arr.append([])
 		arr[i].resize(m)
 	return arr
-
-remote func remove_torch(i, j):
-	print("rem")
-	for i in items_dict:
-		print(i)

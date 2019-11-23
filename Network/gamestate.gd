@@ -11,6 +11,8 @@ var player_name = "Your Name"
 
 # Names for remote players in id:name format
 var players = {}
+# Ref to player instance
+var players_ref = []
 
 # Signals to let lobby GUI know what's going on
 signal player_list_changed()
@@ -63,7 +65,6 @@ remote func register_player(id, new_player_name):
 		for p_id in players: # Then, for each remote player
 			rpc_id(id, "register_player", p_id, players[p_id]) # Send player to new dude
 			rpc_id(p_id, "register_player", id, new_player_name) # Send new dude to player
-	print(player_name, " ", id, " ", new_player_name)
 	players[id] = new_player_name
 	emit_signal("player_list_changed")
 
@@ -75,14 +76,25 @@ remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
 	var world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
-
 	get_tree().get_root().get_node("Lobby").hide()
 
+	load_players(world, spawn_points)
+	if get_tree().is_network_server():
+		load_spectator(world)
+		
+	if not get_tree().is_network_server():
+		rpc_id(1, "ready_to_start", get_tree().get_network_unique_id())
+	elif players.size() == 0:
+		post_start_game()
+
+func load_players(world, spawn_points):
 	var player_scene = load("res://Player/Player.tscn")
 
 	for p_id in spawn_points:
 		var spawn_pos = Map.spawn_positions[spawn_points[p_id]]
 		var player = player_scene.instance()
+
+		players_ref.append(player)
 
 		player.set_name(str(p_id))
 		player.position = spawn_pos
@@ -91,18 +103,18 @@ remote func pre_start_game(spawn_points):
 		if p_id == get_tree().get_network_unique_id():
 			# If node for this peer id, set name
 			player.set_player_name(player_name)
-			player.cam()
 		else:
 			# Otherwise set name from peer
 			player.set_player_name(players[p_id])
 		player.scale = Vector2(0.5, 0.5)
-		world.get_node("players").add_child(player)
+		world.add_child(player)
 
-	if not get_tree().is_network_server():
-		# Tell server we are ready to start
-		rpc_id(1, "ready_to_start", get_tree().get_network_unique_id())
-	elif players.size() == 0:
-		post_start_game()
+func load_spectator(world):
+	var spectator = load("res://Player/Spectator.tscn").instance()
+	spectator.set_map_size(Map.height, Map.width)
+	for pl in players_ref:
+		pl.connect("clicked", spectator, "_focus_on_pos")
+	world.add_child(spectator)
 
 remote func post_start_game():
 	get_tree().set_pause(false) # Unpause and unleash the game!
@@ -141,8 +153,8 @@ func get_player_name():
 func begin_game():
 	assert(get_tree().is_network_server())
 
-	var spawn_points = {1: 0}
-	var spawn_point_idx = 1
+	var spawn_points = {}
+	var spawn_point_idx = 0
 	for p in players:
 		spawn_points[p] = spawn_point_idx
 		spawn_point_idx += 1
@@ -152,9 +164,9 @@ func begin_game():
 	pre_start_game(spawn_points)
 
 func end_game():
-	if has_node("/root/Map"): # Game is in progress
+	if has_node("/root/world"): # Game is in progress
 		# End it
-		get_node("/root/Map").queue_free()
+		get_node("/root/world").queue_free()
 
 	emit_signal("game_ended")
 	players.clear()

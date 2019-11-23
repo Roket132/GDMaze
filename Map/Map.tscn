@@ -55,5 +55,3 @@ name_dictionary = {
 "B": "bonfire",
 "T": "torch"
 }
-
-[node name="players" type="Node2D" parent="."]

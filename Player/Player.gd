@@ -16,12 +16,16 @@ var settings = {
 	have_a_torch = false
 }
 
+signal clicked(pawn)
+
 func _ready():
 	set_as_toplevel(true)
 	
 	puppet_pos = position
 	new_pos = position
 	last_pos = position
+	
+	move_and_slide(Vector2(0,0)) # to prevent unnecessary motion in start
 	
 	if is_network_master():
 		$Camera2D.make_current()
@@ -52,6 +56,7 @@ func make_step(x, y):
 func make_puppet_step(puppet_pos):
 	var step = puppet_pos - position
 	if step != Vector2(0, 0):
+		
 		make_step(1 if step.x > 0 else 0 if step.x == 0 else -1,
 				  1 if step.y > 0 else 0 if step.y == 0 else -1)
 
@@ -87,8 +92,9 @@ remotesync func hit_bonfire():
 remotesync func hit_torch():
 	settings["have_a_torch"] = true
 	Map.rpc("remove_torch", 2, 2)
-	
-func cam():
-	$Camera2D.set_enable_follow_smoothing(10)
-	
 
+func _on_Player_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton \
+	and event.button_index == BUTTON_LEFT \
+	and event.pressed:
+		emit_signal("clicked", self)

@@ -48,6 +48,12 @@ func _on_connection_failed():
 	$Connect/Join.disabled = false
 	$Connect/Error.set_text("Connection failed.")
 
+func _on_game_ended():
+	show()
+	$Connect.show()
+	$Players.hide()
+	$Connect/Host.disabled = false
+
 func _on_game_error(errtxt):
 	get_node("err").dialog_text = errtxt
 	get_node("err").popup_centered_minsize()
