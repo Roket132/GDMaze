@@ -91,8 +91,9 @@ func load_players(world, spawn_points):
 	var player_scene = load("res://Player/Player.tscn")
 
 	for p_id in spawn_points:
-		var spawn_pos = Map.spawn_positions[spawn_points[p_id]]
+		var spawn_pos = world.spawn_positions[spawn_points[p_id]]
 		var player = player_scene.instance()
+		player.set_world(world)
 
 		players_ref.append(player)
 
@@ -111,9 +112,10 @@ func load_players(world, spawn_points):
 
 func load_spectator(world):
 	var spectator = load("res://Player/Spectator.tscn").instance()
-	spectator.set_map_size(Map.height, Map.width)
+	spectator.set_map_size(world.height, world.width)
 	for pl in players_ref:
 		pl.connect("clicked", spectator, "_focus_on_pos")
+		spectator.add_player(pl)
 	world.add_child(spectator)
 
 remote func post_start_game():
@@ -171,6 +173,9 @@ func end_game():
 	emit_signal("game_ended")
 	players.clear()
 	get_tree().set_network_peer(null) # End networking
+
+func get_game_mode():
+	return "SPECTATOR" if get_tree().is_network_server() else "PLAYER"
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")

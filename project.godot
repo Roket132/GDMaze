@@ -33,7 +33,7 @@ config/icon="res://icon.png"
 [autoload]
 
 gamestate="*res://Network/gamestate.gd"
-Map="*res://Map/Map.gd"
+Map="res://Map/Map.gd"
 
 [display]
 

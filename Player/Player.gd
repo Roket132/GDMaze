@@ -4,6 +4,8 @@ export var speed = 200
 export var BLOCK_SIZE = 64
 export var DIFF = 32
 
+var world = null
+
 puppet var puppet_pos = Vector2()
 
 var new_pos = Vector2()
@@ -29,6 +31,12 @@ func _ready():
 	
 	if is_network_master():
 		$Camera2D.make_current()
+		
+	print($AnimatedSprite.frames)
+	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
+
+func set_world(_world):
+	world = _world
 
 func _physics_process(delta):
 	if is_network_master():
@@ -91,7 +99,8 @@ remotesync func hit_bonfire():
 
 remotesync func hit_torch():
 	settings["have_a_torch"] = true
-	Map.rpc("remove_torch", 2, 2)
+	if world != null:
+		world.rpc("remove_torch", 2, 2)
 
 func _on_Player_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton \

@@ -5,6 +5,9 @@ var mouse_captured = false
 var focus_pawn = null
 
 func _ready():
+	#OS.set_window_size(Vector2(1920, 1080))
+	OS.set_window_fullscreen(true)
+	set_offset(Vector2(0, -1))
 	make_current()
 
 func _input(event):	
@@ -21,9 +24,15 @@ func _physics_process(delta):
 		position = focus_pawn.position
 
 func set_map_size(h, w):
-	limit_right = (w + 1) * 64
-	limit_bottom = (h + 1) * 64
+	limit_right = (w + 1) * 64 + 32
+	limit_bottom = (h + 1) * 64 + 32
+	pass
 	
 func _focus_on_pos(pawn):
-	set_offset(Vector2(0, 0)) # some kinde of magic with offset :|
+	set_offset(Vector2(0, -1)) # some kinde of magic with offset :|
 	focus_pawn = pawn
+	
+func add_player(pl):
+	var info = load("res://Interface/PlayerInfo.tscn").instance()
+	info.set_player(pl)
+	$CanvasLayer/PlayersPanel/Panel/VScrollBar/VBoxContainer.add_child(info)
