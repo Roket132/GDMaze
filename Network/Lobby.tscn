@@ -91,15 +91,12 @@ margin_bottom = 524.0
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Start" type="Button" parent="Players"]
-margin_left = 320.0
-margin_top = 797.617
-margin_right = 576.0
-margin_bottom = 861.617
+margin_left = 18.3488
+margin_top = 547.783
+margin_right = 274.349
+margin_bottom = 611.783
 custom_fonts/font = SubResource( 5 )
 text = "Start!"
 

@@ -32,6 +32,9 @@ func _ready():
 	if is_network_master():
 		$Camera2D.make_current()
 		
+	if get_tree().is_network_server():
+		$Camera2D/ParallaxBackground/Sprite.queue_free()
+		
 	print($AnimatedSprite.frames)
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
@@ -83,9 +86,9 @@ func move_player():
 		$AnimatedSprite.animation = "stay_forward"
 		
 	if settings["rest_of_bonfire"] == 0:
-		$Camera2D.zoom = Vector2(0.5, 0.5)
+		$Light2D.set_texture_scale(1.96)
 	else:
-		$Camera2D.zoom = Vector2(0.643, 0.643)
+		$Light2D.set_texture_scale(2.76)
 		
 	if is_network_master():
 		rset("puppet_pos", position)

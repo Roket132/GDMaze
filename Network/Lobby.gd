@@ -38,6 +38,7 @@ func _on_Join_pressed():
 	
 	var player_name = $Connect/NameEdit.text
 	gamestate.join_game(ip, player_name)
+	
 
 func _on_connection_success():
 	get_node("Connect").hide()

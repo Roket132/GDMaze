@@ -18,10 +18,12 @@ var spawn_positions = []
 func _ready():
 	load_map("C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt")
 	draw_map(map)
+	if get_tree().is_network_server():
+		material.set_light_mode(0) # Normal mode
 
 func _physics_process(delta):
 	pass
-	
+
 
 func load_map(patch):
 	var file = File.new()
