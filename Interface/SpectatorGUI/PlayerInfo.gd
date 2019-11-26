@@ -1,5 +1,7 @@
 extends Control
 
+signal focus(player)
+
 func _ready():
 	$VBoxContainer/HBoxContainer/Avatar.set_size(Vector2(64, 64))
 	$VBoxContainer/HBoxContainer/Name.set_size(Vector2(192, 64))
@@ -12,5 +14,12 @@ func _ready():
 	set_size(Vector2(256, 135))
 	set_margin(MARGIN_TOP, -438)
 
+var player = null
+
 func set_player(pl):
 	$VBoxContainer/HBoxContainer/Avatar/Avatar.texture = pl.settings["texture"]
+	player = pl
+
+func _on_Avatar_pressed():
+	if player != null:
+		emit_signal("focus", player)

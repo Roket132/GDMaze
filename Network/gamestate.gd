@@ -78,7 +78,7 @@ remote func pre_start_game(spawn_points):
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("Lobby").hide()
 
-	load_players(world, spawn_points)
+	load_players(world, spawn_points) # necessarily before load_specrator
 	if get_tree().is_network_server():
 		load_spectator(world)
 		
@@ -114,7 +114,6 @@ func load_spectator(world):
 	var spectator = load("res://Player/Spectator.tscn").instance()
 	spectator.set_map_size(world.height, world.width)
 	for pl in players_ref:
-		pl.connect("clicked", spectator, "_focus_on_pos")
 		spectator.add_player(pl)
 	world.add_child(spectator)
 

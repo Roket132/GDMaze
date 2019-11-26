@@ -35,4 +35,6 @@ func _focus_on_pos(pawn):
 func add_player(pl):
 	var info = load("res://Interface/SpectatorGUI/PlayerInfo.tscn").instance()
 	info.set_player(pl)
+	info.connect("focus", self, "_focus_on_pos")
+	pl.connect("clicked", self, "_focus_on_pos")
 	$CanvasLayer/PlayersPanel/Panel/VScrollBar/VBoxContainer.add_child(info)

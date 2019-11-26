@@ -74,3 +74,4 @@ margin_left = 51.0
 margin_right = 59.0
 margin_bottom = 14.0
 text = "0"
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Avatar" to="." method="_on_Avatar_pressed"]
