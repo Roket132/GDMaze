@@ -4,5 +4,10 @@ class_name bonfire
 
 signal hit_bonfire
 
+var item_name = "bonfire"
+
 func _on_Bonfire_body_entered(body):
-	body.rpc("hit_bonfire")
+	body.rpc("hit_bonfire", self)
+	
+func _get_texture():
+	return $AnimatedSprite.frames.get_frame("fire", 0)

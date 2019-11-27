@@ -31,9 +31,15 @@ func _ready():
 	
 	if is_network_master():
 		$Camera2D.make_current()
+	else:
+		#if not get_tree().is_network_server():
+		#	$Light2D.queue_free()
+		$Light2D.queue_free()
+		$Camera2D.queue_free()
 		
 	if get_tree().is_network_server():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()
+		material.set_light_mode(0) #Normal
 		
 	print($AnimatedSprite.frames)
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
@@ -84,30 +90,32 @@ func move_player():
 		position.y = new_pos.y
 		player_cell = (position + Vector2(DIFF, DIFF)) / BLOCK_SIZE
 		$AnimatedSprite.animation = "stay_forward"
-		
-	if settings["rest_of_bonfire"] == 0:
-		$Light2D.set_texture_scale(1.96)
-	else:
-		$Light2D.set_texture_scale(2.76)
-		
+			
 	if is_network_master():
+		if settings["rest_of_bonfire"] == 0:
+			$Light2D.set_texture_scale(1.96)
+		else:
+			$Light2D.set_texture_scale(2.76)
 		rset("puppet_pos", position)
 
 func set_player_name(name):
 	settings.player_name = name
 
-remotesync func hit_bonfire():
+remotesync func hit_bonfire(bonfire):
 	if settings["have_a_torch"]:
 		settings["rest_of_bonfire"] = 10
 
-remotesync func hit_torch():
+remotesync func hit_torch(torch):
 	settings["have_a_torch"] = true
-	if world != null:
-		world.rpc("remove_torch", 2, 2)
+	#if world != null:
+	#	world.rpc("remove_torch", 2, 2)
+	
+# only master can add items
+master func add_item(name, path):
+	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
 
 func _on_Player_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton \
 	and event.button_index == BUTTON_LEFT \
 	and event.pressed:
-		print("yes")
 		emit_signal("clicked", self)

@@ -26,6 +26,7 @@ margin_bottom = 450.0
 
 [node name="Button" type="Button" parent="CanvasLayer/VBoxContainer"]
 margin_right = 100.0
+margin_bottom = 20.0
 
 [node name="Panel" type="Panel" parent="CanvasLayer/VBoxContainer"]
 margin_top = 24.0

@@ -50,18 +50,18 @@ margin_right = 321.0
 margin_bottom = 64.0
 custom_constants/separation = 25
 
-[node name="Inv_1" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
+[node name="Inv_0" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
 
-[node name="Inv_2" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
+[node name="Inv_1" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
 margin_left = 89.0
 margin_right = 153.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 0 )
 
-[node name="Inv_3" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
+[node name="Inv_2" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
 margin_left = 178.0
 margin_right = 242.0
 margin_bottom = 64.0

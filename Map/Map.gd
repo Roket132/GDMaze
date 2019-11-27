@@ -24,7 +24,6 @@ func _ready():
 func _physics_process(delta):
 	pass
 
-
 func load_map(patch):
 	var file = File.new()
 	file.open(patch, file.READ)

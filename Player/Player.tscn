@@ -1,35 +1,40 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=2]
-[ext_resource path="res://Player/sprites/move_forward_1.png" type="Texture" id=3]
-[ext_resource path="res://Player/sprites/move_forward_2.png" type="Texture" id=4]
+[ext_resource path="res://Player/sprites/move_forward_1.png" type="Texture" id=2]
+[ext_resource path="res://Player/sprites/move_forward_2.png" type="Texture" id=3]
+[ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=4]
 [ext_resource path="res://Interface/PlayerGUI/PlayerPanel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Player/sprites/Fog.png" type="Texture" id=6]
 [ext_resource path="res://Player/sprites/splat_gr.png" type="Texture" id=7]
 
+[sub_resource type="CanvasItemMaterial" id=3]
+light_mode = 2
+
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "stay_forward",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
 "loop": true,
 "name": "move_forward",
 "speed": 10.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "stay_forward",
+"speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 36.4876, 36.0757 )
 
 [node name="Player" type="KinematicBody2D"]
+material = SubResource( 3 )
 position = Vector2( 0, -0.35849 )
 input_pickable = true
 script = ExtResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+use_parent_material = true
 frames = SubResource( 1 )
 animation = "stay_forward"
 playing = true
