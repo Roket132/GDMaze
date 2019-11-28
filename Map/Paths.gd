@@ -12,9 +12,6 @@ func init(map, start_pos):
 		# assert
 		return
 	bfs_map = bfs(map, start_pos)
-	for i in bfs_map:
-		print(i)
-	#print(bfs_map)
 
 func bfs(map, start):
 	var res_map = create_2d_array(map.size(), map[0].size())
@@ -42,7 +39,6 @@ func bfs(map, start):
 # if steps == -1 then return all path
 func get_array_path(from, steps = -1):
 	var res = []
-	print("get path from ", from)
 	var i = from.x
 	var j = from.y
 	res.append(Vector2(j, i))
@@ -64,7 +60,6 @@ func get_array_path(from, steps = -1):
 func draw(from, steps = -1):
 	var path = get_array_path(from, steps)
 	for it in path:
-		print("draf in ", it,  "   ___    ", bfs_map[it.y][it.x])
 		set_cellv(it, 0)
 
 func create_2d_array(n, m, val = 0):

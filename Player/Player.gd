@@ -13,7 +13,7 @@ var last_pos = Vector2()
 var player_cell = Vector2()
 
 var settings = {
-	player_name = "name",
+	name = "name",
 	rest_of_bonfire = 0,
 	have_a_torch = false
 }
@@ -45,8 +45,9 @@ func _ready():
 	print($AnimatedSprite.frames)
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
-func set_world(_world):
-	world = _world
+func setup(world_, name_):
+	world = world_
+	settings.name = name_
 
 func _physics_process(delta):
 	if is_network_master():

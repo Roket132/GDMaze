@@ -7,7 +7,7 @@ const DEFAULT_PORT = 10567
 const MAX_PEERS = 4
 
 # Name for my player
-var player_name = "Your Name"
+var player_name = "Host"
 var maze_path = ""
 
 # Names for remote players in id:name format
@@ -62,6 +62,8 @@ func _connected_fail():
 remote func register_player(id, new_player_name):
 	if get_tree().is_network_server():
 		# If we are the server, let everyone know about the new player
+		print("pl n = ", player_name)
+		print("npn = ", new_player_name)
 		rpc_id(id, "register_player", 1, player_name) # Send myself to new dude
 		for p_id in players: # Then, for each remote player
 			rpc_id(id, "register_player", p_id, players[p_id]) # Send player to new dude
@@ -94,7 +96,7 @@ func load_players(world, spawn_points):
 	for p_id in spawn_points:
 		var spawn_pos = world.spawn_positions[spawn_points[p_id]]
 		var player = player_scene.instance()
-		player.set_world(world)
+		player.setup(world, players[p_id])
 
 		players_ref.append(player)
 
@@ -141,6 +143,7 @@ func host_game(path):
 	get_tree().set_network_peer(host)
 
 func join_game(ip, new_player_name):
+	print("new name = ", new_player_name)
 	player_name = new_player_name
 	var host = NetworkedMultiplayerENet.new()
 	host.create_client(ip, DEFAULT_PORT)

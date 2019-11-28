@@ -17,8 +17,9 @@ func _ready():
 var player = null
 
 func set_player(pl):
-	$VBoxContainer/HBoxContainer/Avatar/Avatar.texture = pl.settings["texture"]
 	player = pl
+	$VBoxContainer/HBoxContainer/Avatar/Avatar.texture = pl.settings["texture"]
+	$VBoxContainer/HBoxContainer/Name.text = pl.settings.name
 
 func _on_Avatar_pressed():
 	if player != null:

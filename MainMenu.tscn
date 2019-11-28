@@ -98,10 +98,8 @@ custom_fonts/font = SubResource( 2 )
 text = "Создать игру"
 
 [node name="Menus" type="CanvasLayer" parent="."]
-layer = 0
 
 [node name="Lobby" parent="Menus" instance=ExtResource( 5 )]
 mouse_filter = 2
-[connection signal="hide" from="." to="." method="_on_MainMenu_hide"]
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Join" to="." method="_on_Join_pressed"]
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Host" to="." method="_on_Host_pressed"]
