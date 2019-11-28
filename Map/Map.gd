@@ -12,6 +12,7 @@ var height
 var width
 
 var map
+var exit_pos = Vector2()
 var items_dict = {}
 var spawn_positions = []
 
@@ -19,6 +20,8 @@ func _ready():
 	clear_map()
 	load_map("C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt")
 	draw_map(map)
+	$Paths.init(map, exit_pos)
+	
 	if get_tree().is_network_server():
 		material.set_light_mode(0) # Normal mode
 
@@ -36,14 +39,17 @@ func load_map(patch):
 	height = n[0] as int
 	width = n[1] as int
 	
-	map = create_2d_array(n[0], n[1])
+	map = $Paths.create_2d_array(n[0], n[1])
 	
 	for i in range(n[0]):
 		var line = file.get_csv_line(" ")
 		for j in range(line.size()):
 			map[i][j] = line[j]
 			if map[i][j] == "S":
+				map[i][j] = "."
 				add_spawn_pos(Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF))
+			if map[i][j] == "E":
+				exit_pos = Vector2(j, i)
 
 func draw_map(map):
 	for i in range(map.size()):
@@ -58,14 +64,10 @@ func draw_map(map):
 				add_child(item)
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
 				items_dict[item.position] = item
-				#item.connect("hit_" + name_dictionary[type], $Player, "hit_" + name_dictionary[type])
+
+# Vectro2(from) with normal coordinate (i, j)
+remotesync func draw_path(from, steps = -1):
+	$Paths.draw(from, steps)
 
 func add_spawn_pos(pos):
 	spawn_positions.append(pos)
-
-func create_2d_array(n, m):
-	var arr = []
-	for i in range(n):
-		arr.append([])
-		arr[i].resize(m)
-	return arr

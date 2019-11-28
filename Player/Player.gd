@@ -31,10 +31,12 @@ func _ready():
 	
 	if is_network_master():
 		$Camera2D.make_current()
+		$Camera2D/CanvasLayer/PlayerPanel.setup(self)
 	else:
 		# anyway deleted but will update material light mode
 		$Light2D.queue_free()
 		$Camera2D.queue_free()
+		$Camera2D/CanvasLayer/PlayerPanel.queue_free()
 		
 	if get_tree().is_network_server():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()

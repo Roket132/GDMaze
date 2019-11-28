@@ -8,6 +8,7 @@
 [ext_resource path="res://StaticObjects/Arrow.tscn" type="PackedScene" id=6]
 [ext_resource path="res://StaticObjects/Exit.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Map/sprites/Path.png" type="Texture" id=8]
+[ext_resource path="res://Map/Paths.gd" type="Script" id=9]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 2
@@ -50,10 +51,7 @@ points = PoolVector2Array( 0, 0, 64, 0, 64, 64, 0, 64 )
 1/z_index = 0
 script = SubResource( 4 )
 
-[sub_resource type="ConvexPolygonShape2D" id=6]
-points = PoolVector2Array( 0, 0, 64, 0, 64, 64, 0, 64 )
-
-[sub_resource type="TileSet" id=7]
+[sub_resource type="TileSet" id=6]
 0/name = "Path.png 0"
 0/texture = ExtResource( 8 )
 0/tex_offset = Vector2( 0, 0 )
@@ -62,13 +60,7 @@ points = PoolVector2Array( 0, 0, 64, 0, 64, 64, 0, 64 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
-0/shapes = [ {
-"autotile_coord": Vector2( 0, 0 ),
-"one_way": false,
-"one_way_margin": 1.0,
-"shape": SubResource( 6 ),
-"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
-} ]
+0/shapes = [  ]
 0/z_index = 0
 
 [node name="Map" type="TileMap"]
@@ -94,6 +86,7 @@ name_dictionary = {
 
 [node name="Paths" type="TileMap" parent="."]
 use_parent_material = true
-tile_set = SubResource( 7 )
+tile_set = SubResource( 6 )
 format = 1
-tile_data = PoolIntArray( 131089, 0, 0, 196622, 0, 0, 196624, 0, 0, 196625, 0, 0, 262151, 0, 0, 262152, 0, 0, 262153, 0, 0, 262154, 0, 0, 262157, 0, 0, 262159, 0, 0, 262160, 0, 0, 327692, 0, 0, 327695, 0, 0, 393227, 0, 0, 393231, 0, 0 )
+tile_data = PoolIntArray( 131089, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 196622, 0, 0, 196624, 0, 0, 196625, 0, 0, 262156, 0, 0, 262157, 0, 0, 262158, 0, 0, 262159, 0, 0, 262160, 0, 0, 262161, 0, 0, 262162, 0, 0, 262163, 0, 0, 262164, 0, 0, 262165, 0, 0, 262166, 0, 0, 262167, 0, 0, 262168, 0, 0, 262169, 0, 0, 262170, 0, 0, 262171, 0, 0, 327695, 0, 0, 327707, 0, 0, 393231, 0, 0 )
+script = ExtResource( 9 )
