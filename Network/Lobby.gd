@@ -8,40 +8,52 @@ func _ready():
 	gamestate.connect("player_list_changed", self, "refresh_lobby")
 	gamestate.connect("game_ended", self, "_on_game_ended")
 	gamestate.connect("game_error", self, "_on_game_error")
+	
+	$CreateGame/Panel/Back.connect("pressed", self, "to_main_menu")
+	$StartGame/Panel/Back.connect("pressed", self, "to_main_menu")
+	
+	$CreateGame/Panel/CreateGame.connect("pressed", self, "_on_Host_pressed")
+	$StartGame/Panel/StartGame.connect("pressed", self, "_on_Join_pressed")
+
+
+func create_game():
+	$CreateGame.show()
+	
+func start_game():
+	$StartGame.show()
 
 func _on_Host_pressed():
-	if $Connect/NameEdit.text == "":
-		$Connect/Error.text = "Invalid name!"
+	if $CreateGame/Panel/BlockName/Path.text == "":
+		$Connect/Error.text = "Invalid path!"
 		return
 	
-	$Connect.hide()
+	$CreateGame.hide()
 	$Players.show()
-	$Connect/Error.text = ""
+	$CreateGame/Panel/BlockName/Error.text = ""
 	
-	var player_name = $Connect/NameEdit.text
-	gamestate.host_game(player_name)
+	gamestate.host_game($CreateGame/Panel/BlockName/Path.text)
 	refresh_lobby()
 
 func _on_Join_pressed():
-	if $Connect/NameEdit.text == "":
-		$Connect/Error.text = "Invalid name!"
+	if $StartGame/Panel/Name.text == "":
+		$StartGame/Panel/Error.text = "Invalid name!"
 		return
 		
-	var ip = $Connect/IPEdit.text
+	var ip = $StartGame/Panel/IP.text
 	if not ip.is_valid_ip_address():
-		$Connect/Error.text = "Invalid IPv4 address!"
+		$StartGame/Panel/Error.text = "Invalid IPv4 address!"
 		return
-		
-	$Connect/Error.text = ""
-	$Connect/Host.disabled = true
-	$Connect/Join.disabled = true
 	
-	var player_name = $Connect/NameEdit.text
+	$StartGame/Panel/Error.text = ""
+	$StartGame/Panel/StartGame.disabled = true
+	$StartGame/Panel/Back.disabled = true
+	
+	var player_name = $StartGame/Panel/Name.text
 	gamestate.join_game(ip, player_name)
 	
 
 func _on_connection_success():
-	get_node("Connect").hide()
+	get_node("StartGame").hide()
 	get_node("Players").show()
 
 func _on_connection_failed():
@@ -71,3 +83,7 @@ func refresh_lobby():
 
 func _on_Start_pressed():
 	gamestate.begin_game()
+
+func to_main_menu():
+	$CreateGame.visible = false
+	$StartGame.visible = false

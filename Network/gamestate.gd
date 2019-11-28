@@ -8,6 +8,7 @@ const MAX_PEERS = 4
 
 # Name for my player
 var player_name = "Your Name"
+var maze_path = ""
 
 # Names for remote players in id:name format
 var players = {}
@@ -76,7 +77,7 @@ remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
 	var world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
-	get_tree().get_root().get_node("Lobby").hide()
+	get_tree().get_root().get_node("MainMenu").queue_free()
 
 	load_players(world, spawn_points) # necessarily before load_specrator
 	if get_tree().is_network_server():
@@ -133,8 +134,8 @@ remote func ready_to_start(id):
 			rpc_id(p, "post_start_game")
 		post_start_game()
 
-func host_game(new_player_name):
-	player_name = new_player_name
+func host_game(path):
+	maze_path = path
 	var host = NetworkedMultiplayerENet.new()
 	host.create_server(DEFAULT_PORT, MAX_PEERS)
 	get_tree().set_network_peer(host)
@@ -144,7 +145,6 @@ func join_game(ip, new_player_name):
 	var host = NetworkedMultiplayerENet.new()
 	host.create_client(ip, DEFAULT_PORT)
 	get_tree().set_network_peer(host)
-	
 
 func get_player_list():
 	return players.values()
