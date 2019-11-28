@@ -32,8 +32,7 @@ func _ready():
 	if is_network_master():
 		$Camera2D.make_current()
 	else:
-		#if not get_tree().is_network_server():
-		#	$Light2D.queue_free()
+		# anyway deleted but will update material light mode
 		$Light2D.queue_free()
 		$Camera2D.queue_free()
 		

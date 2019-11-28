@@ -10,9 +10,19 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Area2D",
+"class": "arrow",
+"language": "GDScript",
+"path": "res://StaticObjects/Arrow.gd"
+}, {
+"base": "Area2D",
 "class": "bonfire",
 "language": "GDScript",
 "path": "res://StaticObjects/Bonfire.gd"
+}, {
+"base": "Area2D",
+"class": "exit",
+"language": "GDScript",
+"path": "res://StaticObjects/Exit.gd"
 }, {
 "base": "Area2D",
 "class": "torch",
@@ -20,7 +30,9 @@ _global_script_classes=[ {
 "path": "res://StaticObjects/Torch.gd"
 } ]
 _global_script_class_icons={
+"arrow": "",
 "bonfire": "",
+"exit": "",
 "torch": ""
 }
 

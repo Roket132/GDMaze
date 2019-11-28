@@ -16,6 +16,7 @@ var items_dict = {}
 var spawn_positions = []
 
 func _ready():
+	clear_map()
 	load_map("C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt")
 	draw_map(map)
 	if get_tree().is_network_server():
@@ -23,6 +24,10 @@ func _ready():
 
 func _physics_process(delta):
 	pass
+
+func clear_map():
+	clear()
+	$Paths.clear()
 
 func load_map(patch):
 	var file = File.new()

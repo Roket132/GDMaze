@@ -14,7 +14,10 @@ var item_cnt = 0
 
 var inv_path = "Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer/Inv_"
 		
-var inventory_dict = {}
+var inventory_dict = {
+	torch = 0,
+	arrow = 1
+}
 		
 func get_item_pos(name):
 	if not name in inventory_dict:

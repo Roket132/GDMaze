@@ -4,7 +4,7 @@ class_name bonfire
 
 signal hit_bonfire
 
-var item_name = "bonfire"
+const ITEM_NAME = "bonfire"
 
 func _on_Bonfire_body_entered(body):
 	body.rpc("hit_bonfire", self)
