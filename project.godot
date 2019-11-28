@@ -25,6 +25,11 @@ _global_script_classes=[ {
 "path": "res://StaticObjects/Exit.gd"
 }, {
 "base": "Area2D",
+"class": "lion",
+"language": "GDScript",
+"path": "res://Enemies/Lion.gd"
+}, {
+"base": "Area2D",
 "class": "torch",
 "language": "GDScript",
 "path": "res://StaticObjects/Torch.gd"
@@ -33,6 +38,7 @@ _global_script_class_icons={
 "arrow": "",
 "bonfire": "",
 "exit": "",
+"lion": "",
 "torch": ""
 }
 
@@ -46,7 +52,7 @@ config/icon="res://icon.png"
 
 gamestate="*res://Network/gamestate.gd"
 input_script="*res://input_script.gd"
-UsingItemsLambdas="*res://Interface/PlayerGUI/UsingItemsLambdas.gd"
+UsingItemsLambdas="*res://Dialog/PlayerGUI/UsingItemsLambdas.gd"
 
 [display]
 

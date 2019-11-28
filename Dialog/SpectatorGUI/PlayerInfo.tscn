@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Dialog/SpectatorGUI/PlayerInfo.gd" type="Script" id=1]
+[ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=2]
+
+[node name="Control" type="MarginContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -438.0
+margin_top = -438.0
+margin_right = -192.0
+margin_bottom = -313.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 246.0
+margin_bottom = 125.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 246.0
+margin_bottom = 64.0
+
+[node name="Avatar" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+flat = true
+
+[node name="Avatar" type="Sprite" parent="VBoxContainer/HBoxContainer/Avatar"]
+position = Vector2( 32.1316, 32.0869 )
+scale = Vector2( 0.497944, 0.498643 )
+texture = ExtResource( 2 )
+
+[node name="Name" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 68.0
+margin_top = 25.0
+margin_right = 106.0
+margin_bottom = 39.0
+text = "Name"
+
+[node name="ScoreBox" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 68.0
+margin_right = 246.0
+margin_bottom = 82.0
+
+[node name="Score" type="Label" parent="VBoxContainer/ScoreBox"]
+margin_right = 39.0
+margin_bottom = 14.0
+text = "Score:"
+
+[node name="Number" type="Label" parent="VBoxContainer/ScoreBox"]
+margin_left = 43.0
+margin_right = 51.0
+margin_bottom = 14.0
+text = "0"
+
+[node name="MoneyBox" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 86.0
+margin_right = 246.0
+margin_bottom = 100.0
+
+[node name="Money" type="Label" parent="VBoxContainer/MoneyBox"]
+margin_right = 47.0
+margin_bottom = 14.0
+text = "Money:"
+
+[node name="Number" type="Label" parent="VBoxContainer/MoneyBox"]
+margin_left = 51.0
+margin_right = 59.0
+margin_bottom = 14.0
+text = "0"
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Avatar" to="." method="_on_Avatar_pressed"]

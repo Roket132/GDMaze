@@ -4,9 +4,10 @@
 [ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=2]
 [ext_resource path="res://Player/sprites/move_forward_1.png" type="Texture" id=3]
 [ext_resource path="res://Player/sprites/move_forward_2.png" type="Texture" id=4]
-[ext_resource path="res://Interface/PlayerGUI/PlayerPanel.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Dialog/PlayerGUI/PlayerPanel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Player/sprites/Fog.png" type="Texture" id=6]
 [ext_resource path="res://Player/sprites/splat_gr.png" type="Texture" id=7]
+
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 2

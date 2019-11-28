@@ -96,7 +96,9 @@ func load_players(world, spawn_points):
 	for p_id in spawn_points:
 		var spawn_pos = world.spawn_positions[spawn_points[p_id]]
 		var player = player_scene.instance()
-		player.setup(world, players[p_id])
+		print("p_id = ", p_id, " ", players)
+		var name = player_name if p_id == get_tree().get_network_unique_id() else players[p_id]
+		player.setup(world, name)
 
 		players_ref.append(player)
 
