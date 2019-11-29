@@ -62,8 +62,6 @@ func _connected_fail():
 remote func register_player(id, new_player_name):
 	if get_tree().is_network_server():
 		# If we are the server, let everyone know about the new player
-		print("pl n = ", player_name)
-		print("npn = ", new_player_name)
 		rpc_id(id, "register_player", 1, player_name) # Send myself to new dude
 		for p_id in players: # Then, for each remote player
 			rpc_id(id, "register_player", p_id, players[p_id]) # Send player to new dude
@@ -96,7 +94,6 @@ func load_players(world, spawn_points):
 	for p_id in spawn_points:
 		var spawn_pos = world.spawn_positions[spawn_points[p_id]]
 		var player = player_scene.instance()
-		print("p_id = ", p_id, " ", players)
 		var name = player_name if p_id == get_tree().get_network_unique_id() else players[p_id]
 		player.setup(world, name)
 

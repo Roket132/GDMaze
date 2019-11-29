@@ -3,6 +3,7 @@
 [ext_resource path="res://Interface/SpectatorGUI/PlayerInfo.gd" type="Script" id=1]
 [ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=2]
 
+
 [node name="Control" type="MarginContainer"]
 anchor_left = 0.5
 anchor_top = 0.5

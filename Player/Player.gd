@@ -12,10 +12,13 @@ var new_pos = Vector2()
 var last_pos = Vector2()
 var player_cell = Vector2()
 
+var scroll_scene = preload("res://Interface/DialogGUI/Dialog.tscn")
+
 var settings = {
 	name = "name",
 	rest_of_bonfire = 0,
-	have_a_torch = false
+	have_a_torch = false,
+	stuck = false
 }
 
 signal clicked(pawn)
@@ -51,15 +54,17 @@ func setup(world_, name_):
 
 func _physics_process(delta):
 	if is_network_master():
-		if Input.is_action_pressed("ui_left"):
-			make_step(-1, 0)
-		if Input.is_action_pressed("ui_right"):
-			make_step(1, 0)
-		if Input.is_action_pressed("ui_down"):
-			make_step(0, 1)
-		if Input.is_action_pressed("ui_up"):
-			make_step(0, -1)
+		if not settings.stuck:
+			if Input.is_action_pressed("ui_left"):
+				make_step(-1, 0)
+			if Input.is_action_pressed("ui_right"):
+				make_step(1, 0)
+			if Input.is_action_pressed("ui_down"):
+				make_step(0, 1)
+			if Input.is_action_pressed("ui_up"):
+				make_step(0, -1)
 	else:
+		# add check on permission for move
 		make_puppet_step(puppet_pos)
 	move_player()
 
@@ -110,11 +115,20 @@ remotesync func hit_bonfire(bonfire):
 remotesync func hit_torch(torch):
 	settings["have_a_torch"] = true
 	#if world != null:
-	#	world.rpc("remove_torch", 2, 2)
+	#	world.rpc("remove_torch", 2, 2)	
 	
 # only master can add items
 master func add_item(name, path):
 	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
+
+master func hit_lion(text):
+	var scroll = scroll_scene.instance()
+	scroll.set_text(text)
+	world.add_child(scroll)
+	scroll.rect_position += position
+	
+	settings.stuck = true
+	$Light2D.hide()
 
 func _on_Player_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton \
