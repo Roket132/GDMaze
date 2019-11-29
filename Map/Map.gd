@@ -17,13 +17,21 @@ var items_dict = {}
 var spawn_positions = []
 
 func _ready():
+	pass
+
+func init(path):
+	if get_tree().is_network_server():
+		load_map(path)
+		rpc("set_map", map, exit_pos, spawn_positions)
+		material.set_light_mode(0) # Normal mode
+	else:
+		load_map("res://Src/default_maze.tres")
+	setup()
+
+func setup():
 	clear_map()
-	load_map("C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt")
 	draw_map(map)
 	$Paths.init(map, exit_pos)
-	
-	if get_tree().is_network_server():
-		material.set_light_mode(0) # Normal mode
 
 func _physics_process(delta):
 	pass
@@ -38,7 +46,6 @@ func load_map(patch):
 	var n = file.get_csv_line(" ")
 	height = n[0] as int
 	width = n[1] as int
-	
 	map = $Paths.create_2d_array(n[0], n[1])
 	
 	for i in range(n[0]):
@@ -68,6 +75,12 @@ func draw_map(map):
 # Vectro2(from) with normal coordinate (i, j)
 remotesync func draw_path(from, steps = -1):
 	$Paths.draw(from, steps)
+
+remote func set_map(map_, exit, spawn):
+	map = map_
+	exit_pos = exit
+	spawn_positions = spawn
+	setup()
 
 func add_spawn_pos(pos):
 	spawn_positions.append(pos)

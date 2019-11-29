@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://MainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Image/logo.png" type="Texture" id=2]
-[ext_resource path="res://Image/logo2.png" type="Texture" id=3]
+[ext_resource path="res://Src/logo.png" type="Texture" id=2]
+[ext_resource path="res://Src/logo2.png" type="Texture" id=3]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Network/Lobby.tscn" type="PackedScene" id=5]
 

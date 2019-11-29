@@ -77,6 +77,7 @@ remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
 	var world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
+	world.init(maze_path)
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
 	load_players(world, spawn_points) # necessarily before load_specrator
@@ -135,6 +136,9 @@ remote func ready_to_start(id):
 			rpc_id(p, "post_start_game")
 		post_start_game()
 
+remote func set_world():
+	print("keke")
+
 func host_game(path):
 	maze_path = path
 	var host = NetworkedMultiplayerENet.new()
@@ -178,6 +182,8 @@ func end_game():
 
 func get_game_mode():
 	return "SPECTATOR" if get_tree().is_network_server() else "PLAYER"
+
+
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
