@@ -45,7 +45,6 @@ func _ready():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()
 		material.set_light_mode(0) #Normal
 		
-	print($AnimatedSprite.frames)
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
 func setup(world_, name_):
@@ -53,6 +52,9 @@ func setup(world_, name_):
 	settings.name = name_
 
 func _physics_process(delta):
+	
+	print("pos = ", position)
+	
 	if is_network_master():
 		if not settings.stuck:
 			if Input.is_action_pressed("ui_left"):
@@ -135,3 +137,9 @@ func _on_Player_input_event(viewport, event, shape_idx):
 	and event.button_index == BUTTON_LEFT \
 	and event.pressed:
 		emit_signal("clicked", self)
+		
+func set_ultimate_position(position):
+	position = position
+	new_pos = position
+	last_pos = position
+	puppet_pos = position

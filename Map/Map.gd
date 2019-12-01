@@ -4,6 +4,8 @@ export(Array, PackedScene) var Scenes
 export var scenes_dictionary = {}
 export var name_dictionary = {}
 
+signal ready_to_arrange(world)
+
 var BLOCK_SIZE = 64
 var DIFF = 32
 
@@ -22,7 +24,7 @@ func _ready():
 func init(path):
 	if get_tree().is_network_server():
 		load_map(path)
-		rpc("set_map", map, exit_pos, spawn_positions)
+		rpc("reload_map", map, exit_pos, spawn_positions)
 		material.set_light_mode(0) # Normal mode
 	else:
 		load_map("res://Src/default_maze.tres")
@@ -76,11 +78,12 @@ func draw_map(map):
 remotesync func draw_path(from, steps = -1):
 	$Paths.draw(from, steps)
 
-remote func set_map(map_, exit, spawn):
+remote func reload_map(map_, exit, spawn):
 	map = map_
 	exit_pos = exit
 	spawn_positions = spawn
 	setup()
+	emit_signal("ready_to_arrange", self)
 
 func add_spawn_pos(pos):
 	spawn_positions.append(pos)

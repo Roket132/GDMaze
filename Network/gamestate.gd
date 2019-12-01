@@ -15,6 +15,8 @@ var players = {}
 # Ref to player instance
 var players_ref = []
 
+var reload_spawn_points
+
 # Signals to let lobby GUI know what's going on
 signal player_list_changed()
 signal connection_failed()
@@ -80,8 +82,11 @@ remote func pre_start_game(spawn_points):
 	world.init(maze_path)
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
-	load_players(world, spawn_points) # necessarily before load_specrator
+	world.connect("ready_to_arrange", self, "reload_players")
+	reload_spawn_points = spawn_points
+
 	if get_tree().is_network_server():
+		load_players(world, spawn_points) # necessarily before load_specrator
 		load_spectator(world)
 		
 	if not get_tree().is_network_server():
@@ -93,10 +98,12 @@ func load_players(world, spawn_points):
 	var player_scene = load("res://Player/Player.tscn")
 
 	for p_id in spawn_points:
-		var spawn_pos = world.spawn_positions[spawn_points[p_id]]
+		var spawn_pos = world.spawn_positions[spawn_points[p_id]] if spawn_points[p_id] < spawn_points.size() else Vector2(0, 0)
 		var player = player_scene.instance()
 		var name = player_name if p_id == get_tree().get_network_unique_id() else players[p_id]
 		player.setup(world, name)
+
+		print("in ", get_tree().get_network_unique_id(), " pos = ", spawn_pos)
 
 		players_ref.append(player)
 
@@ -112,6 +119,12 @@ func load_players(world, spawn_points):
 			player.set_player_name(players[p_id])
 		player.scale = Vector2(0.5, 0.5)
 		world.add_child(player)
+
+func reload_players(world):
+	print("reload in ", get_tree().get_network_unique_id())
+	for pl in players_ref:
+		pl.queue_free()
+	load_players(world, reload_spawn_points)
 
 func load_spectator(world):
 	var spectator = load("res://Player/Spectator.tscn").instance()
@@ -146,7 +159,6 @@ func host_game(path):
 	get_tree().set_network_peer(host)
 
 func join_game(ip, new_player_name):
-	print("new name = ", new_player_name)
 	player_name = new_player_name
 	var host = NetworkedMultiplayerENet.new()
 	host.create_client(ip, DEFAULT_PORT)
@@ -182,8 +194,6 @@ func end_game():
 
 func get_game_mode():
 	return "SPECTATOR" if get_tree().is_network_server() else "PLAYER"
-
-
 
 func _ready():
 	get_tree().connect("network_peer_connected", self, "_player_connected")
