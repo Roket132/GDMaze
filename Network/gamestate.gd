@@ -14,7 +14,7 @@ var maze_path = ""
 var players = {}
 # Ref to player instance
 var players_ref = []
-
+# Save spawn_pos for players reloading
 var reload_spawn_points
 
 # Signals to let lobby GUI know what's going on
@@ -60,7 +60,6 @@ func _connected_fail():
 	emit_signal("connection_failed")
 
 # Lobby management functions
-
 remote func register_player(id, new_player_name):
 	if get_tree().is_network_server():
 		# If we are the server, let everyone know about the new player
@@ -103,8 +102,6 @@ func load_players(world, spawn_points):
 		var name = player_name if p_id == get_tree().get_network_unique_id() else players[p_id]
 		player.setup(world, name)
 
-		print("in ", get_tree().get_network_unique_id(), " pos = ", spawn_pos)
-
 		players_ref.append(player)
 
 		player.set_name(str(p_id))
@@ -121,7 +118,6 @@ func load_players(world, spawn_points):
 		world.add_child(player)
 
 func reload_players(world):
-	print("reload in ", get_tree().get_network_unique_id())
 	for pl in players_ref:
 		pl.queue_free()
 	load_players(world, reload_spawn_points)
@@ -148,9 +144,6 @@ remote func ready_to_start(id):
 		for p in players:
 			rpc_id(p, "post_start_game")
 		post_start_game()
-
-remote func set_world():
-	print("keke")
 
 func host_game(path):
 	maze_path = path

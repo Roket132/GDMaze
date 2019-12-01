@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Src/logo.png" type="Texture" id=2]
 [ext_resource path="res://Src/logo2.png" type="Texture" id=3]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Network/Lobby.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Node2D.gd" type="Script" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -102,8 +101,5 @@ text = "Создать игру"
 
 [node name="Lobby" parent="Menus" instance=ExtResource( 5 )]
 mouse_filter = 2
-
-[node name="Node2D" type="Node2D" parent="."]
-script = ExtResource( 6 )
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Join" to="." method="_on_Join_pressed"]
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Host" to="." method="_on_Host_pressed"]

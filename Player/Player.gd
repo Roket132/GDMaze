@@ -116,9 +116,7 @@ remotesync func hit_bonfire(bonfire):
 
 remotesync func hit_torch(torch):
 	settings["have_a_torch"] = true
-	#if world != null:
-	#	world.rpc("remove_torch", 2, 2)	
-	
+
 # only master can add items
 master func add_item(name, path):
 	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
@@ -137,9 +135,3 @@ func _on_Player_input_event(viewport, event, shape_idx):
 	and event.button_index == BUTTON_LEFT \
 	and event.pressed:
 		emit_signal("clicked", self)
-		
-func set_ultimate_position(position):
-	position = position
-	new_pos = position
-	last_pos = position
-	puppet_pos = position

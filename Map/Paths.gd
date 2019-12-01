@@ -54,7 +54,7 @@ func get_array_path(from, steps = -1):
 			j += 1
 		steps -= 1
 		res.append(Vector2(j, i))
-		
+			
 	return res
 
 func draw(from, steps = -1):
