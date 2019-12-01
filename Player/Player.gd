@@ -22,6 +22,7 @@ var settings = {
 }
 
 signal clicked(pawn)
+signal kill()
 
 func _ready():
 	set_as_toplevel(true)
@@ -122,14 +123,25 @@ master func add_item(name, path):
 func get_next_enemy_task(lvl):
 	return TasksArchives.get_next_enemy_task(self, lvl)
 
+var scroll = null
+
 master func hit_lion(task):
-	var scroll = scroll_scene.instance()
+	scroll = scroll_scene.instance()
 	scroll.set_task(task)
+	scroll.connect("correct_answer", self, "correct_answer")
+	
 	world.add_child(scroll)
 	scroll.rect_position += position
 	
 	settings.stuck = true
 	$Light2D.hide()
+
+func correct_answer():
+	scroll.queue_free()
+	settings.stuck = false
+	$Light2D.show()
+	
+	emit_signal("kill")
 
 func _on_Player_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton \

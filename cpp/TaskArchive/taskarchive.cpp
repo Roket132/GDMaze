@@ -90,11 +90,8 @@ bool TaskArchive::readFile(fs::path path) {
                 }
                 mode = 0;
             } else if (buffer.get()[i] == ',' && mode == ANSWER) {
-				std::cout << "heh1 " << answer << std::endl;
                 removeLeadSpaces(answer);
-				std::cout << "heh2" << std::endl;
                 answers.emplace_back(answer);
-				std::cout << "heh3" << std::endl;
                 answer = "";
             } else {
                 char ch = buffer.get()[i];
@@ -113,7 +110,7 @@ bool TaskArchive::readFile(fs::path path) {
 void TaskArchive::addTask(std::shared_ptr<Task> task) {
     std::lock_guard<std::mutex> lg(*mutex_);
     auto lvl = task->getLvl();
-    std::cerr << "AddTask lvl = " << lvl << " " << task->getName() << " " << task->getText() << std::endl;
+    //std::cerr << "AddTask lvl = " << lvl << " " << task->getName() << " " << task->getText() << std::endl;
     if (tasks.size() <= lvl) {
         tasks.resize(lvl + 1);
         currentTask.resize(lvl + 1, 0);

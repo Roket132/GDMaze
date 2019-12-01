@@ -14,3 +14,10 @@ func get_next_enemy_task(player, lvl):
 	var task = archive.get_next_task(lvl)
 	cur_enemy_task[player] = task
 	return task
+	
+func check_enemy_answer(player, answer):
+	var answers = cur_enemy_task[player]["answers"]
+	for ans in answers:
+		if answer == ans:
+			return true
+	return false
