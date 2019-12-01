@@ -20,14 +20,14 @@ namespace godot {
 
 		void _init();
 
-		void kek();
+		void add_file(String path);
 
-		void init_acrhive(String path);
-
-		String get_next_enemy_task(int lvl);	
+		Dictionary get_next_task(int lvl);
 
 	private:
-		TaskArchive enemy_archive;
+		TaskArchive _archive;
+
+		std::shared_ptr<Task> cur_task;
 	};
 
 }

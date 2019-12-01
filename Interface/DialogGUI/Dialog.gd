@@ -1,7 +1,7 @@
 extends Control
 
-func set_text(text):
-	$TextureRect/Task/Label.text = text
+func set_task(task):
+	$TextureRect/Task/Label.text = "	" + task["name"] + "\n\n" + task["task"]
 
 func _on_GoAnswer_pressed():
 	$TextureRect/Task.hide()

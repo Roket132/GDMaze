@@ -54,6 +54,7 @@ gamestate="*res://Network/gamestate.gd"
 input_script="*res://input_script.gd"
 UsingItemsLambdas="*res://Interface/PlayerGUI/UsingItemsLambdas.gd"
 Receiver="*res://Tasks/Receiver.gd"
+TasksArchives="*res://Tasks/TasksArchives.gd"
 
 [display]
 

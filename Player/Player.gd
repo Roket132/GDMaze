@@ -44,6 +44,7 @@ func _ready():
 	if get_tree().is_network_server():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()
 		material.set_light_mode(0) #Normal
+		TasksArchives.create_for_player(self)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
@@ -52,9 +53,6 @@ func setup(world_, name_):
 	settings.name = name_
 
 func _physics_process(delta):
-	
-	print("pos = ", position)
-	
 	if is_network_master():
 		if not settings.stuck:
 			if Input.is_action_pressed("ui_left"):
@@ -121,9 +119,12 @@ remotesync func hit_torch(torch):
 master func add_item(name, path):
 	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
 
-master func hit_lion(text):
+func get_next_enemy_task(lvl):
+	return TasksArchives.get_next_enemy_task(self, lvl)
+
+master func hit_lion(task):
 	var scroll = scroll_scene.instance()
-	scroll.set_text(text)
+	scroll.set_task(task)
 	world.add_child(scroll)
 	scroll.rect_position += position
 	
