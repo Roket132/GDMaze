@@ -1,8 +1,16 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Interface/PlayerGUI/PlayerPanel.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
 
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 2 )
 
 [node name="PlayerPanel" type="MarginContainer"]
 anchor_top = 1.0
@@ -23,85 +31,124 @@ anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
 margin_right = 1799.0
-margin_bottom = 96.0
+margin_bottom = 98.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VSeparator" type="VSeparator" parent="Panel/HBoxContainer/VBoxContainer"]
 self_modulate = Color( 0, 0, 0, 0 )
 margin_right = 1799.0
-margin_bottom = 12.0
+margin_bottom = 3.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer"]
-margin_top = 16.0
+margin_top = 7.0
 margin_right = 1799.0
-margin_bottom = 80.0
+margin_bottom = 91.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
 margin_right = 75.0
-margin_bottom = 64.0
+margin_bottom = 84.0
 rect_min_size = Vector2( 75, 0 )
 
-[node name="InvContainer" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
 margin_left = 79.0
-margin_right = 321.0
-margin_bottom = 64.0
-custom_constants/separation = 25
+margin_right = 404.0
+margin_bottom = 84.0
+custom_constants/separation = 50
 
-[node name="Inv_0" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
+[node name="Inv_0" type="VBoxContainer" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 75.0
+margin_bottom = 84.0
+
+[node name="Inv_0" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Inv_0"]
 margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
-[node name="Inv_1" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
-margin_left = 89.0
-margin_right = 153.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 0 )
+[node name="Lab_0" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Inv_0"]
+margin_top = 68.0
+margin_right = 75.0
+margin_bottom = 84.0
+custom_fonts/font = SubResource( 1 )
+text = "Кол-во:    "
 
-[node name="Inv_2" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/InvContainer"]
-margin_left = 178.0
-margin_right = 242.0
+[node name="Inv_1" type="VBoxContainer" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_left = 125.0
+margin_right = 200.0
+margin_bottom = 84.0
+
+[node name="Inv_1" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Inv_1"]
+margin_right = 64.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 64, 0 )
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Lab_1" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Inv_1"]
+margin_top = 68.0
+margin_right = 75.0
+margin_bottom = 84.0
+custom_fonts/font = SubResource( 2 )
+text = "Кол-во:    "
+
+[node name="Inv_2" type="VBoxContainer" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_left = 250.0
+margin_right = 325.0
+margin_bottom = 84.0
+
+[node name="Inv_2" type="Button" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Inv_2"]
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Lab_2" type="Label" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Inv_2"]
+margin_top = 68.0
+margin_right = 75.0
+margin_bottom = 84.0
+custom_fonts/font = SubResource( 3 )
+text = "Кол-во:    "
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBoxContainer/VBoxContainer/HBoxContainer"]
 modulate = Color( 0.145098, 0.145098, 0.164706, 1 )
 self_modulate = Color( 1, 1, 1, 0 )
-margin_left = 325.0
+margin_left = 408.0
 margin_right = 1799.0
-margin_bottom = 64.0
+margin_bottom = 84.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VSeparator2" type="VSeparator" parent="Panel/HBoxContainer/VBoxContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
 show_behind_parent = true
-margin_top = 84.0
+margin_top = 95.0
 margin_right = 1799.0
-margin_bottom = 96.0
+margin_bottom = 98.0
 size_flags_vertical = 3
 
 [node name="InfoContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
 editor/display_folded = true
 margin_left = 1803.0
 margin_right = 1920.0
-margin_bottom = 96.0
+margin_bottom = 98.0
 
 [node name="VSeparator" type="VSeparator" parent="Panel/HBoxContainer/InfoContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
 margin_right = 117.0
-margin_bottom = 37.0
+margin_bottom = 38.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/InfoContainer"]
-margin_top = 41.0
+margin_top = 42.0
 margin_right = 117.0
-margin_bottom = 55.0
+margin_bottom = 56.0
 
 [node name="Label" type="Label" parent="Panel/HBoxContainer/InfoContainer/HBoxContainer"]
 margin_right = 38.0
@@ -119,7 +166,7 @@ size_flags_vertical = 3
 
 [node name="VSeparator2" type="VSeparator" parent="Panel/HBoxContainer/InfoContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
-margin_top = 59.0
+margin_top = 60.0
 margin_right = 117.0
-margin_bottom = 96.0
+margin_bottom = 98.0
 size_flags_vertical = 3
