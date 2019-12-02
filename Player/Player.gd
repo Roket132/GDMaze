@@ -125,13 +125,21 @@ func get_next_enemy_task(lvl):
 
 var scroll = null
 
-master func hit_lion(task):
+func set_task_to_scroll(task):
 	scroll = scroll_scene.instance()
 	scroll.set_task(task)
 	scroll.connect("correct_answer", self, "correct_answer")
-	
 	world.add_child(scroll)
 	scroll.rect_position += position
+
+master func hit_lion(task):
+	set_task_to_scroll(task)
+
+	settings.stuck = true
+	$Light2D.hide()
+
+master func hit_dragon(task):
+	set_task_to_scroll(task)
 	
 	settings.stuck = true
 	$Light2D.hide()

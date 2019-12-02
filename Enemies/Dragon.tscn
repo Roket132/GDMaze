@@ -16,4 +16,6 @@ texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 use_parent_material = true
+scale = Vector2( 3, 3 )
 shape = SubResource( 1 )
+[connection signal="body_entered" from="." to="." method="_on_Dragon_body_entered"]
