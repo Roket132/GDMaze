@@ -78,7 +78,7 @@ remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
 	var world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
-	world.init(maze_path)
+	world.init(GlobalSettings.get_maze_path())
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
 	world.connect("ready_to_arrange", self, "reload_players")
@@ -145,8 +145,7 @@ remote func ready_to_start(id):
 			rpc_id(p, "post_start_game")
 		post_start_game()
 
-func host_game(path):
-	maze_path = path
+func host_game():
 	var host = NetworkedMultiplayerENet.new()
 	host.create_server(DEFAULT_PORT, MAX_PEERS)
 	get_tree().set_network_peer(host)

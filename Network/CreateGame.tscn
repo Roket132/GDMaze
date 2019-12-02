@@ -55,9 +55,9 @@ margin_bottom = 998.0
 text = "Начать"
 
 [node name="Back" type="Button" parent="Panel"]
-margin_left = 106.052
+margin_left = 104.104
 margin_top = 910.0
-margin_right = 571.052
+margin_right = 569.104
 margin_bottom = 998.0
 text = "Назад"
 

@@ -23,15 +23,19 @@ func start_game():
 	$StartGame.show()
 
 func _on_Host_pressed():
-	if $CreateGame/Panel/BlockName/Path.text == "":
+	if $CreateGame.get_maze_path() == "":
 		$Connect/Error.text = "Invalid path!"
 		return
 	
 	$CreateGame.hide()
 	$Players.show()
-	$CreateGame/Panel/BlockName/Error.text = ""
+	$CreateGame.set_error("")
 	
-	gamestate.host_game($CreateGame/Panel/BlockName/Path.text)
+	GlobalSettings.set_maze_path($CreateGame.get_maze_path())
+	GlobalSettings.set_enemy_taskFiles($CreateGame.get_enemy_taskFiles_list())
+	GlobalSettings.set_arrow_taskFiles($CreateGame.get_arrow_taskFiles_list())
+	
+	gamestate.host_game()
 	refresh_lobby()
 
 func _on_Join_pressed():

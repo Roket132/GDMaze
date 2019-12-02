@@ -3,8 +3,6 @@ extends Tabs
 func _ready():
 	$VBoxContainer/Label.text = "Выберите все файлы, которые будут использоваться для " + name + " задач"
 
-
-
 func _on_Add_pressed():
 	$FileDialog.show()
 
@@ -27,3 +25,10 @@ func _on_FileDialog_files_selected(paths):
 		if Files.get_item_text(idx - 1) == Files.get_item_text(idx):
 			Files.remove_item(idx)
 			deleted += 1
+
+func get_files():
+	var res_files = []
+	var Files = $VBoxContainer/ScrollContainer/Files
+	for i in range(Files.get_item_count()):
+		res_files.append(Files.get_item_text(i))
+	return res_files
