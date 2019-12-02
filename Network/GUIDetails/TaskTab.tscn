@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Network/GUIDetails/TaskTab.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 size = 22
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
@@ -42,6 +45,8 @@ margin_right = 1920.0
 margin_bottom = 939.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_fonts/font = SubResource( 4 )
+select_mode = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 970.0
@@ -69,3 +74,19 @@ margin_bottom = 78.0
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 3 )
 text = "Удалить"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+window_title = "Выбор файлов"
+resizable = true
+mode = 1
+access = 2
+current_dir = "C:/Users/Dmitry/Desktop/GODOT PICTURE"
+current_path = "C:/Users/Dmitry/Desktop/GODOT PICTURE/"
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Add" to="." method="_on_Add_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Dell" to="." method="_on_Dell_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="files_selected" from="FileDialog" to="." method="_on_FileDialog_files_selected"]
