@@ -12,11 +12,9 @@
 
 [sub_resource type="StyleBoxEmpty" id=4]
 
-[sub_resource type="DynamicFont" id=17]
+[sub_resource type="DynamicFont" id=5]
 size = 22
 font_data = ExtResource( 3 )
-
-[sub_resource type="StyleBoxEmpty" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=6]
 
@@ -26,13 +24,13 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="StyleBoxEmpty" id=9]
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[sub_resource type="DynamicFont" id=11]
 size = 22
 outline_size = 1
 outline_color = Color( 0.101961, 0.180392, 0.682353, 1 )
 font_data = ExtResource( 3 )
-
-[sub_resource type="StyleBoxEmpty" id=11]
 
 [sub_resource type="StyleBoxEmpty" id=12]
 
@@ -42,7 +40,9 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="StyleBoxEmpty" id=15]
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="StyleBoxEmpty" id=16]
+
+[sub_resource type="DynamicFont" id=17]
 outline_size = 1
 outline_color = Color( 0.0313726, 0.105882, 0.305882, 1 )
 font_data = ExtResource( 3 )
@@ -68,7 +68,7 @@ custom_styles/read_only = SubResource( 1 )
 custom_styles/focus = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 custom_styles/completion = SubResource( 4 )
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 5 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TextureRect"]
 margin_left = 383.049
@@ -81,22 +81,23 @@ alignment = 2
 margin_top = 188.0
 margin_right = 123.0
 margin_bottom = 211.0
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 10 )
+custom_styles/hover = SubResource( 6 )
+custom_styles/pressed = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 10 )
+custom_fonts/font = SubResource( 11 )
 text = "Ответ"
 
 [node name="Cancel" type="Button" parent="TextureRect/VBoxContainer"]
 margin_top = 215.0
 margin_right = 123.0
 margin_bottom = 231.0
-custom_styles/hover = SubResource( 11 )
-custom_styles/pressed = SubResource( 12 )
-custom_styles/focus = SubResource( 13 )
-custom_styles/disabled = SubResource( 14 )
-custom_styles/normal = SubResource( 15 )
-custom_fonts/font = SubResource( 16 )
+custom_styles/hover = SubResource( 12 )
+custom_styles/pressed = SubResource( 13 )
+custom_styles/focus = SubResource( 14 )
+custom_styles/disabled = SubResource( 15 )
+custom_styles/normal = SubResource( 16 )
+custom_fonts/font = SubResource( 17 )
 text = "Удалить стрелку"
+[connection signal="pressed" from="TextureRect/VBoxContainer/Answer" to="." method="_on_Answer_pressed"]

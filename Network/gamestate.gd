@@ -12,6 +12,7 @@ var maze_path = ""
 
 # Names for remote players in id:name format
 var players = {}
+var players_by_id = {}
 # Ref to player instance
 var players_ref = []
 # Save spawn_pos for players reloading
@@ -103,6 +104,7 @@ func load_players(world, spawn_points):
 		player.setup(world, name)
 
 		players_ref.append(player)
+		players_by_id[p_id] = player 
 
 		player.set_name(str(p_id))
 		player.position = spawn_pos
@@ -130,6 +132,7 @@ func load_spectator(world):
 	world.add_child(spectator)
 
 remote func post_start_game():
+	UsingItemsLambdas.players_by_id = players_by_id
 	get_tree().set_pause(false) # Unpause and unleash the game!
 
 var players_ready = []

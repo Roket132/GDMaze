@@ -1,13 +1,15 @@
 extends Control
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var cur_task
 
-# Called when the node enters the scene tree for the first time.
+func set_task(task):
+	$TextureRect/Text.text = "	\"" + task["name"] + "\"\n\n" + task["task"]
+	cur_task = task
+
 func _ready():
 	$TextureRect/VBoxContainer/Cancel.text = "Удалить\nстрелку"
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+
+func _on_Answer_pressed():
+	UsingItemsLambdas.arrow_done()
+	hide()
