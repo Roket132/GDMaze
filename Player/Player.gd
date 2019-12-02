@@ -22,6 +22,7 @@ var settings = {
 }
 
 signal clicked(pawn)
+signal kill()
 
 func _ready():
 	set_as_toplevel(true)
@@ -44,6 +45,7 @@ func _ready():
 	if get_tree().is_network_server():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()
 		material.set_light_mode(0) #Normal
+		TasksArchives.create_for_player(self)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
@@ -52,9 +54,6 @@ func setup(world_, name_):
 	settings.name = name_
 
 func _physics_process(delta):
-	
-	print("pos = ", position)
-	
 	if is_network_master():
 		if not settings.stuck:
 			if Input.is_action_pressed("ui_left"):
@@ -121,14 +120,36 @@ remotesync func hit_torch(torch):
 master func add_item(name, path):
 	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
 
-master func hit_lion(text):
-	var scroll = scroll_scene.instance()
-	scroll.set_text(text)
+func get_next_enemy_task(lvl):
+	return TasksArchives.get_next_enemy_task(self, lvl)
+
+var scroll = null
+
+func set_task_to_scroll(task):
+	scroll = scroll_scene.instance()
+	scroll.set_task(task)
+	scroll.connect("correct_answer", self, "correct_answer")
 	world.add_child(scroll)
 	scroll.rect_position += position
+
+master func hit_lion(task):
+	set_task_to_scroll(task)
+
+	settings.stuck = true
+	$Light2D.hide()
+
+master func hit_dragon(task):
+	set_task_to_scroll(task)
 	
 	settings.stuck = true
 	$Light2D.hide()
+
+func correct_answer():
+	scroll.queue_free()
+	settings.stuck = false
+	$Light2D.show()
+	
+	emit_signal("kill")
 
 func _on_Player_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton \

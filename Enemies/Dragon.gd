@@ -1,14 +1,14 @@
 extends Area2D
 
-class_name lion
+class_name dragon
 
-signal hit_lion()
+signal hit_dragon
 
-const ITEM_NAME = "lion"
+const ITEM_NAME = "dragon"
 
 var connected_body
 
-func _on_Lion_body_entered(body):
+func _on_Dragon_body_entered(body):
 	if body.connect("kill", self, "slot_kill") == 0:
 		connected_body = body
 		
@@ -16,7 +16,7 @@ func _on_Lion_body_entered(body):
 		var id = 0
 		# id????
 		if body.has_method("get_next_enemy_task"):
-			body.rpc("hit_lion", body.get_next_enemy_task(1))
+			body.rpc("hit_dragon", body.get_next_enemy_task(2))
 	
 func _get_texture():
 	return $Sprite.get_texture()
@@ -27,5 +27,4 @@ func slot_kill():
 remotesync func kill():
 	connected_body.disconnect("kill", self, "slot_kill")
 	$CollisionShape2D.queue_free()
-	$Sprite.texture = load("res://Enemies/sprites/lion_dead.png")
-	
+	$Sprite.texture = load("res://Enemies/sprites/dragon_off.png")
