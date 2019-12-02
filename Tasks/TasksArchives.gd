@@ -40,7 +40,17 @@ func check_arrow_answer(player, answer):
 	return check_answer(player, answer, cur_arrow_task[player]["answers"])
 	
 func check_answer(player, answer, answers):
+	if cur_enemy_task[player]["name"] == "nullptr":
+		return true
 	for ans in answers:
+		if answer == ans:
+			return true
+	return false
+	
+func check_answer_for_task(answer, task):
+	if task.name == "nullptr":
+		return true
+	for ans in task.answers:
 		if answer == ans:
 			return true
 	return false
