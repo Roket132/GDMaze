@@ -12,7 +12,7 @@ var new_pos = Vector2()
 var last_pos = Vector2()
 var player_cell = Vector2()
 
-var scroll_scene = preload("res://Interface/DialogGUI/Dialog.tscn")
+var scroll_scene = preload("res://Interface/DialogGUI/EnemyDialog.tscn")
 
 var settings = {
 	name = "name",

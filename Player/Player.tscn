@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=2]
-[ext_resource path="res://Player/sprites/move_forward_1.png" type="Texture" id=3]
-[ext_resource path="res://Player/sprites/move_forward_2.png" type="Texture" id=4]
+[ext_resource path="res://Player/sprites/move_forward_1.png" type="Texture" id=2]
+[ext_resource path="res://Player/sprites/move_forward_2.png" type="Texture" id=3]
+[ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=4]
 [ext_resource path="res://Interface/PlayerGUI/PlayerPanel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Player/sprites/Fog.png" type="Texture" id=6]
 [ext_resource path="res://Player/sprites/splat_gr.png" type="Texture" id=7]
@@ -13,15 +13,15 @@ light_mode = 2
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "stay_forward",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
 "loop": true,
 "name": "move_forward",
 "speed": 10.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "stay_forward",
+"speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=3]

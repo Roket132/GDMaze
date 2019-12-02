@@ -1,42 +1,42 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://Interface/DialogGUI/Dialog.gd" type="Script" id=1]
+[ext_resource path="res://Interface/DialogGUI/EnemyDialog.gd" type="Script" id=1]
 [ext_resource path="res://Interface/sprites/scroll.png" type="Texture" id=2]
 [ext_resource path="res://Fonts/scroll.ttf" type="DynamicFontData" id=3]
 
-[sub_resource type="StyleBoxEmpty" id=1396]
+[sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="StyleBoxEmpty" id=1384]
+[sub_resource type="StyleBoxEmpty" id=2]
 
-[sub_resource type="StyleBoxEmpty" id=1385]
+[sub_resource type="StyleBoxEmpty" id=3]
 
-[sub_resource type="StyleBoxEmpty" id=1386]
+[sub_resource type="StyleBoxEmpty" id=4]
 
-[sub_resource type="DynamicFont" id=1387]
+[sub_resource type="DynamicFont" id=5]
 size = 32
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=1388]
+[sub_resource type="DynamicFont" id=6]
 size = 32
 font_data = ExtResource( 3 )
 
-[sub_resource type="StyleBoxEmpty" id=1389]
+[sub_resource type="StyleBoxEmpty" id=7]
 
-[sub_resource type="StyleBoxEmpty" id=1390]
+[sub_resource type="StyleBoxEmpty" id=8]
 
-[sub_resource type="StyleBoxEmpty" id=1391]
+[sub_resource type="StyleBoxEmpty" id=9]
 
-[sub_resource type="StyleBoxEmpty" id=1392]
+[sub_resource type="StyleBoxEmpty" id=10]
 
-[sub_resource type="DynamicFont" id=1393]
+[sub_resource type="DynamicFont" id=11]
 size = 32
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=1394]
+[sub_resource type="DynamicFont" id=12]
 size = 32
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=1395]
+[sub_resource type="DynamicFont" id=13]
 size = 32
 font_data = ExtResource( 3 )
 
@@ -82,11 +82,11 @@ margin_right = 312.0
 margin_bottom = 176.0
 rect_scale = Vector2( 0.979954, 1 )
 mouse_filter = 2
-custom_styles/read_only = SubResource( 1396 )
-custom_styles/focus = SubResource( 1384 )
-custom_styles/normal = SubResource( 1385 )
-custom_styles/completion = SubResource( 1386 )
-custom_fonts/font = SubResource( 1387 )
+custom_styles/read_only = SubResource( 1 )
+custom_styles/focus = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+custom_styles/completion = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/member_variable_color = Color( 0, 0, 0, 1 )
 custom_colors/code_folding_color = Color( 0, 0, 0, 1 )
 custom_colors/function_color = Color( 0, 0, 0, 1 )
@@ -118,7 +118,7 @@ margin_left = 87.199
 margin_top = 205.0
 margin_right = 368.199
 margin_bottom = 244.0
-custom_fonts/font = SubResource( 1388 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Написать ответ!"
 flat = true
@@ -139,11 +139,11 @@ margin_left = -341.0
 margin_top = -229.5
 margin_right = 341.0
 margin_bottom = 197.5
-custom_styles/read_only = SubResource( 1389 )
-custom_styles/focus = SubResource( 1390 )
-custom_styles/normal = SubResource( 1391 )
-custom_styles/completion = SubResource( 1392 )
-custom_fonts/font = SubResource( 1393 )
+custom_styles/read_only = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
+custom_styles/completion = SubResource( 10 )
+custom_fonts/font = SubResource( 11 )
 custom_colors/member_variable_color = Color( 0, 0, 0, 1 )
 custom_colors/code_folding_color = Color( 0, 0, 0, 1 )
 custom_colors/function_color = Color( 0, 0, 0, 1 )
@@ -172,7 +172,7 @@ margin_left = -364.362
 margin_top = 205.0
 margin_right = -213.362
 margin_bottom = 248.0
-custom_fonts/font = SubResource( 1394 )
+custom_fonts/font = SubResource( 12 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "К задаче!"
 flat = true
@@ -182,7 +182,7 @@ margin_left = 177.0
 margin_top = 205.0
 margin_right = 361.0
 margin_bottom = 244.0
-custom_fonts/font = SubResource( 1395 )
+custom_fonts/font = SubResource( 13 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Отправить!"
 flat = true
