@@ -39,6 +39,7 @@ bool TaskArchive::readFile(fs::path path) {
     //std::lock_guard<std::mutex> lg(*mutex_);
 
     std::fstream file;
+
     try {
         file.open(path.string(), std::ifstream::in);
     } catch (std::ifstream::failure e) {
@@ -60,8 +61,6 @@ bool TaskArchive::readFile(fs::path path) {
     std::string answer;
     std::string lvl;
     std::vector<std::string> answers;
-
-
 
     while (file) {
         file.read(buffer.get(), bufferSize);
@@ -90,7 +89,7 @@ bool TaskArchive::readFile(fs::path path) {
                     answers.clear();
                 }
                 mode = 0;
-            } else if (buffer.get()[i] == ',') {
+            } else if (buffer.get()[i] == ',' && mode == ANSWER) {
                 removeLeadSpaces(answer);
                 answers.emplace_back(answer);
                 answer = "";
@@ -103,6 +102,8 @@ bool TaskArchive::readFile(fs::path path) {
             }
         }
     }
+
+	std::cout << "rturn " << std::endl;
     return true;
 }
 
