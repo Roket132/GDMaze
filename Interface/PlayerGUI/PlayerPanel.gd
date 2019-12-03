@@ -57,4 +57,3 @@ func del_item(name):
 			inv_node.disconnect("pressed", UsingItemsLambdas, name)
 		else:
 			lab_node.text = align_text("Кол-во: " + str(cnt_dict[name]), label_weight)
-			

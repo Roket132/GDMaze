@@ -13,6 +13,7 @@ var last_pos = Vector2()
 var player_cell = Vector2()
 
 var scroll_scene = preload("res://Interface/DialogGUI/EnemyDialog.tscn")
+var arrow_dialog_scene = preload("res://Interface/DialogGUI/ArrowDialog.tscn")
 
 var settings = {
 	name = "name",
@@ -131,6 +132,13 @@ func set_task_to_scroll(task):
 	scroll.connect("correct_answer", self, "correct_answer")
 	world.add_child(scroll)
 	scroll.rect_position += position
+
+var arrow_dialog = null
+
+func set_arrow_task(task):
+	$Camera2D/CanvasLayer/ArrowDialog.set_task(task)
+	$Camera2D/CanvasLayer/ArrowDialog.show()
+	pass
 
 master func hit_lion(task):
 	set_task_to_scroll(task)
