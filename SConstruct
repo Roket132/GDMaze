@@ -58,6 +58,7 @@ env.Append(LIBS=[cpp_library])
 sources = []
 add_sources(sources, "cpp")
 add_sources(sources, "cpp/TaskArchive")
+add_sources(sources, "cpp/TaskGen")
 
 library = env.SharedLibrary(target=target_path + target_name, source=sources)
 Default(library)

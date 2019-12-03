@@ -18,16 +18,17 @@ var exit_pos = Vector2()
 var items_dict = {}
 var spawn_positions = []
 
-func _ready():
-	pass
-
-func init(path):
+func init(path, is_gen):
 	if get_tree().is_network_server():
-		load_map(path)
+		if not is_gen:
+			read_map(path)
+		else:
+			gen_map()
+			print(map)
 		rpc("reload_map", map, exit_pos, spawn_positions)
 		material.set_light_mode(0) # Normal mode
 	else:
-		load_map("res://Src/default_maze.tres")
+		read_map("res://Src/default_maze.tres")
 	setup()
 
 func setup():
@@ -35,16 +36,25 @@ func setup():
 	draw_map(map)
 	$Paths.init(map, exit_pos)
 
-func _physics_process(delta):
-	pass
-
 func clear_map():
 	clear()
+	fix_invalid_tiles()
 	$Paths.clear()
+	$Paths.fix_invalid_tiles() 
 
-func load_map(patch):
+func gen_map():
+	var generator = load("res://bin/GDMazeGenerator.gdns").new()
+	map = generator.generate(Vector2(30, 30))
+	height = 52
+	width = 52
+	
+	for i in range(map.size()):
+		for j in range(map[0].size()):
+			inspect_cell(i, j)
+
+func read_map(path):
 	var file = File.new()
-	file.open(patch, file.READ)
+	file.open(path, file.READ)
 	var n = file.get_csv_line(" ")
 	height = n[0] as int
 	width = n[1] as int
@@ -54,21 +64,24 @@ func load_map(patch):
 		var line = file.get_csv_line(" ")
 		for j in range(line.size()):
 			map[i][j] = line[j]
-			if map[i][j] == "S":
-				map[i][j] = "."
-				add_spawn_pos(Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF))
-			if map[i][j] == "E":
-				exit_pos = Vector2(j, i)
+			inspect_cell(i, j)
+
+func inspect_cell(i, j):
+	if map[i][j] == "S":
+		map[i][j] = "."
+		add_spawn_pos(Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF))
+	if map[i][j] == "E":
+		exit_pos = Vector2(j, i)
 
 func draw_map(map):
 	for i in range(map.size()):
 		for j in range(map[i].size()):
 			var type = map[i][j]
-			if (type as int == 0):
-				set_cell(j, i, 0)
-			else:
+			if (type == "#"):
 				set_cell(j, i, 1)
-			if type != "0" and type != "1" and scenes_dictionary.has(type):
+			else:
+				set_cell(j, i, 0)
+			if type != "." and type != "#" and scenes_dictionary.has(type):
 				var item = Scenes[scenes_dictionary[map[i][j]]].instance()
 				add_child(item)
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)

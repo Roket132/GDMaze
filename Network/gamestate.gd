@@ -79,7 +79,7 @@ remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
 	var world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
-	world.init(GlobalSettings.get_maze_path())
+	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen())
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
 	world.connect("ready_to_arrange", self, "reload_players")
