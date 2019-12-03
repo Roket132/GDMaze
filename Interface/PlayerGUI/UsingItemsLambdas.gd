@@ -35,6 +35,7 @@ func arrow():
 		
 func arrow_delete():
 	cur_arrow_task = null		
+	emit_signal("del_item", "arrow")
 
 func arrow_done():	
 	cur_arrow_task = null

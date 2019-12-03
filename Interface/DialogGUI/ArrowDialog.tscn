@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Interface/DialogGUI/ArrowDialog.gd" type="Script" id=1]
 [ext_resource path="res://Interface/sprites/Dialog.png" type="Texture" id=2]
@@ -47,6 +47,22 @@ outline_size = 1
 outline_color = Color( 0.0313726, 0.105882, 0.305882, 1 )
 font_data = ExtResource( 3 )
 
+[sub_resource type="StyleBoxEmpty" id=18]
+
+[sub_resource type="StyleBoxEmpty" id=19]
+
+[sub_resource type="StyleBoxEmpty" id=20]
+
+[sub_resource type="StyleBoxEmpty" id=21]
+
+[sub_resource type="StyleBoxEmpty" id=22]
+
+[sub_resource type="DynamicFont" id=23]
+size = 20
+outline_size = 1
+outline_color = Color( 0.0509804, 0.176471, 0.466667, 1 )
+font_data = ExtResource( 3 )
+
 [node name="ArrowDialog" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -64,11 +80,13 @@ margin_left = 54.0
 margin_top = 44.0
 margin_right = 380.0
 margin_bottom = 373.0
+mouse_filter = 2
 custom_styles/read_only = SubResource( 1 )
 custom_styles/focus = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 custom_styles/completion = SubResource( 4 )
 custom_fonts/font = SubResource( 5 )
+wrap_enabled = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TextureRect"]
 margin_left = 383.049
@@ -87,7 +105,7 @@ custom_styles/focus = SubResource( 8 )
 custom_styles/disabled = SubResource( 9 )
 custom_styles/normal = SubResource( 10 )
 custom_fonts/font = SubResource( 11 )
-text = "Ответ"
+text = "Ответить!"
 
 [node name="Cancel" type="Button" parent="TextureRect/VBoxContainer"]
 margin_top = 215.0
@@ -100,5 +118,20 @@ custom_styles/disabled = SubResource( 15 )
 custom_styles/normal = SubResource( 16 )
 custom_fonts/font = SubResource( 17 )
 text = "Удалить стрелку"
+
+[node name="Back" type="Button" parent="TextureRect"]
+visible = false
+margin_left = 47.0
+margin_top = 358.0
+margin_right = 129.0
+margin_bottom = 378.0
+custom_styles/hover = SubResource( 18 )
+custom_styles/pressed = SubResource( 19 )
+custom_styles/focus = SubResource( 20 )
+custom_styles/disabled = SubResource( 21 )
+custom_styles/normal = SubResource( 22 )
+custom_fonts/font = SubResource( 23 )
+text = "К задаче!"
 [connection signal="pressed" from="TextureRect/VBoxContainer/Answer" to="." method="_on_Answer_pressed"]
 [connection signal="pressed" from="TextureRect/VBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="TextureRect/Back" to="." method="_on_Back_pressed"]
