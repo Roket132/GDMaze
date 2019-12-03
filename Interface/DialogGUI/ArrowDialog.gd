@@ -13,3 +13,8 @@ func _ready():
 func _on_Answer_pressed():
 	UsingItemsLambdas.arrow_done()
 	hide()
+
+
+func _on_Cancel_pressed():
+	UsingItemsLambdas.arrow_delete()
+	hide()

@@ -101,3 +101,4 @@ custom_styles/normal = SubResource( 16 )
 custom_fonts/font = SubResource( 17 )
 text = "Удалить стрелку"
 [connection signal="pressed" from="TextureRect/VBoxContainer/Answer" to="." method="_on_Answer_pressed"]
+[connection signal="pressed" from="TextureRect/VBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
