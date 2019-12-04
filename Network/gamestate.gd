@@ -36,7 +36,7 @@ func _player_disconnected(id):
 	if get_tree().is_network_server():
 		if has_node("/root/world"): # Game is in progress
 			emit_signal("game_error", "Player " + players[id] + " disconnected")
-			end_game()
+			# end_game() forwhat?
 		else: # Game is not in progress
 			# If we are the server, send to the new dude all the already registered players
 			unregister_player(id)
