@@ -23,10 +23,11 @@ var generator = preload("res://bin/GDMazeGenerator.gdns").new()
 var thread_load_map
 
 func init(path, is_gen, progress):
-	var progressBar = progress.get_progress_bar()
-	generator.connect("progress_max_value_changed", progressBar, "set_max")
-	generator.connect("progress_value_changed", progressBar, "set_value")
 	if get_tree().is_network_server():
+		print("server")
+		var progressBar = progress.get_progress_bar()
+		generator.connect("progress_max_value_changed", progressBar, "set_max")
+		generator.connect("progress_value_changed", progressBar, "set_value")
 		thread_load_map = Thread.new()
 		var args = {
 				path = path,
@@ -35,6 +36,7 @@ func init(path, is_gen, progress):
 			}
 		thread_load_map.start(self, "async_load_map", args, 2)
 	else:
+		print("not server")
 		read_map("res://Src/default_maze.tres", progress)
 		map_ready()
 		
@@ -59,7 +61,6 @@ func setup():
 	clear_map()
 	draw_map(map)
 	$Paths.init(map, exit_pos)
-	
 	emit_signal("continue_start_game")
 
 func clear_map():
@@ -69,9 +70,9 @@ func clear_map():
 	$Paths.fix_invalid_tiles() 
 
 func gen_map(progress):
-	map = generator.generate(Vector2(75, 75))
-	height = 75 + 2
-	width = 75 + 2
+	map = generator.generate(Vector2(100, 100))
+	height = 100 + 2
+	width = 100 + 2
 	
 	for i in range(map.size()):
 		for j in range(map[0].size()):

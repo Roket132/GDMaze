@@ -81,15 +81,20 @@ remote func unregister_player(id):
 remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
 	world = load("res://Map/Map.tscn").instance()
+	print("world created")
 	get_tree().get_root().add_child(world)
+	
 	world.visible = false
 	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), progress)
-
+	
+	# connect must be necessarily only after init
 	world.connect("ready_to_arrange", self, "reload_players")
 	world.connect("continue_start_game", self, "continue_start_game")
+	
 	reload_spawn_points = spawn_points
 
 func continue_start_game():
+	print("continue")
 	var spawn_points = reload_spawn_points
 	if get_tree().is_network_server():
 		load_players(world, spawn_points) # necessarily before load_specrator
@@ -101,7 +106,8 @@ func continue_start_game():
 		post_start_game()
 		
 	world.visible = true
-	get_tree().get_root().get_node("MainMenu").queue_free()
+	if get_tree().get_root().has_node("MainMenu"):
+		get_tree().get_root().get_node("MainMenu").queue_free()
 
 func load_players(world, spawn_points):
 	var player_scene = load("res://Player/Player.tscn")
