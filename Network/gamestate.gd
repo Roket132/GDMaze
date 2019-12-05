@@ -10,6 +10,9 @@ const MAX_PEERS = 4
 var player_name = "Host"
 var maze_path = ""
 
+var world = null
+var progress = null
+
 # Names for remote players in id:name format
 var players = {}
 var players_by_id = {}
@@ -77,14 +80,17 @@ remote func unregister_player(id):
 
 remote func pre_start_game(spawn_points):
 	get_tree().set_pause(true)
-	var world = load("res://Map/Map.tscn").instance()
+	world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
-	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen())
-	get_tree().get_root().get_node("MainMenu").queue_free()
+	world.visible = false
+	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), progress)
 
 	world.connect("ready_to_arrange", self, "reload_players")
+	world.connect("continue_start_game", self, "continue_start_game")
 	reload_spawn_points = spawn_points
 
+func continue_start_game():
+	var spawn_points = reload_spawn_points
 	if get_tree().is_network_server():
 		load_players(world, spawn_points) # necessarily before load_specrator
 		load_spectator(world)
@@ -93,6 +99,9 @@ remote func pre_start_game(spawn_points):
 		rpc_id(1, "ready_to_start", get_tree().get_network_unique_id())
 	elif players.size() == 0:
 		post_start_game()
+		
+	world.visible = true
+	get_tree().get_root().get_node("MainMenu").queue_free()
 
 func load_players(world, spawn_points):
 	var player_scene = load("res://Player/Player.tscn")
@@ -151,6 +160,7 @@ remote func ready_to_start(id):
 func host_game():
 	var host = NetworkedMultiplayerENet.new()
 	host.create_server(DEFAULT_PORT, MAX_PEERS)
+	print("created")
 	get_tree().set_network_peer(host)
 
 func join_game(ip, new_player_name):

@@ -21,6 +21,10 @@ namespace godot {
 		void _init();
 
 		Array generate(Vector2 size);
+
+		void update_max_value(int max_value);
+
+		void update_value(int value);
 	};
 
 }

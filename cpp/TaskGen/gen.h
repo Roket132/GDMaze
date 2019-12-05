@@ -11,5 +11,16 @@
 #include <set>
 #include <map>
 
-std::vector<std::string> main_generator(int n, int m);
+#include <boost/signals2.hpp>
+
+class Generator {
+public:
+	std::vector<std::string> main_generator(int n, int m);
+
+	boost::signals2::signal<void(int)> signal_max_value_changed;
+
+	boost::signals2::signal<void(int)> signal_value_changed;
+};
+
+
 

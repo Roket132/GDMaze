@@ -196,10 +196,8 @@ vector<pair<int, int>> get_cuts(vector<string> a) {
 	return res;
 }
 
-vector<string> gen(int n, int m, map<string, int> params) {
+vector<string> gen(int n, int m, map<string, int> params, boost::signals2::signal<void(int)> &signal_value_changed) {
 	//ofstream out("maze.txt");
-
-	//std::cout << "start global gen" << std::endl;
 
 	int midx = n / 2;
 	int midy = m / 2;
@@ -209,6 +207,8 @@ vector<string> gen(int n, int m, map<string, int> params) {
 
 	int resd = 0;
 	vector<string> W;
+
+	signal_value_changed(0);
 
 	for (int it = 0; it < 1; ++it) {
 
@@ -232,6 +232,9 @@ vector<string> gen(int n, int m, map<string, int> params) {
 			pool.pop_back();
 		}
 
+		// first 
+		signal_value_changed(1);
+
 		int cur = 0;
 		for (auto cell : cells) {
 			int x = cell.first;
@@ -245,25 +248,11 @@ vector<string> gen(int n, int m, map<string, int> params) {
 				w[x][y] = '.';
 			}
 		}
-		/*
-		int cnt = 0;
-		for(int i=0;i<n;++i)
-		for(int j=0;j<m;++j) if(w[i][j]=='.'){
-			w[i][j] = '#';
-			if(!connected(w)) ++cnt;
-			w[i][j] = '.';
-		}
-
-		cerr<<it<<": "<<cnt<<endl;
-
-		if(cnt > resd){
-			resd = cnt;
-			W = w;
-		}*/
 
 		W = w;
-
 	}
+		
+	signal_value_changed(2);
 
 	//std::cout << "respawns" << std::endl;
 
@@ -287,6 +276,8 @@ vector<string> gen(int n, int m, map<string, int> params) {
 	}
 
 
+	signal_value_changed(3);
+
 	//std::cout << "DOOR" << std::endl;
 	//DOOR
 	int doorx, doory, doordist = -1;
@@ -304,6 +295,7 @@ vector<string> gen(int n, int m, map<string, int> params) {
 	cerr << "ddist = " << doordist << endl;
 
 	//std::cout << "FAKEL" << std::endl;
+	signal_value_changed(4);
 
 	//FAKEL init
 	for (int d : {4, 10, 30})
@@ -323,6 +315,7 @@ vector<string> gen(int n, int m, map<string, int> params) {
 	}
 
 	//std::cout << "FIRE" << std::endl;
+	signal_value_changed(5);
 
 	//FIRE init
 	int fire_radius = params["fire_radius"];
@@ -344,6 +337,8 @@ vector<string> gen(int n, int m, map<string, int> params) {
 	}
 
 
+	signal_value_changed(6);
+
 	//std::cout << "CHESTS" << std::endl;
 
 	///CHESTS
@@ -355,6 +350,8 @@ vector<string> gen(int n, int m, map<string, int> params) {
 		for (auto cc : c) erase_from_pool(chest_pool, cc);
 		W[cell.first][cell.second] = '.';
 	}
+
+	signal_value_changed(7);
 
 	//std::cout << "ARROWS" << std::endl;
 
@@ -372,6 +369,8 @@ vector<string> gen(int n, int m, map<string, int> params) {
 		W[cell.first][cell.second] = 'A';
 		++arrows;
 	}
+
+	signal_value_changed(8);
 
 	//std::cout << "LIONS" << std::endl;
 
@@ -399,6 +398,8 @@ vector<string> gen(int n, int m, map<string, int> params) {
 		}
 	}
 
+	signal_value_changed(9);
+
 	//std::cout << "DRAGONS" << std::endl;
 
 	///DRAGONS
@@ -425,46 +426,16 @@ vector<string> gen(int n, int m, map<string, int> params) {
 		}
 	}
 
+	signal_value_changed(10);
+
 	//std::cout << "ALL" << std::endl;
 
-	//for(string r : W) cerr<<r<<endl;
 	cerr << resd << endl;
 	for (int k = 0; k < 4; ++k) {
 		cerr << k << " dist: " << steps(resps[k].first, resps[k].second, W, "E") << endl;
 	}
 
-
-	/*{
-		auto g = distmap(doorx, doory, W);
-		vector<pair<int,int>> q = resps;
-		for(int h=0;h<q.size();++h){
-			int x = q[h].first;
-			int y = q[h].second;
-			W[x][y] = '*';
-			for(int k=0;k<4;++k){
-				int tx = x+dx[k];
-				int ty = y+dy[k];
-				if(tx<0 || ty<0 || tx>=n || ty>=m || g[tx][ty]+1!=g[x][y] || W[tx][ty]=='*')
-					continue;
-				q.push_back({tx,ty});
-				W[tx][ty] = '*';
-			}
-		}
-	}*/
-
-	/*{
-		auto g = distmap(doorx, doory, W);
-		for(int i=0;i<n;++i)
-		for(int j=0;j<m;++j) if(W[i][j]!='#'){
-			bool fin = true;
-			for(int k=0;k<4;++k){
-				int tx = i+dx[k];
-				int ty = j+dy[k];
-				if(tx>=0 && ty>=0 && tx<n && ty<m && g[tx][ty]>g[i][j]) fin = false;
-			}
-			//if(!fin) W[i][j] = '@';
-		}
-	}*/
+	signal_value_changed(11);
 
 	//std::cout << "FOKING" << std::endl;
 
@@ -472,14 +443,7 @@ vector<string> gen(int n, int m, map<string, int> params) {
 	W.push_back(W[0]);
 	for (string& r : W) r = "#" + r + "#";
 
-	/*for(string &r : w) for(char &c : r){
-		if(c=='.') c = '0';
-		if(c=='#') c = '1';
-	}*/
-
-
-	//	out<<n+2<<' '<<m+2<<"\n";
-	//	for(string r : W) out<<r<<"\n";
+	signal_value_changed(12);
 
 	//std::cout << "RETURN" << std::endl;
 
@@ -515,7 +479,7 @@ $ chest
 
 */
 
-std::vector<std::string> main_generator(int n, int m)
+std::vector<std::string> Generator::main_generator(int n, int m)
 {
 	//freopen("input.txt","r",stdin); //freopen("output.txt","w",stdout);
 	ios::sync_with_stdio(0); cin.tie(0);//cout.precision(12);cout<<fixed;
@@ -530,8 +494,8 @@ std::vector<std::string> main_generator(int n, int m)
 		{"dragon_radius", 35},
 		{"dragons_limit", 5 * 4 * 2},
 	};
+	
+	signal_max_value_changed(12);
 
-	//std::cout << "main_gen n m = " << n << " " << m << std::endl;
-
-	return gen(n, m, params);
+	return gen(n, m, params, signal_value_changed);
 }
