@@ -9,6 +9,7 @@ target_name = 'libgdtest'
 godot_headers_path = "godot-cpp/godot_headers/"
 cpp_bindings_path = "godot-cpp/"
 cpp_library = "godot-cpp"
+boost_prefix = 'cpp/boost/'
 
 target = ARGUMENTS.get("target", "debug")
 
@@ -42,21 +43,25 @@ if platform == "linux":
     cpp_library += '.linux.64'
 
 if platform == "windows":
-    env.Append(CCFLAGS = ['-DWIN32', '-D_WIN32', '-D_WINDOWS', '-W3', '-GR', '-D_CRT_SECURE_NO_WARNINGS'])
+    env.Append(CCFLAGS = ['-DWIN32', '-D_WIN32', '-D_WINDOWS', '-W3', '-GR', '-D_CRT_SECURE_NO_WARNINGS',
+                          '/std:c++latest'])
     if target == "debug":
-        env.Append(CCFLAGS = ['-EHsc', '-D_DEBUG', '-MDd', '/std:c++latest'])
+        env.Append(CCFLAGS = ['-EHsc', '-D_DEBUG', '-MDd'])
     else:
         env.Append(CCFLAGS = ['-O2', '-EHsc', '-DNDEBUG', '-MD'])
     target_path += 'win64/'
     cpp_library += '.windows.64'
 
 # , 'include', 'include/core'
-env.Append(CPPPATH=['.', 'src/', godot_headers_path, cpp_bindings_path + 'include/', cpp_bindings_path + 'include/core/', cpp_bindings_path + 'include/gen/'])
-env.Append(LIBPATH=[cpp_bindings_path + 'bin/'])
+env.Append(CPPPATH=['.', 'src/', godot_headers_path, cpp_bindings_path + 'include/', cpp_bindings_path + 'include/core/',
+                    cpp_bindings_path + 'include/gen/', boost_prefix])
+
+env.Append(LIBPATH=[cpp_bindings_path + 'bin/', boost_prefix + 'libs/'])
+
 env.Append(LIBS=[cpp_library])
 
 sources = []
-add_sources(sources, "cpp")
+add_sources(sources, "cpp/")
 add_sources(sources, "cpp/TaskArchive")
 add_sources(sources, "cpp/TaskGen")
 

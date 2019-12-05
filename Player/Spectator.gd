@@ -26,7 +26,6 @@ func _physics_process(delta):
 func set_map_size(h, w):
 	limit_right = (w + 1) * 64 + 32
 	limit_bottom = (h + 1) * 64 + 32
-	pass
 	
 func _focus_on_pos(pawn):
 	set_offset(Vector2(0, -1)) # some kinde of magic with offset :|

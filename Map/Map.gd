@@ -5,6 +5,7 @@ export var scenes_dictionary = {}
 export var name_dictionary = {}
 
 signal ready_to_arrange(world)
+signal continue_start_game()
 
 var BLOCK_SIZE = 64
 var DIFF = 32
@@ -18,23 +19,48 @@ var exit_pos = Vector2()
 var items_dict = {}
 var spawn_positions = []
 
-func init(path, is_gen):
+var generator = preload("res://bin/GDMazeGenerator.gdns").new()
+var thread_load_map
+
+func init(path, is_gen, progress):
+	var progressBar = progress.get_progress_bar()
+	generator.connect("progress_max_value_changed", progressBar, "set_max")
+	generator.connect("progress_value_changed", progressBar, "set_value")
 	if get_tree().is_network_server():
-		if not is_gen:
-			read_map(path)
-		else:
-			gen_map()
-			print(map)
+		thread_load_map = Thread.new()
+		var args = {
+				path = path,
+				is_gen = is_gen,
+				progress = progress
+			}
+		thread_load_map.start(self, "async_load_map", args, 2)
+	else:
+		read_map("res://Src/default_maze.tres", progress)
+		map_ready()
+		
+func async_load_map(args):
+	if not args.is_gen:
+		read_map(args["path"], args.progress)
+	else:
+		gen_map(args.progress)
+	call_deferred("load_map_done")
+
+func load_map_done():
+	thread_load_map.wait_to_finish()
+	map_ready()
+
+func map_ready():
+	if get_tree().is_network_server():
 		rpc("reload_map", map, exit_pos, spawn_positions)
 		material.set_light_mode(0) # Normal mode
-	else:
-		read_map("res://Src/default_maze.tres")
 	setup()
 
 func setup():
 	clear_map()
 	draw_map(map)
 	$Paths.init(map, exit_pos)
+	
+	emit_signal("continue_start_game")
 
 func clear_map():
 	clear()
@@ -42,17 +68,16 @@ func clear_map():
 	$Paths.clear()
 	$Paths.fix_invalid_tiles() 
 
-func gen_map():
-	var generator = load("res://bin/GDMazeGenerator.gdns").new()
-	map = generator.generate(Vector2(30, 30))
-	height = 52
-	width = 52
+func gen_map(progress):
+	map = generator.generate(Vector2(75, 75))
+	height = 75 + 2
+	width = 75 + 2
 	
 	for i in range(map.size()):
 		for j in range(map[0].size()):
 			inspect_cell(i, j)
 
-func read_map(path):
+func read_map(path, progress):
 	var file = File.new()
 	file.open(path, file.READ)
 	var n = file.get_csv_line(" ")
