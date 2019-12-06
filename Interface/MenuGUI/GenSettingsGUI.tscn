@@ -1,0 +1,443 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://Interface/MenuGUI/GenSettingsGUI.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Fonts/montserrat.otf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 60
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=16]
+size = 18
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=17]
+size = 60
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=18]
+size = 60
+font_data = ExtResource( 2 )
+
+[node name="GenSetings" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -2.39172
+margin_bottom = -2.39172
+
+[node name="MainContainer" type="VBoxContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 198.708
+margin_top = 97.4153
+margin_right = -201.292
+margin_bottom = -102.585
+custom_constants/separation = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer"]
+margin_right = 1520.0
+margin_bottom = 68.0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MainContainer/HBoxContainer"]
+margin_right = 1520.0
+margin_bottom = 68.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TitleName" type="Label" parent="Panel/MainContainer/HBoxContainer/VBoxContainer"]
+margin_right = 1520.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 1 )
+text = "Настройки генерации лабиринта"
+align = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MainContainer/HBoxContainer/VBoxContainer"]
+margin_top = 64.0
+margin_right = 1520.0
+margin_bottom = 68.0
+
+[node name="VariantsContainer" type="VBoxContainer" parent="Panel/MainContainer"]
+margin_top = 118.0
+margin_right = 1520.0
+margin_bottom = 606.0
+rect_clip_content = true
+size_flags_vertical = 0
+custom_constants/separation = 25
+
+[node name="SizeContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_right = 1520.0
+margin_bottom = 40.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/SizeContainer"]
+margin_right = 143.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 2 )
+text = "Размер:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/SizeContainer"]
+margin_left = 168.0
+margin_right = 410.0
+margin_bottom = 40.0
+
+[node name="N_Label" type="Label" parent="Panel/MainContainer/VariantsContainer/SizeContainer/HBoxContainer"]
+margin_top = 13.0
+margin_right = 14.0
+margin_bottom = 27.0
+text = "N:"
+
+[node name="N_Size" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/SizeContainer/HBoxContainer"]
+margin_left = 18.0
+margin_right = 118.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 3 )
+text = "100"
+align = 1
+
+[node name="M_Label" type="Label" parent="Panel/MainContainer/VariantsContainer/SizeContainer/HBoxContainer"]
+margin_left = 122.0
+margin_top = 13.0
+margin_right = 138.0
+margin_bottom = 27.0
+text = "M:"
+
+[node name="M_Size" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/SizeContainer/HBoxContainer"]
+margin_left = 142.0
+margin_right = 242.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 4 )
+text = "100"
+align = 1
+
+[node name="WallsContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 65.0
+margin_right = 1520.0
+margin_bottom = 105.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/WallsContainer"]
+margin_right = 257.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 5 )
+text = "Процент стен:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/WallsContainer"]
+margin_left = 282.0
+margin_right = 398.0
+margin_bottom = 40.0
+
+[node name="Walls" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/WallsContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 6 )
+text = "35"
+align = 1
+
+[node name="Label2" type="Label" parent="Panel/MainContainer/VariantsContainer/WallsContainer/HBoxContainer"]
+margin_left = 104.0
+margin_top = 13.0
+margin_right = 116.0
+margin_bottom = 27.0
+text = "%"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 130.0
+margin_right = 1520.0
+margin_bottom = 134.0
+
+[node name="TorchContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 159.0
+margin_right = 1520.0
+margin_bottom = 199.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/TorchContainer"]
+margin_right = 309.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 7 )
+text = "Радиус факелов:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/TorchContainer"]
+margin_left = 334.0
+margin_right = 434.0
+margin_bottom = 40.0
+
+[node name="Torch_r" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/TorchContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "40"
+align = 1
+
+[node name="BonfireContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 224.0
+margin_right = 1520.0
+margin_bottom = 264.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/BonfireContainer"]
+margin_right = 297.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 9 )
+text = "Радиус костров:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/BonfireContainer"]
+margin_left = 322.0
+margin_right = 422.0
+margin_bottom = 40.0
+
+[node name="Bonfire_r" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/BonfireContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 10 )
+text = "25"
+align = 1
+
+[node name="ArrowContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 289.0
+margin_right = 1520.0
+margin_bottom = 329.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/ArrowContainer"]
+margin_right = 301.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 11 )
+text = "Радиус стрелок:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/ArrowContainer"]
+margin_left = 326.0
+margin_right = 426.0
+margin_bottom = 40.0
+
+[node name="Arrow_r" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/ArrowContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 12 )
+text = "25"
+align = 1
+
+[node name="ChestContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+visible = false
+margin_top = 354.0
+margin_right = 1520.0
+margin_bottom = 394.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/ChestContainer"]
+margin_right = 319.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 11 )
+text = "Радиус сундуков:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/ChestContainer"]
+margin_left = 344.0
+margin_right = 444.0
+margin_bottom = 40.0
+
+[node name="Chest_r" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/ChestContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 12 )
+text = "22"
+align = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 354.0
+margin_right = 1520.0
+margin_bottom = 358.0
+
+[node name="LionContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 383.0
+margin_right = 1520.0
+margin_bottom = 423.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/LionContainer"]
+margin_right = 346.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 13 )
+text = "Радиус врагов 1lvl:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/LionContainer"]
+margin_left = 371.0
+margin_right = 471.0
+margin_bottom = 40.0
+
+[node name="lvl1_r" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/LionContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 14 )
+text = "25"
+align = 1
+
+[node name="VSeparator" type="VSeparator" parent="Panel/MainContainer/VariantsContainer/LionContainer"]
+margin_left = 496.0
+margin_right = 500.0
+margin_bottom = 40.0
+
+[node name="Label2" type="Label" parent="Panel/MainContainer/VariantsContainer/LionContainer"]
+margin_left = 525.0
+margin_right = 854.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 15 )
+text = "Лимит врагов 1lvl:"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/LionContainer"]
+margin_left = 879.0
+margin_right = 979.0
+margin_bottom = 40.0
+
+[node name="lvl1_limit" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/LionContainer/HBoxContainer2"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 16 )
+text = "80"
+align = 1
+
+[node name="DragonContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer"]
+margin_top = 448.0
+margin_right = 1520.0
+margin_bottom = 488.0
+custom_constants/separation = 25
+
+[node name="Label" type="Label" parent="Panel/MainContainer/VariantsContainer/DragonContainer"]
+margin_right = 346.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 13 )
+text = "Радиус врагов 2lvl:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/DragonContainer"]
+margin_left = 371.0
+margin_right = 471.0
+margin_bottom = 40.0
+
+[node name="lvl2_r" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/DragonContainer/HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 14 )
+text = "35"
+align = 1
+
+[node name="VSeparator" type="VSeparator" parent="Panel/MainContainer/VariantsContainer/DragonContainer"]
+margin_left = 496.0
+margin_right = 500.0
+margin_bottom = 40.0
+
+[node name="Label2" type="Label" parent="Panel/MainContainer/VariantsContainer/DragonContainer"]
+margin_left = 525.0
+margin_right = 854.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 15 )
+text = "Лимит врагов 2lvl:"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MainContainer/VariantsContainer/DragonContainer"]
+margin_left = 879.0
+margin_right = 979.0
+margin_bottom = 40.0
+
+[node name="lvl2_limit" type="LineEdit" parent="Panel/MainContainer/VariantsContainer/DragonContainer/HBoxContainer2"]
+margin_right = 100.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 100, 0 )
+custom_fonts/font = SubResource( 16 )
+text = "40"
+align = 1
+
+[node name="AcceptContainer" type="HBoxContainer" parent="Panel"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -676.65
+margin_top = -130.825
+margin_right = -66.6501
+margin_bottom = -64.8251
+custom_constants/separation = 25
+
+[node name="Cancel" type="Button" parent="Panel/AcceptContainer"]
+margin_right = 219.0
+margin_bottom = 66.0
+custom_fonts/font = SubResource( 17 )
+text = "Отмена"
+
+[node name="Ok" type="Button" parent="Panel/AcceptContainer"]
+margin_left = 244.0
+margin_right = 604.0
+margin_bottom = 66.0
+custom_fonts/font = SubResource( 18 )
+text = "Подтвердить"
+[connection signal="pressed" from="Panel/AcceptContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="Panel/AcceptContainer/Ok" to="." method="_on_Ok_pressed"]

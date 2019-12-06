@@ -342,7 +342,7 @@ vector<string> gen(int n, int m, map<string, int> params, boost::signals2::signa
 	//std::cout << "CHESTS" << std::endl;
 
 	///CHESTS
-	int chest_radius = 22;
+	int chest_radius = params["chest_radius"]; 
 	auto chest_pool = get_pool(W);
 	while (!chest_pool.empty()) {
 		auto cell = chest_pool[rnd() % chest_pool.size()];
@@ -493,6 +493,7 @@ std::vector<std::string> Generator::main_generator(int n, int m)
 		{"lions_limit", 10 * 4 * 2},
 		{"dragon_radius", 35},
 		{"dragons_limit", 5 * 4 * 2},
+		{"chest_radius", 22},
 	};
 	
 	signal_max_value_changed(12);

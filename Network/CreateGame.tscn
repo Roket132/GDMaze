@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Network/CreateGame.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
@@ -33,6 +33,10 @@ size = 40
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=8]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -126,15 +130,30 @@ margin_right = 920.0
 margin_bottom = 144.0
 custom_fonts/font = SubResource( 6 )
 
-[node name="Choice" type="Button" parent="Panel/VBoxContainer/NameBlock"]
-margin_left = 377.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/NameBlock"]
 margin_top = 148.0
-margin_right = 542.0
+margin_right = 920.0
 margin_bottom = 194.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="Choice" type="Button" parent="Panel/VBoxContainer/NameBlock/HBoxContainer"]
+margin_left = 166.0
+margin_right = 331.0
+margin_bottom = 46.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 7 )
 text = "Выбрать"
+
+[node name="BtnGenSettigns" type="Button" parent="Panel/VBoxContainer/NameBlock/HBoxContainer"]
+margin_left = 341.0
+margin_right = 754.0
+margin_bottom = 46.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 8 )
+text = "Настройка генерации"
 
 [node name="MazeBlock" type="VBoxContainer" parent="Panel/VBoxContainer"]
 margin_top = 219.0
@@ -151,7 +170,7 @@ margin_top = 68.0
 margin_right = 920.0
 margin_bottom = 423.0
 rect_min_size = Vector2( 0, 355 )
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 
 [node name="Enemy" parent="Panel/VBoxContainer/MazeBlock/TabContainer" instance=ExtResource( 3 )]
 margin_left = 4.0
@@ -177,5 +196,6 @@ current_file = "GDMaze.txt"
 current_path = "C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt"
 [connection signal="pressed" from="Panel/CreateGame" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/NameBlock/PathContainer/GenCheckBox" to="." method="_on_GenCheckBox_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/Choice" to="." method="_on_Choice_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/HBoxContainer/Choice" to="." method="_on_Choice_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/HBoxContainer/BtnGenSettigns" to="." method="_on_BtnGenSettigns_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
