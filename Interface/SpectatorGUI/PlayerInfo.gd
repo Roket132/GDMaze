@@ -24,3 +24,7 @@ func set_player(pl):
 func _on_Avatar_pressed():
 	if player != null:
 		emit_signal("focus", player)
+		
+func increase_score(dt):
+	var score = $VBoxContainer/ScoreBox/Number.text as int
+	$VBoxContainer/ScoreBox/Number.text = str(score + dt)

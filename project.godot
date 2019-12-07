@@ -63,6 +63,7 @@ Receiver="*res://Tasks/Receiver.gd"
 TasksArchives="*res://Tasks/TasksArchives.gd"
 GlobalSettings="*res://Settings/GlobalSettings.gd"
 MazeGenSettings="*res://Settings/MazeGenSettings.gd"
+ScoreSettings="*res://Settings/ScoreSettings.gd"
 
 [display]
 
