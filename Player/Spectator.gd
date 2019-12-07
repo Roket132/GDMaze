@@ -36,4 +36,7 @@ func add_player(pl):
 	info.set_player(pl)
 	info.connect("focus", self, "_focus_on_pos")
 	pl.connect("clicked", self, "_focus_on_pos")
+	
+	pl.connect("increase_score", info, "increase_score")
+	
 	$CanvasLayer/PlayersPanel/Panel/VScrollBar/VBoxContainer.add_child(info)

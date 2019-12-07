@@ -2,7 +2,7 @@ extends Node
 
 # Generations settings
 
-var _size = Vector2(100, 100)
+var _size = Vector2(50, 50)
 
 func get_size():
 	return _size
