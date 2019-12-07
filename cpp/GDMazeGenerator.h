@@ -7,6 +7,7 @@
 #include "TaskGen/gen.h"
 
 #include <iostream>
+#include <map>
 #include <vector>
 #include <string>
 
@@ -20,7 +21,7 @@ namespace godot {
 
 		void _init();
 
-		Array generate(Vector2 size);
+		Array generate(Array args);
 
 		void update_max_value(int max_value);
 

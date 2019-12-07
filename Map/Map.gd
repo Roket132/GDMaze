@@ -24,7 +24,6 @@ var thread_load_map
 
 func init(path, is_gen, progress):
 	if get_tree().is_network_server():
-		print("server")
 		var progressBar = progress.get_progress_bar()
 		generator.connect("progress_max_value_changed", progressBar, "set_max")
 		generator.connect("progress_value_changed", progressBar, "set_value")
@@ -36,7 +35,6 @@ func init(path, is_gen, progress):
 			}
 		thread_load_map.start(self, "async_load_map", args, 2)
 	else:
-		print("not server")
 		read_map("res://Src/default_maze.tres", progress)
 		map_ready()
 		
@@ -70,9 +68,9 @@ func clear_map():
 	$Paths.fix_invalid_tiles() 
 
 func gen_map(progress):
-	map = generator.generate(Vector2(100, 100))
-	height = 100 + 2
-	width = 100 + 2
+	map = generator.generate(MazeGenSettings.get_settings())
+	height = map.size()
+	width = map[0].size()
 	
 	for i in range(map.size()):
 		for j in range(map[0].size()):

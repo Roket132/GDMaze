@@ -479,11 +479,13 @@ $ chest
 
 */
 
-std::vector<std::string> Generator::main_generator(int n, int m)
+std::vector<std::string> Generator::main_generator(int n, int m, map<string, int> _params)
 {
 	//freopen("input.txt","r",stdin); //freopen("output.txt","w",stdout);
 	ios::sync_with_stdio(0); cin.tie(0);//cout.precision(12);cout<<fixed;
 
+	map<string, int> params = _params;
+	/*
 	map<string, int> params = {
 		{"walls", 35}, //процент стен
 		{"fakel_radius", 40},
@@ -495,7 +497,7 @@ std::vector<std::string> Generator::main_generator(int n, int m)
 		{"dragons_limit", 5 * 4 * 2},
 		{"chest_radius", 22},
 	};
-	
+	*/
 	signal_max_value_changed(12);
 
 	return gen(n, m, params, signal_value_changed);

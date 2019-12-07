@@ -15,7 +15,7 @@
 
 class Generator {
 public:
-	std::vector<std::string> main_generator(int n, int m);
+	std::vector<std::string> main_generator(int n, int m, std::map<std::string, int> _params);
 
 	boost::signals2::signal<void(int)> signal_max_value_changed;
 

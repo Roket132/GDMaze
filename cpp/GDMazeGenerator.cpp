@@ -26,16 +26,30 @@ namespace {
 	}
 }
 
-Array godot::GDMazeGenerator::generate(Vector2 size)
+// n, m, walls, torch_r, bonfire_r, arrow_r, chest_r, lvl1_r, l, lvl2_r, l
+
+Array godot::GDMazeGenerator::generate(Array args)
 {	
 	global_this = this;
-	int n = size.x + 2, m = size.y + 2;
+	int n = int(args[0]) + 2, m = int(args[1]) + 2;
+
+		std::map<std::string, int> _params = {
+			{"walls", args[2]},
+			{"fakel_radius", args[3]},
+			{"fire_radius", args[4]},
+			{"arrow_radius", args[5]},
+			{"chest_radius", args[6]},
+			{"lion_radius", args[7]},
+			{"lions_limit", args[8]},
+			{"dragon_radius", args[9]},
+			{"dragons_limit", args[10]},
+		};
 
 	Generator generator;
 	generator.signal_max_value_changed.connect(&hide_update_max_value);
 	generator.signal_value_changed.connect(&hide_update_value);
 
-	std::vector<std::string> res = generator.main_generator(size.x, size.y);
+	std::vector<std::string> res = generator.main_generator(int(args[0]), int(args[1]), _params);
 
 	Array arr;
 	for (int i = 0; i < n; i++) {

@@ -70,3 +70,7 @@ func set_lvl2(radius, limit):
 	_lvl2_r = radius
 	_lvl2_limit = limit
 	
+func get_settings():
+	return [_size.x, _size.y, _walls, _torch_r, _bonfire_r, _arrow_r, _chest_r, _lvl1_r, _lvl1_limit, 
+			_lvl2_r, _lvl2_limit]
+	
