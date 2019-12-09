@@ -14,9 +14,9 @@ var DIFF = 32
 var height
 var width
 
-var map
+var map  # startly map without changing
 var exit_pos = Vector2()
-var items_dict = {}
+var items_by_position = {}
 var spawn_positions = []
 
 var generator = preload("res://bin/GDMazeGenerator.gdns").new()
@@ -109,7 +109,7 @@ func draw_map(map):
 				var item = Scenes[scenes_dictionary[map[i][j]]].instance()
 				add_child(item)
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
-				items_dict[item.position] = item
+				items_by_position[item.position] = item
 
 # Vectro2(from) with normal coordinate (i, j)
 remotesync func draw_path(from, steps = -1):

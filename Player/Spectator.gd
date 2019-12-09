@@ -4,6 +4,8 @@ var mouse_captured = false
 
 var focus_pawn = null
 
+var players = []
+
 func _ready():
 	#OS.set_window_size(Vector2(1920, 1080))
 	OS.set_window_fullscreen(true)
@@ -32,6 +34,8 @@ func _focus_on_pos(pawn):
 	focus_pawn = pawn
 	
 func add_player(pl):
+	players.append(pl)
+	
 	var info = load("res://Interface/SpectatorGUI/PlayerInfo.tscn").instance()
 	info.set_player(pl)
 	info.connect("focus", self, "_focus_on_pos")
