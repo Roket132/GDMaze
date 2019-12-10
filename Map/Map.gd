@@ -130,3 +130,22 @@ func get_next_spawn_position():
 	var pos = spawn_positions[player_in_game]
 	player_in_game += 1
 	return pos
+
+
+func save_players():
+	var players_save_dcits = {}
+	for pl in gamestate.players:
+		var pl_dict = pl.save()
+		players_save_dcits[pl_dict.name] = pl_dict
+	return players_save_dcits
+
+func save_tasks_archives():
+	pass
+
+func save():
+	return {
+		"players" : save_players(),
+		"map" : map,
+		"exit" :  exit_pos,
+		"spawn_positions" : spawn_positions
+		}

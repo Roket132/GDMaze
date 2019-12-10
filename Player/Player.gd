@@ -181,4 +181,14 @@ func update_score(dt):
 remote func remote_update_score(dt):
 	if get_tree().is_network_server():
 		emit_signal("increase_score", dt)
-	
+
+func get_settings():
+	return settings
+
+
+func save():
+	return {
+		"name" : settings.name,
+		"position" : position,
+		"settings" : settings
+		}

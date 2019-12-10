@@ -65,7 +65,9 @@ script = SubResource( 4 )
 0/shapes = [  ]
 0/z_index = 0
 
-[node name="Map" type="TileMap"]
+[node name="Map" type="TileMap" groups=[
+"Persist",
+]]
 material = SubResource( 1 )
 position = Vector2( 2, -1 )
 tile_set = SubResource( 5 )

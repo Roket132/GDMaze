@@ -1,14 +1,12 @@
 extends Node
 
-# Default game port
-const DEFAULT_PORT = 10567
 
-# Max number of players
-const MAX_PEERS = 4
+const DEFAULT_PORT = 10567 # Default game port
+
+const MAX_PEERS = 4 # Max number of players
 
 var game_started = false
-# Name for my player
-var player_name = "Host"
+var player_name = "Host" # Name for my player
 
 var world = null
 var progress = null
@@ -196,3 +194,16 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
+
+
+func save_game():
+	var save_game = File.new()
+	save_game.open("res://savegame.save", File.WRITE)
+	print(save_game.is_open())
+	var save_nodes = get_tree().get_nodes_in_group("Persist")
+	for i in save_nodes:
+		print(i)
+		var node_data = i.call("save");
+		save_game.store_line(to_json(node_data))
+	print("saved")
+	save_game.close()
