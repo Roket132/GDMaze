@@ -6,6 +6,7 @@ const DEFAULT_PORT = 10567
 # Max number of players
 const MAX_PEERS = 4
 
+var game_started = false
 # Name for my player
 var player_name = "Host"
 
@@ -14,6 +15,7 @@ var progress = null
 
 var players_name = {}  # Names for remote players in id:name format
 var players = {}  # in id:pl_ref format
+var spectator = null
 
 # Save spawn_pos for players reloading
 var reload_spawn_points
@@ -55,6 +57,9 @@ remote func register_player(id, new_player_name):
 		rpc_id(id, "add_new_player", p_id, players_name[p_id])
 		rpc_id(p_id, "add_new_player", id, new_player_name)
 	add_new_player(id, new_player_name)
+	
+	if game_started:
+		remote_start_late(id)
 
 remotesync func add_new_player(id, new_player_name):
 	players_name[id] = new_player_name
@@ -101,6 +106,8 @@ func get_player_name():
 func start_game():
 	assert(get_tree().is_network_server())
 	
+	game_started = true
+	
 	world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
 	world.visible = false
@@ -114,15 +121,15 @@ func continue_start_game():
 	world.visible = true
 	get_tree().get_root().get_node("MainMenu").queue_free()
 	
-	ending_start_game()
+	end_start_game()
 
-func ending_start_game():
+func end_start_game():
 	UsingItemsLambdas.players_by_id = players
 	for p_id in players:
 		remote_start(p_id)
 
 func load_spectator():
-	var spectator = load("res://Player/Spectator.tscn").instance()
+	spectator = load("res://Player/Spectator.tscn").instance()
 	spectator.set_map_size(world.height, world.width)
 	print(players)
 	for pl in players:
@@ -130,23 +137,31 @@ func load_spectator():
 	world.add_child(spectator)
 
 func load_players():
-	var player_scene = preload("res://Player/Player.tscn")
 	for p_id in players_name:
-		var player = player_scene.instance()
-		var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
-		var spawn_pos = world.get_next_spawn_position()
-		players[p_id] = player
-		
-		player.setup(world, p_id, name, spawn_pos)
-		player.set_network_master(p_id)
-		
-		player.scale = Vector2(0.5, 0.5)
-		world.add_child(player)
+		create_player(p_id)
 
-func remote_start(id):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
+func create_player(p_id):
+	var player_scene = preload("res://Player/Player.tscn")
+	var player = player_scene.instance()
+	var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
+	var spawn_pos = world.get_next_spawn_position()
+	players[p_id] = player
+	
+	player.setup(world, p_id, name, spawn_pos)
+	player.set_network_master(p_id)
+	
+	player.scale = Vector2(0.5, 0.5)
+	world.add_child(player)
 
-remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name):
+func remote_start(id, late = false):
+	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name, false)
+	
+func remote_start_late(id):
+	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name, true)
+	create_player(id)
+	spectator.add_player(players[id])
+
+remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name, late):
 	world = load("res://Map/Map.tscn").instance()
 	world.set_map(map, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
@@ -156,8 +171,12 @@ remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name):
 	
 	load_players()
 	
-remote func remote_add_player(pl):
-	pass
+	if late:
+		for p_id in players_name:
+			rpc_id(p_id, "remote_add_player", get_tree().get_network_unique_id())
+
+remote func remote_add_player(p_id):
+	create_player(p_id)
 
 func end_game():
 	if has_node("/root/world"): # Game is in progress
