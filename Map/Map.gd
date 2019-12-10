@@ -5,7 +5,7 @@ export var scenes_dictionary = {}
 export var name_dictionary = {}
 
 signal ready_to_arrange(world)
-signal continue_start_game()
+signal maze_generated()
 
 var BLOCK_SIZE = 64
 var DIFF = 32
@@ -17,6 +17,8 @@ var width
 var map  # startly map without changing
 var exit_pos = Vector2()
 var items_by_position = {}
+
+var player_in_game = 0
 var spawn_positions = []
 
 var generator = preload("res://bin/GDMazeGenerator.gdns").new()
@@ -54,12 +56,12 @@ func map_ready():
 		rpc("reload_map", map, exit_pos, spawn_positions)
 		material.set_light_mode(0) # Normal mode
 	setup()
+	emit_signal("maze_generated")
 
 func setup():
 	clear_map()
 	draw_map(map)
 	$Paths.init(map, exit_pos)
-	emit_signal("continue_start_game")
 
 func clear_map():
 	clear()
@@ -97,6 +99,9 @@ func inspect_cell(i, j):
 	if map[i][j] == "E":
 		exit_pos = Vector2(j, i)
 
+func add_spawn_pos(pos):
+	spawn_positions.append(pos)
+
 func draw_map(map):
 	for i in range(map.size()):
 		for j in range(map[i].size()):
@@ -115,12 +120,13 @@ func draw_map(map):
 remotesync func draw_path(from, steps = -1):
 	$Paths.draw(from, steps)
 
-remote func reload_map(map_, exit, spawn):
+func set_map(map_, exit_pos_, spawn_pos_):
 	map = map_
-	exit_pos = exit
-	spawn_positions = spawn
+	exit_pos = exit_pos_
+	spawn_positions = spawn_pos_
 	setup()
-	emit_signal("ready_to_arrange", self)
 
-func add_spawn_pos(pos):
-	spawn_positions.append(pos)
+func get_next_spawn_position():
+	var pos = spawn_positions[player_in_game]
+	player_in_game += 1
+	return pos

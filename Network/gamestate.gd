@@ -8,16 +8,13 @@ const MAX_PEERS = 4
 
 # Name for my player
 var player_name = "Host"
-var maze_path = ""
 
 var world = null
 var progress = null
 
-# Names for remote players in id:name format
-var players = {}
-var players_by_id = {}
-# Ref to player instance
-var players_ref = []
+var players_name = {}  # Names for remote players in id:name format
+var players = {}  # in id:pl_ref format
+
 # Save spawn_pos for players reloading
 var reload_spawn_points
 
@@ -30,27 +27,15 @@ signal game_error(what)
 
 # Callback from SceneTree
 func _player_connected(_id):
-	# This is not used in this demo, because _connected_ok is called for clients
-	# on success and will do the job.
 	pass
 
 # Callback from SceneTree
 func _player_disconnected(id):
-	if get_tree().is_network_server():
-		if has_node("/root/world"): # Game is in progress
-			emit_signal("game_error", "Player " + players[id] + " disconnected")
-			# end_game() forwhat?
-		else: # Game is not in progress
-			# If we are the server, send to the new dude all the already registered players
-			unregister_player(id)
-			for p_id in players:
-				# Erase in the server
-				rpc_id(p_id, "unregister_player", id)
+	pass
 
 # Callback from SceneTree, only for clients (not server)
 func _connected_ok():
-	# Registration of a client beings here, tell everyone that we are here
-	rpc("register_player", get_tree().get_network_unique_id(), player_name)
+	rpc_id(1, "register_player", get_tree().get_network_unique_id(), player_name)
 	emit_signal("connection_succeeded")
 
 # Callback from SceneTree, only for clients (not server)
@@ -63,92 +48,24 @@ func _connected_fail():
 	get_tree().set_network_peer(null) # Removeset_wo peer
 	emit_signal("connection_failed")
 
-# Lobby management functions
+# called on server by connected player
 remote func register_player(id, new_player_name):
-	if get_tree().is_network_server():
-		# If we are the server, let everyone know about the new player
-		rpc_id(id, "register_player", 1, player_name) # Send myself to new dude
-		for p_id in players: # Then, for each remote player
-			rpc_id(id, "register_player", p_id, players[p_id]) # Send player to new dude
-			rpc_id(p_id, "register_player", id, new_player_name) # Send new dude to player
-	players[id] = new_player_name
+	rpc_id(id, "add_new_player", 1, player_name)
+	for p_id in players_name: 
+		rpc_id(id, "add_new_player", p_id, players_name[p_id])
+		rpc_id(p_id, "add_new_player", id, new_player_name)
+	add_new_player(id, new_player_name)
+
+remotesync func add_new_player(id, new_player_name):
+	players_name[id] = new_player_name
 	emit_signal("player_list_changed")
 
 remote func unregister_player(id):
-	players.erase(id)
+	players_name.erase(id)
 	emit_signal("player_list_changed")
 
-remote func pre_start_game(spawn_points):
-	get_tree().set_pause(true)
-	world = load("res://Map/Map.tscn").instance()
-	print("world created")
-	get_tree().get_root().add_child(world)
-	
-	world.visible = false
-	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), progress)
-	
-	# connect must be necessarily only after init
-	world.connect("ready_to_arrange", self, "reload_players")
-	world.connect("continue_start_game", self, "continue_start_game")
-	
-	reload_spawn_points = spawn_points
-
-func continue_start_game():
-	print("continue")
-	var spawn_points = reload_spawn_points
-	if get_tree().is_network_server():
-		load_players(world, spawn_points) # necessarily before load_specrator
-		load_spectator(world)
-		
-	if not get_tree().is_network_server():
-		rpc_id(1, "ready_to_start", get_tree().get_network_unique_id())
-	elif players.size() == 0:
-		post_start_game()
-		
-	world.visible = true
-	if get_tree().get_root().has_node("MainMenu"):
-		get_tree().get_root().get_node("MainMenu").queue_free()
-
-func load_players(world, spawn_points):
-	var player_scene = load("res://Player/Player.tscn")
-
-	for p_id in spawn_points:
-		var spawn_pos = world.spawn_positions[spawn_points[p_id]] if spawn_points[p_id] < spawn_points.size() else Vector2(0, 0)
-		var player = player_scene.instance()
-		var name = player_name if p_id == get_tree().get_network_unique_id() else players[p_id]
-		player.setup(world, name)
-
-		players_ref.append(player)
-		players_by_id[p_id] = player 
-
-		player.set_name(str(p_id))
-		player.position = spawn_pos
-		player.set_network_master(p_id) #set unique id as master
-
-		if p_id == get_tree().get_network_unique_id():
-			# If node for this peer id, set name
-			player.set_player_name(player_name)
-		else:
-			# Otherwise set name from peer
-			player.set_player_name(players[p_id])
-		player.scale = Vector2(0.5, 0.5)
-		world.add_child(player)
-
-func reload_players(world):
-	for pl in players_ref:
-		pl.queue_free()
-	load_players(world, reload_spawn_points)
-
-func load_spectator(world):
-	var spectator = load("res://Player/Spectator.tscn").instance()
-	spectator.set_map_size(world.height, world.width)
-	for pl in players_ref:
-		spectator.add_player(pl)
-	world.add_child(spectator)
-
 remote func post_start_game():
-	UsingItemsLambdas.players_by_id = players_by_id
-	get_tree().set_pause(false) # Unpause and unleash the game!
+	pass
 
 var players_ready = []
 
@@ -158,9 +75,9 @@ remote func ready_to_start(id):
 	if not id in players_ready:
 		players_ready.append(id)
 
-	if players_ready.size() == players.size():
-		for p in players:
-			rpc_id(p, "post_start_game")
+	if players_ready.size() == players_name.size():
+		for p_id in players_name:
+			rpc_id(p_id, "post_start_game")
 		post_start_game()
 
 func host_game():
@@ -176,23 +93,71 @@ func join_game(ip, new_player_name):
 	get_tree().set_network_peer(host)
 
 func get_player_list():
-	return players.values()
+	return players_name.values()
 
 func get_player_name():
 	return player_name
 
-func begin_game():
+func start_game():
 	assert(get_tree().is_network_server())
+	
+	world = load("res://Map/Map.tscn").instance()
+	get_tree().get_root().add_child(world)
+	world.visible = false
+	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), progress)
+	
+	world.connect("maze_generated", self, "continue_start_game")
 
-	var spawn_points = {}
-	var spawn_point_idx = 0
-	for p in players:
-		spawn_points[p] = spawn_point_idx
-		spawn_point_idx += 1
-	for p in players:
-		rpc_id(p, "pre_start_game", spawn_points)
+func continue_start_game():
+	load_players()
+	load_spectator()
+	world.visible = true
+	get_tree().get_root().get_node("MainMenu").queue_free()
+	
+	ending_start_game()
 
-	pre_start_game(spawn_points)
+func ending_start_game():
+	UsingItemsLambdas.players_by_id = players
+	for p_id in players:
+		remote_start(p_id)
+
+func load_spectator():
+	var spectator = load("res://Player/Spectator.tscn").instance()
+	spectator.set_map_size(world.height, world.width)
+	print(players)
+	for pl in players:
+		spectator.add_player(players[pl])
+	world.add_child(spectator)
+
+func load_players():
+	var player_scene = preload("res://Player/Player.tscn")
+	for p_id in players_name:
+		var player = player_scene.instance()
+		var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
+		var spawn_pos = world.get_next_spawn_position()
+		players[p_id] = player
+		
+		player.setup(world, p_id, name, spawn_pos)
+		player.set_network_master(p_id)
+		
+		player.scale = Vector2(0.5, 0.5)
+		world.add_child(player)
+
+func remote_start(id):
+	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
+
+remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name):
+	world = load("res://Map/Map.tscn").instance()
+	world.set_map(map, exit_pos_, spawn_pos_)
+	get_tree().get_root().add_child(world)
+	get_tree().get_root().get_node("MainMenu").queue_free()
+	
+	players_name = pls_name
+	
+	load_players()
+	
+remote func remote_add_player(pl):
+	pass
 
 func end_game():
 	if has_node("/root/world"): # Game is in progress
@@ -200,7 +165,7 @@ func end_game():
 		get_node("/root/world").queue_free()
 
 	emit_signal("game_ended")
-	players.clear()
+	players_name.clear()
 	get_tree().set_network_peer(null) # End networking
 
 func get_game_mode():

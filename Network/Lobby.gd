@@ -39,20 +39,10 @@ func _on_Host_pressed():
 	GlobalSettings.set_arrow_taskFiles($CreateGame.get_arrow_taskFiles_list())
 	
 	gamestate.progress = $Players/Progress
-	print("progress = ", $Players/Progress/progressBar)
-	
-	#thread_load_game = Thread.new()
-	#thread_load_game.start(self, "_run_load_game", "", 2)
-	#thread_load_game.wait_to_finish()
-	
+		
 	gamestate.host_game()
 	refresh_lobby()
 
-func _run_load_game(input):
-	gamestate.world = load("res://Map/Map.tscn").inctance()
-	gamestate.world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), $Players/Progress)
-	
-	
 func _on_Join_pressed():
 	if $StartGame/Panel/Name.text == "":
 		$StartGame/Panel/Error.text = "Invalid name!"
@@ -69,7 +59,7 @@ func _on_Join_pressed():
 	
 	var player_name = $StartGame/Panel/Name.text
 	gamestate.join_game(ip, player_name)
-	
+
 
 func _on_connection_success():
 	get_node("StartGame").hide()
@@ -101,7 +91,7 @@ func refresh_lobby():
 	$Players/Start.disabled = not get_tree().is_network_server()
 
 func _on_Start_pressed():
-	gamestate.begin_game()
+	gamestate.start_game()
 
 func to_main_menu():
 	$CreateGame.visible = false

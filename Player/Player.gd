@@ -17,6 +17,7 @@ var arrow_dialog_scene = preload("res://Interface/DialogGUI/ArrowDialog.tscn")
 
 var settings = {
 	name = "name",
+	id = 0,
 	rest_of_bonfire = 0,
 	have_a_torch = false,
 	stuck = false
@@ -51,9 +52,11 @@ func _ready():
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
-func setup(world_, name_):
+func setup(world_, id_, name_, spawn_pos):
 	world = world_
 	settings.name = name_
+	settings.id = id_
+	position = spawn_pos
 
 func _physics_process(delta):
 	if is_network_master():
@@ -108,8 +111,6 @@ func move_player():
 			$Light2D.set_texture_scale(2.76)
 		rset("puppet_pos", position)
 
-func set_player_name(name):
-	settings.player_name = name
 
 remotesync func hit_bonfire(bonfire):
 	if settings["have_a_torch"]:
