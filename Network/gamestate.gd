@@ -131,20 +131,16 @@ func create_player(p_id):
 	var spawn_pos
 	
 	if loaded_players_settings.has(name):
-		print("tyt")
 		var settings = loaded_players_settings[name]
 		spawn_pos = Vector2(settings.position_x, settings.position_y)
 		player.set_settings(settings.settings)
 		player.set_complited_tasks(settings["complited_tasks"].enemy, settings["complited_tasks"].arrow)
 	else:
-		print("or tyt")
 		spawn_pos = world.get_next_spawn_position()
 	
 	players[p_id] = player
 	player.setup(world, p_id, name, spawn_pos)
 	player.set_network_master(p_id)
-
-	print("player_pos = ", player.position)
 
 	world.add_child(player)
 
@@ -195,13 +191,10 @@ func _ready():
 func save_game():
 	var save_game = File.new()
 	save_game.open("res://savegame.save", File.WRITE)
-	print(save_game.is_open())
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
 	for i in save_nodes:
-		print(i)
 		var node_data = i.call("save");
 		save_game.store_line(to_json(node_data))
-	print("saved")
 	save_game.close()
 
 func load_game(path):

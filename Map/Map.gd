@@ -154,7 +154,6 @@ func save_tasks_archives():
 	pass
 
 func save():
-	print("keke = ", typeof(exit_pos))
 	var save_dict = {
 		"players" : save_players(),
 		"map" : map,

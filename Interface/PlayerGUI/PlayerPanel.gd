@@ -39,7 +39,6 @@ func get_item_pos(name):
 	return inventory_dict[name]
 
 func add_item(name):
-	print("add item")
 	var inv_node = get_node(inv_path.replace("%", str(get_item_pos(name))))
 	var lab_node = get_node(lab_path.replace("%", str(get_item_pos(name))))
 	if not name in cnt_dict or cnt_dict[name] == 0:
