@@ -186,7 +186,6 @@ remote func remote_update_score(dt):
 func get_settings():
 	return settings
 
-
 func save():
 	return {
 		"name" : settings.name,

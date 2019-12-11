@@ -24,6 +24,11 @@ var spawn_positions = []
 var generator = preload("res://bin/GDMazeGenerator.gdns").new()
 var thread_load_map
 
+func _ready():
+	current_free_pos = gamestate.loaded_players_settings.size()
+	if get_tree().is_network_server():
+		material.set_light_mode(0) # Normal mode
+
 func init(path, is_gen, progress):
 	if get_tree().is_network_server():
 		var progressBar = progress.get_progress_bar()
@@ -39,7 +44,8 @@ func init(path, is_gen, progress):
 	else:
 		read_map("res://Src/default_maze.tres", progress)
 		map_ready()
-		
+
+
 func async_load_map(args):
 	if not args.is_gen:
 		read_map(args["path"], args.progress)
@@ -52,9 +58,6 @@ func load_map_done():
 	map_ready()
 
 func map_ready():
-	if get_tree().is_network_server():
-		rpc("reload_map", map, exit_pos, spawn_positions)
-		material.set_light_mode(0) # Normal mode
 	setup()
 	emit_signal("maze_generated")
 

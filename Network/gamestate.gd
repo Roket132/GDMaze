@@ -130,20 +130,21 @@ func create_player(p_id):
 	var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
 	var spawn_pos
 	if loaded_players_settings.has(name):
+		print("tyt")
 		var settings = loaded_players_settings[name]
 		spawn_pos = Vector2(settings.position_x, settings.position_y)
 		player.set_settings(settings.settings)
 	else:
+		print("or tyt")
 		spawn_pos = world.get_next_spawn_position()
 	
-	print("sp_pos ", spawn_pos)
-	print("settings pl = ", player.get_settings())
 	players[p_id] = player
 	player.setup(world, p_id, name, spawn_pos)
 	player.set_network_master(p_id)
 
+	print("player_pos = ", player.position)
+
 	world.add_child(player)
-	print("settings pl = ", player.get_settings())
 
 func remote_start(id, late = false):
 	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
@@ -225,10 +226,10 @@ func load_game(path):
 		
 		for pl in line["players"]:
 			loaded_players_settings[pl] = line["players"][pl]
-			world.current_free_pos += 1
 		
 	save_game.close()
 	
+	world.current_free_pos = gamestate.loaded_players_settings.size()
 	load_spectator()
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
