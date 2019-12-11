@@ -157,6 +157,7 @@ func remote_start_late(id, _name):
 	create_player(id)
 	
 	spectator.add_player(players[id])
+	UsingItemsLambdas.players_by_id = players
 
 remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name):
 	world = load("res://Map/Map.tscn").instance()

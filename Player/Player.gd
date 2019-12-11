@@ -28,13 +28,16 @@ signal clicked(pawn)
 signal kill()
 
 func _ready():
+	scale = Vector2(0.5, 0.5)
 	set_as_toplevel(true)
 	
-	puppet_pos = position
-	new_pos = position
-	last_pos = position
+	print("my collision = ", $CollisionShape2D)
 	
-	move_and_slide(Vector2(0,0)) # to prevent unnecessary motion in start
+	new_pos = position
+	move_and_slide(Vector2(0,0))  # to prevent unnecessary motion in start (a few changing position)
+	position = new_pos  # remove changing
+	puppet_pos = position
+	last_pos = position
 	
 	if is_network_master():
 		$Camera2D.make_current()
@@ -51,7 +54,8 @@ func _ready():
 		TasksArchives.create_for_player(self)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
-	scale = Vector2(0.5, 0.5)
+	
+	print(position)
 
 func setup(world_, id_, name_, spawn_pos):
 	world = world_
@@ -76,6 +80,7 @@ func _physics_process(delta):
 	move_player()
 
 func make_step(x, y):
+	print("step ", new_pos, " " , position)
 	if new_pos == position: #if player don't motion
 		$AnimatedSprite.animation = "move_forward"
 		last_pos = position
@@ -83,17 +88,18 @@ func make_step(x, y):
 		new_pos.y = position.y + BLOCK_SIZE * y
 		if settings["rest_of_bonfire"] != 0:
 			settings["rest_of_bonfire"] -= 1
+	print("stepex ", new_pos, " " , position)
 
 func make_puppet_step(puppet_pos):
 	var step = puppet_pos - position
 	if step != Vector2(0, 0):
-		
 		make_step(1 if step.x > 0 else 0 if step.x == 0 else -1,
 				  1 if step.y > 0 else 0 if step.y == 0 else -1)
 
 func move_player():
 	if get_slide_count() != 0:
 		var collision = get_slide_collision(0)
+		print("colision = ", collision)
 		new_pos = last_pos
 		
 	var velocity = (new_pos - position).normalized() * speed
@@ -104,7 +110,7 @@ func move_player():
 		position.y = new_pos.y
 		player_cell = (position + Vector2(DIFF, DIFF)) / BLOCK_SIZE
 		$AnimatedSprite.animation = "stay_forward"
-			
+	
 	if is_network_master():
 		if settings["rest_of_bonfire"] == 0:
 			$Light2D.set_texture_scale(1.96)
