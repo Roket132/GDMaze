@@ -145,10 +145,10 @@ func create_player(p_id):
 	world.add_child(player)
 
 func remote_start(id, late = false):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
+	rpc_id(id, "remote_create_game", world.map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
 	
 func remote_start_late(id, _name):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
+	rpc_id(id, "remote_create_game", world.map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
 	for p_id in players_name:
 		if p_id != id:
 			rpc_id(p_id, "remote_add_player", id)
@@ -157,9 +157,9 @@ func remote_start_late(id, _name):
 	spectator.add_player(players[id])
 	UsingItemsLambdas.players_by_id = players
 
-remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name):
+remote func remote_create_game(map, paths_map, exit_pos_, spawn_pos_, pls_name):
 	world = load("res://Map/Map.tscn").instance()
-	world.set_map(map, exit_pos_, spawn_pos_)
+	world.set_map(map, paths_map, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("MainMenu").queue_free()
 	
@@ -221,7 +221,7 @@ func load_game(path):
 		var spawn_pos = []
 		for pos in line["spawn_positions"]:
 			spawn_pos.append(Vector2(pos.position_x, pos.position_y))
-		world.set_map(line["map"], Vector2(line["exit_x"], line["exit_y"]), spawn_pos)
+		world.set_map(line["map"], line["paths_map"], Vector2(line["exit_x"], line["exit_y"]), spawn_pos)
 		
 		for pl in line["players"]:
 			loaded_players_settings[pl] = line["players"][pl]
@@ -229,6 +229,7 @@ func load_game(path):
 	save_game.close()
 	
 	world.current_free_pos = gamestate.loaded_players_settings.size()
+	
 	load_spectator()
 	get_tree().get_root().get_node("MainMenu").queue_free()
 

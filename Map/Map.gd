@@ -16,6 +16,7 @@ var width
 
 var map  # startly map without changes
 var curent_map  # map with changes
+var paths_map = null
 var exit_pos = Vector2()
 var items_by_position = {}
 
@@ -66,7 +67,7 @@ func setup():
 	clear_map()
 	draw_map(map)
 	curent_map = map
-	$Paths.init(map, exit_pos)
+	$Paths.init(map, exit_pos, paths_map)
 
 func clear_map():
 	clear()
@@ -121,8 +122,9 @@ func draw_map(map):
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
 				items_by_position[item.position] = item
 
-func set_map(map_, exit_pos_, spawn_pos_):
+func set_map(map_, paths_map_, exit_pos_, spawn_pos_):
 	map = map_
+	paths_map = paths_map_
 	height = map.size()
 	width = map[0].size()
 	exit_pos = exit_pos_
@@ -171,6 +173,7 @@ func save():
 	var save_dict = {
 		"players" : save_players(),
 		"map" : curent_map,
+		"paths_map" : $Paths.get_paths_map(),
 		"exit_x" : exit_pos.x,
 		"exit_y" : exit_pos.y,
 		"spawn_positions" : save_spawn_positions(),
