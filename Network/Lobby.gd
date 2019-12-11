@@ -33,10 +33,10 @@ func _on_Host_pressed():
 	$Players.show()
 	$CreateGame.set_error("")
 	
-	GlobalSettings.set_maze_gen($CreateGame.is_generate())
-	GlobalSettings.set_maze_path($CreateGame.get_maze_path())
-	GlobalSettings.set_enemy_taskFiles($CreateGame.get_enemy_taskFiles_list())
-	GlobalSettings.set_arrow_taskFiles($CreateGame.get_arrow_taskFiles_list())
+	GameSettings.set_maze_gen($CreateGame.is_generate())
+	GameSettings.set_maze_path($CreateGame.get_maze_path())
+	GameSettings.set_enemy_taskFiles($CreateGame.get_enemy_taskFiles_list())
+	GameSettings.set_arrow_taskFiles($CreateGame.get_arrow_taskFiles_list())
 	
 	gamestate.progress = $Players/Progress
 		

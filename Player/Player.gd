@@ -51,6 +51,7 @@ func _ready():
 		TasksArchives.create_for_player(self)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
+	scale = Vector2(0.5, 0.5)
 
 func setup(world_, id_, name_, spawn_pos):
 	world = world_
@@ -189,6 +190,11 @@ func get_settings():
 func save():
 	return {
 		"name" : settings.name,
-		"position" : position,
+		"position_x" : position.x,
+		"position_y" : position.y,
 		"settings" : settings
 		}
+		
+func load_player(_pos, _settings):
+	position = _pos
+	settings = _settings

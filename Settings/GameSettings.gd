@@ -33,3 +33,12 @@ func get_arrow_taskFiles():
 func get_enemy_taskFiles():
 	return _enemy_taskFiles_list
 	
+func save():
+	return {
+		"enemy" : _enemy_taskFiles_list,
+		"arrow" : _arrow_taskFiles_list
+		}
+		
+func load_settings(dict):
+	_enemy_taskFiles_list = dict["enemy"]
+	_arrow_taskFiles_list = dict["arrow"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Src/logo.png" type="Texture" id=2]
@@ -11,6 +11,10 @@ size = 32
 font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
 size = 32
 font_data = ExtResource( 4 )
 
@@ -78,28 +82,41 @@ custom_constants/separation = 25
 alignment = 1
 
 [node name="Join" type="Button" parent="Menu/Panel/VBoxContainer"]
-margin_top = 202.0
+margin_top = 152.0
 margin_right = 352.0
-margin_bottom = 277.0
+margin_bottom = 227.0
 rect_min_size = Vector2( 0, 75 )
 size_flags_horizontal = 5
 size_flags_vertical = 5
 custom_fonts/font = SubResource( 1 )
 text = "Начать игру"
 
-[node name="Host" type="Button" parent="Menu/Panel/VBoxContainer"]
-margin_top = 302.0
+[node name="Continue" type="Button" parent="Menu/Panel/VBoxContainer"]
+margin_top = 252.0
 margin_right = 352.0
-margin_bottom = 377.0
+margin_bottom = 327.0
+rect_min_size = Vector2( 0, 75 )
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_fonts/font = SubResource( 2 )
+text = "Загрузить игру"
+
+[node name="Host" type="Button" parent="Menu/Panel/VBoxContainer"]
+margin_top = 352.0
+margin_right = 352.0
+margin_bottom = 427.0
 rect_min_size = Vector2( 0, 75 )
 size_flags_horizontal = 5
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Создать игру"
 
 [node name="Menus" type="CanvasLayer" parent="."]
 
 [node name="Lobby" parent="Menus" instance=ExtResource( 5 )]
+margin_top = -1.67017
+margin_bottom = -1.67017
 mouse_filter = 2
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Join" to="." method="_on_Join_pressed"]
+[connection signal="pressed" from="Menu/Panel/VBoxContainer/Continue" to="." method="_on_Continue_pressed"]
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Host" to="." method="_on_Host_pressed"]

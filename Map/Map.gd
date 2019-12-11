@@ -18,7 +18,7 @@ var map  # startly map without changing
 var exit_pos = Vector2()
 var items_by_position = {}
 
-var player_in_game = 0
+var current_free_pos = 0
 var spawn_positions = []
 
 var generator = preload("res://bin/GDMazeGenerator.gdns").new()
@@ -127,15 +127,15 @@ func set_map(map_, exit_pos_, spawn_pos_):
 	setup()
 
 func get_next_spawn_position():
-	var pos = spawn_positions[player_in_game]
-	player_in_game += 1
+	var pos = spawn_positions[current_free_pos]
+	current_free_pos += 1
 	return pos
 
 
 func save_players():
 	var players_save_dcits = {}
 	for pl in gamestate.players:
-		var pl_dict = pl.save()
+		var pl_dict = gamestate.players[pl].save()
 		players_save_dcits[pl_dict.name] = pl_dict
 	return players_save_dcits
 
@@ -143,9 +143,13 @@ func save_tasks_archives():
 	pass
 
 func save():
-	return {
+	print("keke = ", typeof(exit_pos))
+	var save_dict = {
 		"players" : save_players(),
 		"map" : map,
-		"exit" :  exit_pos,
-		"spawn_positions" : spawn_positions
+		"exit_x" : exit_pos.x,
+		"exit_y" : exit_pos.y,
+		"spawn_positions" : spawn_positions,
+		"gamesettings" : GameSettings.save()
 		}
+	return save_dict

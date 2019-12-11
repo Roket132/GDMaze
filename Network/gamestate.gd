@@ -1,6 +1,5 @@
 extends Node
 
-
 const DEFAULT_PORT = 10567 # Default game port
 
 const MAX_PEERS = 4 # Max number of players
@@ -14,6 +13,8 @@ var progress = null
 var players_name = {}  # Names for remote players in id:name format
 var players = {}  # in id:pl_ref format
 var spectator = null
+
+var laoded_players = {}  # players which was loaded and wait self user
 
 # Save spawn_pos for players reloading
 var reload_spawn_points
@@ -86,7 +87,6 @@ remote func ready_to_start(id):
 func host_game():
 	var host = NetworkedMultiplayerENet.new()
 	host.create_server(DEFAULT_PORT, MAX_PEERS)
-	print("created")
 	get_tree().set_network_peer(host)
 
 func join_game(ip, new_player_name):
@@ -109,7 +109,7 @@ func start_game():
 	world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
 	world.visible = false
-	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), progress)
+	world.init(GameSettings.get_maze_path(), GameSettings.get_maze_gen(), progress)
 	
 	world.connect("maze_generated", self, "continue_start_game")
 
@@ -147,8 +147,7 @@ func create_player(p_id):
 	
 	player.setup(world, p_id, name, spawn_pos)
 	player.set_network_master(p_id)
-	
-	player.scale = Vector2(0.5, 0.5)
+
 	world.add_child(player)
 
 func remote_start(id, late = false):
@@ -207,3 +206,36 @@ func save_game():
 		save_game.store_line(to_json(node_data))
 	print("saved")
 	save_game.close()
+
+func load_game(path):
+	var save_game = File.new()
+	if not save_game.file_exists("res://savegame.save"):
+		return
+		
+	host_game()
+	
+	save_game.open("res://savegame.save", File.READ)
+	var player_scene = load("res://Player/Player.tscn")
+	while not save_game.eof_reached():
+		var line = parse_json(save_game.get_line())
+		if line == null:
+			break
+		
+		world = load("res://Map/Map.tscn").instance()
+		get_tree().get_root().add_child(world)
+		
+		GameSettings.load_settings(line["gamesettings"])
+		world.set_map(line["map"], Vector2(line["exit_x"], line["exit_y"]), line["spawn_positions"])
+		
+		for pl in line["players"]:
+			var player = player_scene.instance()
+			var pl_dict = line["players"][pl]
+			player.load_player(Vector2(pl_dict.position_x, pl_dict.position_y), line["players"][pl].settings)
+			
+			laoded_players[pl] = player
+			world.current_free_pos += 1
+		
+	save_game.close()
+	
+	get_tree().get_root().get_node("MainMenu").queue_free()
+

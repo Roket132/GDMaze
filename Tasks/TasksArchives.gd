@@ -11,11 +11,11 @@ func create_for_player(player):
 	var enemy_archive = load("res://bin/GDTaskBridge.gdns").new()
 	var arrow_archive = load("res://bin/GDTaskBridge.gdns").new()
 	# enemy files
-	for file in GlobalSettings.get_enemy_taskFiles():
+	for file in GameSettings.get_enemy_taskFiles():
 		enemy_archive.add_file(file)
 	
 	# arrow files
-	for file in GlobalSettings.get_arrow_taskFiles():
+	for file in GameSettings.get_arrow_taskFiles():
 		arrow_archive.add_file(file)
 		
 	enemy_archives[player] = enemy_archive
@@ -54,3 +54,7 @@ func check_answer_for_task(answer, task):
 		if answer == ans:
 			return true
 	return false
+
+
+func save():
+	pass

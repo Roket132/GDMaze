@@ -10,3 +10,7 @@ func _on_Host_pressed():
 func _on_MainMenu_hide():
 	$Background.hide()
 	$Menus.hide()
+
+
+func _on_Continue_pressed():
+	gamestate.load_game("res://savegame.save")
