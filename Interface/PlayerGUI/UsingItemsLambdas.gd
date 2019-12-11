@@ -30,7 +30,6 @@ func arrow():
 	if cur_arrow_task != null:
 		return
 	else:
-		print(pl_ref)
 		rpc_id(1, "get_arrow_task", get_tree().get_network_unique_id())
 		
 func arrow_delete():

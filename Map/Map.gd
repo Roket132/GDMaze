@@ -161,6 +161,7 @@ func save():
 		"exit_x" : exit_pos.x,
 		"exit_y" : exit_pos.y,
 		"spawn_positions" : save_spawn_positions(),
-		"gamesettings" : GameSettings.save()
+		"gamesettings" : GameSettings.save(),
+		"tasksArchives" : TasksArchives.save()
 		}
 	return save_dict

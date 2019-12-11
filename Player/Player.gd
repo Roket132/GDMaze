@@ -17,7 +17,7 @@ var arrow_dialog_scene = preload("res://Interface/DialogGUI/ArrowDialog.tscn")
 
 var settings = {
 	name = "name",
-	id = 0,
+	id = 0, #  don't use it!! FIXME
 	rest_of_bonfire = 0,
 	have_a_torch = false,
 	stuck = false
@@ -27,11 +27,13 @@ signal increase_score(dt)
 signal clicked(pawn)
 signal kill()
 
+# use in _ready
+var _complited_eneme_tasks = []
+var _complited_arrow_tasks = []
+
 func _ready():
 	scale = Vector2(0.5, 0.5)
 	set_as_toplevel(true)
-	
-	print("my collision = ", $CollisionShape2D)
 	
 	new_pos = position
 	move_and_slide(Vector2(0,0))  # to prevent unnecessary motion in start (a few changing position)
@@ -51,17 +53,19 @@ func _ready():
 	if get_tree().is_network_server():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()
 		material.set_light_mode(0) #Normal
-		TasksArchives.create_for_player(self)
+		TasksArchives.create_for_player(self, _complited_eneme_tasks, _complited_arrow_tasks)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
-	
-	print(position)
 
 func setup(world_, id_, name_, spawn_pos):
 	world = world_
 	settings.name = name_
 	settings.id = id_
 	position = spawn_pos
+
+func set_complited_tasks(_complited_enemy = [], _complited_arrow = []):
+	_complited_eneme_tasks = _complited_enemy
+	_complited_arrow_tasks = _complited_arrow
 
 func _physics_process(delta):
 	if is_network_master():
@@ -80,7 +84,6 @@ func _physics_process(delta):
 	move_player()
 
 func make_step(x, y):
-	print("step ", new_pos, " " , position)
 	if new_pos == position: #if player don't motion
 		$AnimatedSprite.animation = "move_forward"
 		last_pos = position
@@ -88,7 +91,6 @@ func make_step(x, y):
 		new_pos.y = position.y + BLOCK_SIZE * y
 		if settings["rest_of_bonfire"] != 0:
 			settings["rest_of_bonfire"] -= 1
-	print("stepex ", new_pos, " " , position)
 
 func make_puppet_step(puppet_pos):
 	var step = puppet_pos - position
@@ -99,7 +101,6 @@ func make_puppet_step(puppet_pos):
 func move_player():
 	if get_slide_count() != 0:
 		var collision = get_slide_collision(0)
-		print("colision = ", collision)
 		new_pos = last_pos
 		
 	var velocity = (new_pos - position).normalized() * speed
@@ -197,7 +198,8 @@ func save():
 		"name" : settings.name,
 		"position_x" : position.x,
 		"position_y" : position.y,
-		"settings" : settings
+		"settings" : settings,
+		"complited_tasks" : TasksArchives.save_complited_tasks(self)
 		}
 		
 func set_settings(_settings):

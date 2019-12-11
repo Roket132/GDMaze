@@ -129,11 +129,13 @@ func create_player(p_id):
 	var player = load("res://Player/Player.tscn").instance()
 	var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
 	var spawn_pos
+	
 	if loaded_players_settings.has(name):
 		print("tyt")
 		var settings = loaded_players_settings[name]
 		spawn_pos = Vector2(settings.position_x, settings.position_y)
 		player.set_settings(settings.settings)
+		player.set_complited_tasks(settings["complited_tasks"].enemy, settings["complited_tasks"].arrow)
 	else:
 		print("or tyt")
 		spawn_pos = world.get_next_spawn_position()
@@ -220,6 +222,9 @@ func load_game(path):
 			break
 		
 		GameSettings.load_settings(line["gamesettings"])
+		TasksArchives.loaded_enemy_tasks = line["tasksArchives"]["enemy"]
+		TasksArchives.loaded_arrow_tasks = line["tasksArchives"]["arrow"]
+		
 		var spawn_pos = []
 		for pos in line["spawn_positions"]:
 			spawn_pos.append(Vector2(pos.position_x, pos.position_y))
