@@ -157,9 +157,9 @@ func remote_start_late(id, _name):
 	spectator.add_player(players[id])
 	UsingItemsLambdas.players_by_id = players
 
-remote func remote_create_game(map, paths_map, exit_pos_, spawn_pos_, pls_name):
+remote func remote_create_game(map_, paths_map_, exit_pos_, spawn_pos_, pls_name):
 	world = load("res://Map/Map.tscn").instance()
-	world.set_map(map, paths_map, exit_pos_, spawn_pos_)
+	world.set_map(map_, paths_map_, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("MainMenu").queue_free()
 	

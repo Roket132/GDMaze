@@ -15,11 +15,11 @@ func init(map, start_pos, paths_map_):
 	init_paths_map(map if paths_map_ == null else paths_map_)
 	bfs_map = bfs(map, start_pos)
 
-func init_paths_map(paths_map_):
-	paths_map = paths_map_
-	for i in range(paths_map_.size()):
-		for j in range(paths_map_[i].size()):
-			paths_map[i][j] = "#" if paths_map_[i][j] == "#" else "P" if paths_map_[i][j] == "P" else "."
+func init_paths_map(p_map_):
+	paths_map = p_map_.duplicate(true)
+	for i in range(paths_map.size()):
+		for j in range(paths_map[i].size()):
+			paths_map[i][j] = "#" if paths_map[i][j] == "#" else "P" if paths_map[i][j] == "P" else "."
 	_draw_paths_map()
 
 func bfs(map, start):

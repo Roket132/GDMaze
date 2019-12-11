@@ -66,7 +66,7 @@ func map_ready():
 func setup():
 	clear_map()
 	draw_map(map)
-	curent_map = map
+	curent_map = map.duplicate(true)
 	$Paths.init(map, exit_pos, paths_map)
 
 func clear_map():
