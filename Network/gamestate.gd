@@ -14,7 +14,7 @@ var players_name = {}  # Names for remote players in id:name format
 var players = {}  # in id:pl_ref format
 var spectator = null
 
-var laoded_players = {}  # players which was loaded and wait self user
+remote var loaded_players_settings = {}  # players which was loaded and wait self user
 
 # Save spawn_pos for players reloading
 var reload_spawn_points
@@ -25,6 +25,8 @@ signal connection_failed()
 signal connection_succeeded()
 signal game_ended()
 signal game_error(what)
+
+remote var settings
 
 # Callback from SceneTree
 func _player_connected(_id):
@@ -58,7 +60,8 @@ remote func register_player(id, new_player_name):
 	add_new_player(id, new_player_name)
 	
 	if game_started:
-		remote_start_late(id)
+		rset("loaded_players_settings", loaded_players_settings)
+		remote_start_late(id, new_player_name)
 
 remotesync func add_new_player(id, new_player_name):
 	players_name[id] = new_player_name
@@ -67,22 +70,6 @@ remotesync func add_new_player(id, new_player_name):
 remote func unregister_player(id):
 	players_name.erase(id)
 	emit_signal("player_list_changed")
-
-remote func post_start_game():
-	pass
-
-var players_ready = []
-
-remote func ready_to_start(id):
-	assert(get_tree().is_network_server())
-
-	if not id in players_ready:
-		players_ready.append(id)
-
-	if players_ready.size() == players_name.size():
-		for p_id in players_name:
-			rpc_id(p_id, "post_start_game")
-		post_start_game()
 
 func host_game():
 	var host = NetworkedMultiplayerENet.new()
@@ -139,26 +126,38 @@ func load_players():
 		create_player(p_id)
 
 func create_player(p_id):
-	var player_scene = preload("res://Player/Player.tscn")
-	var player = player_scene.instance()
+	var player = load("res://Player/Player.tscn").instance()
 	var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
-	var spawn_pos = world.get_next_spawn_position()
-	players[p_id] = player
+	var spawn_pos
+	if loaded_players_settings.has(name):
+		var settings = loaded_players_settings[name]
+		spawn_pos = Vector2(settings.position_x, settings.position_y)
+		player.set_settings(settings.settings)
+	else:
+		spawn_pos = world.get_next_spawn_position()
 	
+	print("sp_pos ", spawn_pos)
+	print("settings pl = ", player.get_settings())
+	players[p_id] = player
 	player.setup(world, p_id, name, spawn_pos)
 	player.set_network_master(p_id)
 
 	world.add_child(player)
+	print("settings pl = ", player.get_settings())
 
 func remote_start(id, late = false):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name, false)
+	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
 	
-func remote_start_late(id):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name, true)
+func remote_start_late(id, _name):
+	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name)
+	for p_id in players_name:
+		if p_id != id:
+			rpc_id(p_id, "remote_add_player", id)
 	create_player(id)
+	
 	spectator.add_player(players[id])
 
-remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name, late):
+remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name):
 	world = load("res://Map/Map.tscn").instance()
 	world.set_map(map, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
@@ -167,17 +166,12 @@ remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name, late):
 	players_name = pls_name
 	
 	load_players()
-	
-	if late:
-		for p_id in players_name:
-			rpc_id(p_id, "remote_add_player", get_tree().get_network_unique_id())
 
 remote func remote_add_player(p_id):
 	create_player(p_id)
 
 func end_game():
 	if has_node("/root/world"): # Game is in progress
-		# End it
 		get_node("/root/world").queue_free()
 
 	emit_signal("game_ended")
@@ -193,7 +187,6 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
-
 
 func save_game():
 	var save_game = File.new()
@@ -211,31 +204,31 @@ func load_game(path):
 	var save_game = File.new()
 	if not save_game.file_exists("res://savegame.save"):
 		return
-		
+	
+	game_started = true
 	host_game()
 	
+	world = load("res://Map/Map.tscn").instance()
+	get_tree().get_root().add_child(world)
+	
 	save_game.open("res://savegame.save", File.READ)
-	var player_scene = load("res://Player/Player.tscn")
 	while not save_game.eof_reached():
 		var line = parse_json(save_game.get_line())
 		if line == null:
 			break
 		
-		world = load("res://Map/Map.tscn").instance()
-		get_tree().get_root().add_child(world)
-		
 		GameSettings.load_settings(line["gamesettings"])
-		world.set_map(line["map"], Vector2(line["exit_x"], line["exit_y"]), line["spawn_positions"])
+		var spawn_pos = []
+		for pos in line["spawn_positions"]:
+			spawn_pos.append(Vector2(pos.position_x, pos.position_y))
+		world.set_map(line["map"], Vector2(line["exit_x"], line["exit_y"]), spawn_pos)
 		
 		for pl in line["players"]:
-			var player = player_scene.instance()
-			var pl_dict = line["players"][pl]
-			player.load_player(Vector2(pl_dict.position_x, pl_dict.position_y), line["players"][pl].settings)
-			
-			laoded_players[pl] = player
+			loaded_players_settings[pl] = line["players"][pl]
 			world.current_free_pos += 1
 		
 	save_game.close()
 	
+	load_spectator()
 	get_tree().get_root().get_node("MainMenu").queue_free()
 

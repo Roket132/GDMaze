@@ -122,6 +122,8 @@ remotesync func draw_path(from, steps = -1):
 
 func set_map(map_, exit_pos_, spawn_pos_):
 	map = map_
+	height = map.size()
+	width = map[0].size()
 	exit_pos = exit_pos_
 	spawn_positions = spawn_pos_
 	setup()
@@ -139,6 +141,12 @@ func save_players():
 		players_save_dcits[pl_dict.name] = pl_dict
 	return players_save_dcits
 
+func save_spawn_positions():
+	var save_list = []
+	for pos in spawn_positions:
+		save_list.append({"position_x" : pos.x, "position_y" : pos.y})
+	return save_list
+
 func save_tasks_archives():
 	pass
 
@@ -149,7 +157,7 @@ func save():
 		"map" : map,
 		"exit_x" : exit_pos.x,
 		"exit_y" : exit_pos.y,
-		"spawn_positions" : spawn_positions,
+		"spawn_positions" : save_spawn_positions(),
 		"gamesettings" : GameSettings.save()
 		}
 	return save_dict

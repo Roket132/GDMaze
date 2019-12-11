@@ -195,6 +195,5 @@ func save():
 		"settings" : settings
 		}
 		
-func load_player(_pos, _settings):
-	position = _pos
+func set_settings(_settings):
 	settings = _settings
