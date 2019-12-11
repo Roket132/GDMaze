@@ -17,24 +17,29 @@ var arrow_dialog_scene = preload("res://Interface/DialogGUI/ArrowDialog.tscn")
 
 var settings = {
 	name = "name",
-	id = 0,
+	id = 0, #  don't use it!! FIXME
 	rest_of_bonfire = 0,
 	have_a_torch = false,
-	stuck = false
+	stuck = false,
+	arrow_amount = 0
 }
 
 signal increase_score(dt)
 signal clicked(pawn)
 signal kill()
 
+# use in _ready
+var _complited_eneme_tasks = []
+var _complited_arrow_tasks = []
+
 func _ready():
 	set_as_toplevel(true)
 	
-	puppet_pos = position
 	new_pos = position
+	move_and_slide(Vector2(0,0))  # to prevent unnecessary motion in start (a few changing position)
+	position = new_pos  # remove changing
+	puppet_pos = position
 	last_pos = position
-	
-	move_and_slide(Vector2(0,0)) # to prevent unnecessary motion in start
 	
 	if is_network_master():
 		$Camera2D.make_current()
@@ -48,7 +53,7 @@ func _ready():
 	if get_tree().is_network_server():
 		$Camera2D/ParallaxBackground/Sprite.queue_free()
 		material.set_light_mode(0) #Normal
-		TasksArchives.create_for_player(self)
+		TasksArchives.create_for_player(self, _complited_eneme_tasks, _complited_arrow_tasks)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
 
@@ -57,6 +62,10 @@ func setup(world_, id_, name_, spawn_pos):
 	settings.name = name_
 	settings.id = id_
 	position = spawn_pos
+
+func set_complited_tasks(_complited_enemy = [], _complited_arrow = []):
+	_complited_eneme_tasks = _complited_enemy
+	_complited_arrow_tasks = _complited_arrow
 
 func _physics_process(delta):
 	if is_network_master():
@@ -86,7 +95,6 @@ func make_step(x, y):
 func make_puppet_step(puppet_pos):
 	var step = puppet_pos - position
 	if step != Vector2(0, 0):
-		
 		make_step(1 if step.x > 0 else 0 if step.x == 0 else -1,
 				  1 if step.y > 0 else 0 if step.y == 0 else -1)
 
@@ -103,7 +111,7 @@ func move_player():
 		position.y = new_pos.y
 		player_cell = (position + Vector2(DIFF, DIFF)) / BLOCK_SIZE
 		$AnimatedSprite.animation = "stay_forward"
-			
+	
 	if is_network_master():
 		if settings["rest_of_bonfire"] == 0:
 			$Light2D.set_texture_scale(1.96)
@@ -112,17 +120,23 @@ func move_player():
 		rset("puppet_pos", position)
 
 
-remotesync func hit_bonfire(bonfire):
+remotesync func hit_bonfire():
 	if settings["have_a_torch"]:
 		settings["rest_of_bonfire"] = 10
 
-remotesync func hit_torch(torch):
+remotesync func hit_torch():
 	settings["have_a_torch"] = true
 	update_score(ScoreSettings.get_value("torch"))
 
+remotesync func hit_arrow():
+	settings["arrow_amount"] += 1
+
+remotesync func remove_arrow():
+	settings["arrow_amount"] -= 1
+
 # only master can add items
-master func add_item(name, path):
-	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
+master func add_item(name):
+	$Camera2D/CanvasLayer/PlayerPanel.add_item(name)
 
 func get_next_enemy_task(lvl):
 	return TasksArchives.get_next_enemy_task(self, lvl)
@@ -181,4 +195,18 @@ func update_score(dt):
 remote func remote_update_score(dt):
 	if get_tree().is_network_server():
 		emit_signal("increase_score", dt)
-	
+
+func get_settings():
+	return settings
+
+func save():
+	return {
+		"name" : settings.name,
+		"position_x" : position.x,
+		"position_y" : position.y,
+		"settings" : settings,
+		"complited_tasks" : TasksArchives.save_complited_tasks(self)
+		}
+		
+func set_settings(_settings):
+	settings = _settings

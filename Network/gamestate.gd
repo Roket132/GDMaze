@@ -1,14 +1,11 @@
 extends Node
 
-# Default game port
-const DEFAULT_PORT = 10567
+const DEFAULT_PORT = 10567 # Default game port
 
-# Max number of players
-const MAX_PEERS = 4
+const MAX_PEERS = 4 # Max number of players
 
 var game_started = false
-# Name for my player
-var player_name = "Host"
+var player_name = "Host" # Name for my player
 
 var world = null
 var progress = null
@@ -16,6 +13,8 @@ var progress = null
 var players_name = {}  # Names for remote players in id:name format
 var players = {}  # in id:pl_ref format
 var spectator = null
+
+remote var loaded_players_settings = {}  # players which was loaded and wait self user
 
 # Save spawn_pos for players reloading
 var reload_spawn_points
@@ -26,6 +25,8 @@ signal connection_failed()
 signal connection_succeeded()
 signal game_ended()
 signal game_error(what)
+
+remote var settings
 
 # Callback from SceneTree
 func _player_connected(_id):
@@ -59,7 +60,8 @@ remote func register_player(id, new_player_name):
 	add_new_player(id, new_player_name)
 	
 	if game_started:
-		remote_start_late(id)
+		rset("loaded_players_settings", loaded_players_settings)
+		remote_start_late(id, new_player_name)
 
 remotesync func add_new_player(id, new_player_name):
 	players_name[id] = new_player_name
@@ -69,26 +71,9 @@ remote func unregister_player(id):
 	players_name.erase(id)
 	emit_signal("player_list_changed")
 
-remote func post_start_game():
-	pass
-
-var players_ready = []
-
-remote func ready_to_start(id):
-	assert(get_tree().is_network_server())
-
-	if not id in players_ready:
-		players_ready.append(id)
-
-	if players_ready.size() == players_name.size():
-		for p_id in players_name:
-			rpc_id(p_id, "post_start_game")
-		post_start_game()
-
 func host_game():
 	var host = NetworkedMultiplayerENet.new()
 	host.create_server(DEFAULT_PORT, MAX_PEERS)
-	print("created")
 	get_tree().set_network_peer(host)
 
 func join_game(ip, new_player_name):
@@ -111,7 +96,7 @@ func start_game():
 	world = load("res://Map/Map.tscn").instance()
 	get_tree().get_root().add_child(world)
 	world.visible = false
-	world.init(GlobalSettings.get_maze_path(), GlobalSettings.get_maze_gen(), progress)
+	world.init(GameSettings.get_maze_path(), GameSettings.get_maze_gen(), progress)
 	
 	world.connect("maze_generated", self, "continue_start_game")
 
@@ -141,46 +126,52 @@ func load_players():
 		create_player(p_id)
 
 func create_player(p_id):
-	var player_scene = preload("res://Player/Player.tscn")
-	var player = player_scene.instance()
+	var player = load("res://Player/Player.tscn").instance()
 	var name = player_name if p_id == get_tree().get_network_unique_id() else players_name[p_id]
-	var spawn_pos = world.get_next_spawn_position()
-	players[p_id] = player
+	var spawn_pos
 	
+	if loaded_players_settings.has(name):
+		var settings = loaded_players_settings[name]
+		spawn_pos = Vector2(settings.position_x, settings.position_y)
+		player.set_settings(settings.settings)
+		player.set_complited_tasks(settings["complited_tasks"].enemy, settings["complited_tasks"].arrow)
+	else:
+		spawn_pos = world.get_next_spawn_position()
+	
+	players[p_id] = player
 	player.setup(world, p_id, name, spawn_pos)
 	player.set_network_master(p_id)
-	
-	player.scale = Vector2(0.5, 0.5)
+
 	world.add_child(player)
 
 func remote_start(id, late = false):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name, false)
+	rpc_id(id, "remote_create_game", world.map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
 	
-func remote_start_late(id):
-	rpc_id(id, "remote_create_game", world.map, world.exit_pos, world.spawn_positions, players_name, true)
+func remote_start_late(id, _name):
+	rpc_id(id, "remote_create_game", world.map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
+	for p_id in players_name:
+		if p_id != id:
+			rpc_id(p_id, "remote_add_player", id)
 	create_player(id)
+	
 	spectator.add_player(players[id])
+	UsingItemsLambdas.players_by_id = players
 
-remote func remote_create_game(map, exit_pos_, spawn_pos_, pls_name, late):
+remote func remote_create_game(map_, paths_map_, exit_pos_, spawn_pos_, pls_name):
 	world = load("res://Map/Map.tscn").instance()
-	world.set_map(map, exit_pos_, spawn_pos_)
+	world.set_map(map_, paths_map_, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("MainMenu").queue_free()
 	
 	players_name = pls_name
 	
 	load_players()
-	
-	if late:
-		for p_id in players_name:
-			rpc_id(p_id, "remote_add_player", get_tree().get_network_unique_id())
 
 remote func remote_add_player(p_id):
 	create_player(p_id)
 
 func end_game():
 	if has_node("/root/world"): # Game is in progress
-		# End it
 		get_node("/root/world").queue_free()
 
 	emit_signal("game_ended")
@@ -196,3 +187,49 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
+
+func save_game():
+	var save_game = File.new()
+	save_game.open("res://savegame.save", File.WRITE)
+	var save_nodes = get_tree().get_nodes_in_group("Persist")
+	for i in save_nodes:
+		var node_data = i.call("save");
+		save_game.store_line(to_json(node_data))
+	save_game.close()
+
+func load_game(path):
+	var save_game = File.new()
+	if not save_game.file_exists("res://savegame.save"):
+		return
+	
+	game_started = true
+	host_game()
+	
+	world = load("res://Map/Map.tscn").instance()
+	get_tree().get_root().add_child(world)
+	
+	save_game.open("res://savegame.save", File.READ)
+	while not save_game.eof_reached():
+		var line = parse_json(save_game.get_line())
+		if line == null:
+			break
+		
+		GameSettings.load_settings(line["gamesettings"])
+		TasksArchives.loaded_enemy_tasks = line["tasksArchives"]["enemy"]
+		TasksArchives.loaded_arrow_tasks = line["tasksArchives"]["arrow"]
+		
+		var spawn_pos = []
+		for pos in line["spawn_positions"]:
+			spawn_pos.append(Vector2(pos.position_x, pos.position_y))
+		world.set_map(line["map"], line["paths_map"], Vector2(line["exit_x"], line["exit_y"]), spawn_pos)
+		
+		for pl in line["players"]:
+			loaded_players_settings[pl] = line["players"][pl]
+		
+	save_game.close()
+	
+	world.current_free_pos = gamestate.loaded_players_settings.size()
+	
+	load_spectator()
+	get_tree().get_root().get_node("MainMenu").queue_free()
+

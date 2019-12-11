@@ -61,7 +61,7 @@ input_script="*res://input_script.gd"
 UsingItemsLambdas="*res://Interface/PlayerGUI/UsingItemsLambdas.gd"
 Receiver="*res://Tasks/Receiver.gd"
 TasksArchives="*res://Tasks/TasksArchives.gd"
-GlobalSettings="*res://Settings/GlobalSettings.gd"
+GameSettings="*res://Settings/GameSettings.gd"
 MazeGenSettings="*res://Settings/MazeGenSettings.gd"
 ScoreSettings="*res://Settings/ScoreSettings.gd"
 

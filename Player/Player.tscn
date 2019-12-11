@@ -31,6 +31,7 @@ extents = Vector2( 36.4876, 36.0757 )
 [node name="Player" type="KinematicBody2D"]
 material = SubResource( 1 )
 position = Vector2( 0, -0.35849 )
+scale = Vector2( 0.5, 0.5 )
 input_pickable = true
 script = ExtResource( 1 )
 

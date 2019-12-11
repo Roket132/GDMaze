@@ -28,3 +28,4 @@ remotesync func kill():
 	connected_body.disconnect("kill", self, "slot_kill")
 	$CollisionShape2D.queue_free()
 	$Sprite.texture = load("res://Enemies/sprites/dragon_off.png")
+	gamestate.world.rpc("kill_enemy", position)

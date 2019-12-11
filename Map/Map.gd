@@ -14,15 +14,22 @@ var DIFF = 32
 var height
 var width
 
-var map  # startly map without changing
+var map  # startly map without changes
+var curent_map  # map with changes
+var paths_map = null
 var exit_pos = Vector2()
 var items_by_position = {}
 
-var player_in_game = 0
+var current_free_pos = 0
 var spawn_positions = []
 
 var generator = preload("res://bin/GDMazeGenerator.gdns").new()
 var thread_load_map
+
+func _ready():
+	current_free_pos = gamestate.loaded_players_settings.size()
+	if get_tree().is_network_server():
+		material.set_light_mode(0) # Normal mode
 
 func init(path, is_gen, progress):
 	if get_tree().is_network_server():
@@ -39,7 +46,8 @@ func init(path, is_gen, progress):
 	else:
 		read_map("res://Src/default_maze.tres", progress)
 		map_ready()
-		
+
+
 func async_load_map(args):
 	if not args.is_gen:
 		read_map(args["path"], args.progress)
@@ -52,16 +60,14 @@ func load_map_done():
 	map_ready()
 
 func map_ready():
-	if get_tree().is_network_server():
-		rpc("reload_map", map, exit_pos, spawn_positions)
-		material.set_light_mode(0) # Normal mode
 	setup()
 	emit_signal("maze_generated")
 
 func setup():
 	clear_map()
 	draw_map(map)
-	$Paths.init(map, exit_pos)
+	curent_map = map.duplicate(true)
+	$Paths.init(map, exit_pos, paths_map)
 
 func clear_map():
 	clear()
@@ -116,17 +122,62 @@ func draw_map(map):
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
 				items_by_position[item.position] = item
 
-# Vectro2(from) with normal coordinate (i, j)
-remotesync func draw_path(from, steps = -1):
-	$Paths.draw(from, steps)
-
-func set_map(map_, exit_pos_, spawn_pos_):
+func set_map(map_, paths_map_, exit_pos_, spawn_pos_):
 	map = map_
+	paths_map = paths_map_
+	height = map.size()
+	width = map[0].size()
 	exit_pos = exit_pos_
 	spawn_positions = spawn_pos_
 	setup()
 
 func get_next_spawn_position():
-	var pos = spawn_positions[player_in_game]
-	player_in_game += 1
+	var pos = spawn_positions[current_free_pos]
+	current_free_pos += 1
 	return pos
+
+# Vectro2(from) with normal coordinate (i, j)
+remotesync func draw_path(from, steps = -1):
+	$Paths.draw(from, steps)
+
+remotesync func hit_torch(pos):
+	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
+	curent_map[cell.y][cell.x] = "."
+
+remotesync func hit_arrow(pos):
+	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
+	curent_map[cell.y][cell.x] = "."
+
+remotesync func kill_enemy(pos):
+	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
+	curent_map[cell.y][cell.x] = "."
+
+
+func save_players():
+	var players_save_dcits = {}
+	for pl in gamestate.players:
+		var pl_dict = gamestate.players[pl].save()
+		players_save_dcits[pl_dict.name] = pl_dict
+	return players_save_dcits
+
+func save_spawn_positions():
+	var save_list = []
+	for pos in spawn_positions:
+		save_list.append({"position_x" : pos.x, "position_y" : pos.y})
+	return save_list
+
+func save_tasks_archives():
+	pass
+
+func save():
+	var save_dict = {
+		"players" : save_players(),
+		"map" : curent_map,
+		"paths_map" : $Paths.get_paths_map(),
+		"exit_x" : exit_pos.x,
+		"exit_y" : exit_pos.y,
+		"spawn_positions" : save_spawn_positions(),
+		"gamesettings" : GameSettings.save(),
+		"tasksArchives" : TasksArchives.save()
+		}
+	return save_dict
