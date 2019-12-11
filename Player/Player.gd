@@ -20,7 +20,8 @@ var settings = {
 	id = 0, #  don't use it!! FIXME
 	rest_of_bonfire = 0,
 	have_a_torch = false,
-	stuck = false
+	stuck = false,
+	arrow_amount = 0
 }
 
 signal increase_score(dt)
@@ -120,13 +121,19 @@ func move_player():
 		rset("puppet_pos", position)
 
 
-remotesync func hit_bonfire(bonfire):
+remotesync func hit_bonfire():
 	if settings["have_a_torch"]:
 		settings["rest_of_bonfire"] = 10
 
-remotesync func hit_torch(torch):
+remotesync func hit_torch():
 	settings["have_a_torch"] = true
 	update_score(ScoreSettings.get_value("torch"))
+
+remotesync func hit_arrow():
+	settings["arrow_amount"] += 1
+
+remotesync func remove_arrow():
+	settings["arrow_amount"] -= 1
 
 # only master can add items
 master func add_item(name, path):
