@@ -33,7 +33,6 @@ var _complited_eneme_tasks = []
 var _complited_arrow_tasks = []
 
 func _ready():
-	scale = Vector2(0.5, 0.5)
 	set_as_toplevel(true)
 	
 	new_pos = position

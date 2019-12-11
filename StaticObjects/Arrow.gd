@@ -10,6 +10,7 @@ func _on_Arrow_body_entered(body):
 	if get_tree().is_network_server():
 		# to all
 		body.rpc("hit_arrow")
+		gamestate.world.rpc("hit_arrow", position)
 		# to master
 		body.rpc("add_item" , ITEM_NAME)
 	queue_free()

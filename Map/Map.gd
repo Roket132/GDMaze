@@ -14,7 +14,8 @@ var DIFF = 32
 var height
 var width
 
-var map  # startly map without changing
+var map  # startly map without changes
+var curent_map  # map with changes
 var exit_pos = Vector2()
 var items_by_position = {}
 
@@ -64,6 +65,7 @@ func map_ready():
 func setup():
 	clear_map()
 	draw_map(map)
+	curent_map = map
 	$Paths.init(map, exit_pos)
 
 func clear_map():
@@ -119,10 +121,6 @@ func draw_map(map):
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
 				items_by_position[item.position] = item
 
-# Vectro2(from) with normal coordinate (i, j)
-remotesync func draw_path(from, steps = -1):
-	$Paths.draw(from, steps)
-
 func set_map(map_, exit_pos_, spawn_pos_):
 	map = map_
 	height = map.size()
@@ -135,6 +133,22 @@ func get_next_spawn_position():
 	var pos = spawn_positions[current_free_pos]
 	current_free_pos += 1
 	return pos
+
+# Vectro2(from) with normal coordinate (i, j)
+remotesync func draw_path(from, steps = -1):
+	$Paths.draw(from, steps)
+
+remotesync func hit_torch(pos):
+	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
+	curent_map[cell.y][cell.x] = "."
+
+remotesync func hit_arrow(pos):
+	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
+	curent_map[cell.y][cell.x] = "."
+
+remotesync func kill_enemy(pos):
+	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
+	curent_map[cell.y][cell.x] = "."
 
 
 func save_players():
@@ -156,7 +170,7 @@ func save_tasks_archives():
 func save():
 	var save_dict = {
 		"players" : save_players(),
-		"map" : map,
+		"map" : curent_map,
 		"exit_x" : exit_pos.x,
 		"exit_y" : exit_pos.y,
 		"spawn_positions" : save_spawn_positions(),
