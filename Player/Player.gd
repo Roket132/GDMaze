@@ -136,8 +136,8 @@ remotesync func remove_arrow():
 	settings["arrow_amount"] -= 1
 
 # only master can add items
-master func add_item(name, path):
-	$Camera2D/CanvasLayer/PlayerPanel.add_item(name, path)
+master func add_item(name):
+	$Camera2D/CanvasLayer/PlayerPanel.add_item(name)
 
 func get_next_enemy_task(lvl):
 	return TasksArchives.get_next_enemy_task(self, lvl)

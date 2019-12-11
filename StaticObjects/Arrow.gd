@@ -11,7 +11,7 @@ func _on_Arrow_body_entered(body):
 		# to all
 		body.rpc("hit_arrow")
 		# to master
-		body.rpc("add_item" , ITEM_NAME, _get_texture().get_load_path())
+		body.rpc("add_item" , ITEM_NAME)
 	queue_free()
 	
 func _get_texture():

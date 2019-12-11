@@ -28,9 +28,9 @@ func setup(player_ref):
 	UsingItemsLambdas.pl_ref = player_ref
 	
 	if player_ref.settings["have_a_torch"]:
-		add_item("torch", icons_dict.torch)
+		add_item("torch")
 	for i in player_ref.settings["arrow_amount"] as int:
-		add_item("arrow", icons_dict.arrow)
+		add_item("arrow")
 
 func get_item_pos(name):
 	if not name in inventory_dict:
@@ -38,12 +38,13 @@ func get_item_pos(name):
 		items_cnt += 1
 	return inventory_dict[name]
 
-func add_item(name, icon_path):
+func add_item(name):
+	print("add item")
 	var inv_node = get_node(inv_path.replace("%", str(get_item_pos(name))))
 	var lab_node = get_node(lab_path.replace("%", str(get_item_pos(name))))
 	if not name in cnt_dict or cnt_dict[name] == 0:
 		cnt_dict[name] = 1
-		inv_node.icon = load(icon_path)
+		inv_node.icon = load(icons_dict[name])
 		lab_node.text = "Кол-во: 1  "
 		inv_node.connect("pressed", UsingItemsLambdas, name)
 	else:
