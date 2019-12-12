@@ -1,23 +1,23 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Interface/MenuGUI/Save.gd" type="Script" id=1]
+[ext_resource path="res://Interface/MenuGUI/SaveManager.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="DynamicFont" id=2]
-size = 32
-font_data = ExtResource( 2 )
+[sub_resource type="StyleBoxEmpty" id=2]
 
 [sub_resource type="DynamicFont" id=3]
 size = 32
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
 font_data = ExtResource( 2 )
 
 [node name="Save" type="Panel"]
@@ -49,7 +49,7 @@ margin_left = 10.0
 margin_top = 48.892
 margin_right = -10.0
 margin_bottom = -140.0
-custom_styles/bg_focus = SubResource( 6 )
+custom_styles/bg_focus = SubResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchor_left = 0.5
@@ -67,7 +67,7 @@ alignment = 1
 margin_right = 185.0
 margin_bottom = 38.0
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Отмена"
 
 [node name="Ok" type="Button" parent="HBoxContainer"]
@@ -76,7 +76,7 @@ margin_right = 380.0
 margin_bottom = 38.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 text = "Сохранить"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
@@ -93,7 +93,7 @@ margin_bottom = 213.0
 margin_top = 4.0
 margin_right = 34.0
 margin_bottom = 20.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 text = "Имя:"
 
 [node name="FileName" type="LineEdit" parent="HBoxContainer2"]

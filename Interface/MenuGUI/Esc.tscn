@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Interface/MenuGUI/Esc.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://Interface/MenuGUI/Save.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Interface/MenuGUI/SaveManager.tscn" type="PackedScene" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32

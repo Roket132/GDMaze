@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Src/logo.png" type="Texture" id=2]
 [ext_resource path="res://Src/logo2.png" type="Texture" id=3]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Network/Lobby.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Interface/MenuGUI/LoadManager.tscn" type="PackedScene" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -117,6 +118,13 @@ text = "Создать игру"
 margin_top = -1.67017
 margin_bottom = -1.67017
 mouse_filter = 2
+
+[node name="LoadManager" parent="Menus" instance=ExtResource( 6 )]
+visible = false
+margin_left = -509.0
+margin_top = -154.542
+margin_right = -109.0
+margin_bottom = 395.458
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Join" to="." method="_on_Join_pressed"]
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Continue" to="." method="_on_Continue_pressed"]
 [connection signal="pressed" from="Menu/Panel/VBoxContainer/Host" to="." method="_on_Host_pressed"]
