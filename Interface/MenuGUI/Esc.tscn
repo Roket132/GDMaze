@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Interface/MenuGUI/Esc.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Interface/MenuGUI/Save.tscn" type="PackedScene" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -55,5 +56,9 @@ margin_right = 265.0
 margin_bottom = 307.0
 custom_fonts/font = SubResource( 2 )
 text = "Выйти из игры"
+
+[node name="Save" parent="." instance=ExtResource( 3 )]
+visible = false
 [connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_Continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_Exit_pressed"]

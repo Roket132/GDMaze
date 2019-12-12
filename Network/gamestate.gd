@@ -179,9 +179,9 @@ func _ready():
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
 
-func save_game():
+func save_game(file):
 	var save_game = File.new()
-	save_game.open("res://savegame.save", File.WRITE)
+	save_game.open(file, File.WRITE)
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
 	for i in save_nodes:
 		var node_data = i.call("save");
