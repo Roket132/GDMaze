@@ -7,12 +7,11 @@ var focus_pawn = null
 var players = []
 
 func _ready():
-	#OS.set_window_size(Vector2(1920, 1080))
 	OS.set_window_fullscreen(true)
 	set_offset(Vector2(0, -1))
 	make_current()
 
-func _input(event):	
+func _input(event):
 	if event.is_action_pressed("cam_drag"):
 		mouse_captured = true
 		focus_pawn = null
@@ -44,3 +43,4 @@ func add_player(pl):
 	pl.connect("increase_score", info, "increase_score")
 	
 	$CanvasLayer/PlayersPanel/Panel/VScrollBar/VBoxContainer.add_child(info)
+

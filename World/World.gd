@@ -31,6 +31,7 @@ func _ready():
 	if get_tree().is_network_server():
 		material.set_light_mode(0) # Normal mode
 
+
 func init(path, is_gen, progress):
 	if get_tree().is_network_server():
 		var progressBar = progress.get_progress_bar()

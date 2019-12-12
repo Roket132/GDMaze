@@ -6,18 +6,17 @@ const MAX_PEERS = 4 # Max number of players
 
 var game_started = false
 var player_name = "Host" # Name for my player
+var progress = null  #  ref to progressBar from Lobby, init in Lobby
 
 var world = null
-var progress = null
+var spectator = null
 
 var players_name = {}  # Names for remote players in id:name format
 var players = {}  # in id:pl_ref format
-var spectator = null
 
 remote var loaded_players_settings = {}  # players which was loaded and wait self user
 
-# Save spawn_pos for players reloading
-var reload_spawn_points
+remote var settings  # forWhat? FIXME
 
 # Signals to let lobby GUI know what's going on
 signal player_list_changed()
@@ -26,15 +25,15 @@ signal connection_succeeded()
 signal game_ended()
 signal game_error(what)
 
-remote var settings
-
 # Callback from SceneTree
 func _player_connected(_id):
 	pass
 
 # Callback from SceneTree
 func _player_disconnected(id):
-	pass
+	if get_tree().is_network_server():
+		# TODO
+		pass
 
 # Callback from SceneTree, only for clients (not server)
 func _connected_ok():
@@ -93,7 +92,7 @@ func start_game():
 	
 	game_started = true
 	
-	world = load("res://Map/Map.tscn").instance()
+	world = load("res://World/World.tscn").instance()
 	get_tree().get_root().add_child(world)
 	world.visible = false
 	world.init(GameSettings.get_maze_path(), GameSettings.get_maze_gen(), progress)
@@ -158,7 +157,7 @@ func remote_start_late(id, _name):
 	UsingItemsLambdas.players_by_id = players
 
 remote func remote_create_game(map_, paths_map_, exit_pos_, spawn_pos_, pls_name):
-	world = load("res://Map/Map.tscn").instance()
+	world = load("res://World/World.tscn").instance()
 	world.set_map(map_, paths_map_, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("MainMenu").queue_free()
@@ -169,14 +168,6 @@ remote func remote_create_game(map_, paths_map_, exit_pos_, spawn_pos_, pls_name
 
 remote func remote_add_player(p_id):
 	create_player(p_id)
-
-func end_game():
-	if has_node("/root/world"): # Game is in progress
-		get_node("/root/world").queue_free()
-
-	emit_signal("game_ended")
-	players_name.clear()
-	get_tree().set_network_peer(null) # End networking
 
 func get_game_mode():
 	return "SPECTATOR" if get_tree().is_network_server() else "PLAYER"
@@ -205,7 +196,7 @@ func load_game(path):
 	game_started = true
 	host_game()
 	
-	world = load("res://Map/Map.tscn").instance()
+	world = load("res://World/World.tscn").instance()
 	get_tree().get_root().add_child(world)
 	
 	save_game.open("res://savegame.save", File.READ)
@@ -232,4 +223,25 @@ func load_game(path):
 	
 	load_spectator()
 	get_tree().get_root().get_node("MainMenu").queue_free()
+
+
+func end_game():
+	game_started = false
+	
+	for pl in players:
+		players[pl].queue_free()
+	
+	if spectator != null:
+		spectator.queue_free()
+		
+	if world != null:
+		world.queue_free()
+
+	emit_signal("game_ended")
+	players_name.clear()
+	players.clear()
+	loaded_players_settings.clear()
+	get_tree().set_network_peer(null) # End networking
+	
+	get_tree().get_root().add_child(preload("res://MainMenu.tscn").instance())
 

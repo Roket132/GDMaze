@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/sprites/stay_forward.png" type="Texture" id=2]
@@ -6,8 +6,9 @@
 [ext_resource path="res://Player/sprites/move_forward_2.png" type="Texture" id=4]
 [ext_resource path="res://Interface/PlayerGUI/PlayerPanel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Interface/DialogGUI/ArrowDialog.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Player/sprites/Fog.png" type="Texture" id=7]
-[ext_resource path="res://Player/sprites/splat_gr.png" type="Texture" id=8]
+[ext_resource path="res://Interface/MenuGUI/Esc.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Player/sprites/Fog.png" type="Texture" id=8]
+[ext_resource path="res://Player/sprites/splat_gr.png" type="Texture" id=9]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 2
@@ -61,14 +62,17 @@ margin_top = 472.301
 margin_right = -201.09
 margin_bottom = -391.699
 
+[node name="Esc" parent="Camera2D/CanvasLayer" instance=ExtResource( 7 )]
+visible = false
+
 [node name="ParallaxBackground" type="ParallaxBackground" parent="Camera2D"]
 
 [node name="Sprite" type="Sprite" parent="Camera2D/ParallaxBackground"]
 visible = false
 position = Vector2( 958.998, 539.574 )
 scale = Vector2( 7.48882, 4.21207 )
-texture = ExtResource( 7 )
-normal_map = ExtResource( 7 )
+texture = ExtResource( 8 )
+normal_map = ExtResource( 8 )
 
 [node name="ColorRect" type="ColorRect" parent="Camera2D/ParallaxBackground"]
 anchor_right = 1.0
@@ -78,7 +82,7 @@ color = Color( 0, 0, 0, 1 )
 
 [node name="Light2D" type="Light2D" parent="."]
 light_mask = 7
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 texture_scale = 1.96
 mode = 2
 shadow_enabled = true
