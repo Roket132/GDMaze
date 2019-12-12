@@ -115,7 +115,6 @@ func end_start_game():
 func load_spectator():
 	spectator = load("res://Player/Spectator.tscn").instance()
 	spectator.set_map_size(world.height, world.width)
-	print(players)
 	for pl in players:
 		spectator.add_player(players[pl])
 	world.add_child(spectator)
@@ -179,18 +178,18 @@ func _ready():
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
 
-func save_game():
+func save_game(file):
 	var save_game = File.new()
-	save_game.open("res://savegame.save", File.WRITE)
+	save_game.open(file, File.WRITE)
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
 	for i in save_nodes:
 		var node_data = i.call("save");
 		save_game.store_line(to_json(node_data))
 	save_game.close()
 
-func load_game(path):
+func load_game(file):
 	var save_game = File.new()
-	if not save_game.file_exists("res://savegame.save"):
+	if not save_game.file_exists(file):
 		return
 	
 	game_started = true
@@ -199,7 +198,7 @@ func load_game(path):
 	world = load("res://World/World.tscn").instance()
 	get_tree().get_root().add_child(world)
 	
-	save_game.open("res://savegame.save", File.READ)
+	save_game.open(file, File.READ)
 	while not save_game.eof_reached():
 		var line = parse_json(save_game.get_line())
 		if line == null:

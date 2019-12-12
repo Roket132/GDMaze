@@ -13,4 +13,4 @@ func _on_MainMenu_hide():
 
 
 func _on_Continue_pressed():
-	gamestate.load_game("res://savegame.save")
+	$Menus/LoadManager.show()
