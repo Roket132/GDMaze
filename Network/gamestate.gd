@@ -8,6 +8,7 @@ var game_started = false
 var player_name = "Host" # Name for my player
 var progress = null  #  ref to progressBar from Lobby, init in Lobby
 
+onready var registration_manager = preload("res://Network/Registration.gd").new()
 var world = null
 var spectator = null
 
@@ -32,8 +33,14 @@ func _player_connected(_id):
 # Callback from SceneTree
 func _player_disconnected(id):
 	if get_tree().is_network_server():
-		# TODO
-		pass
+		var player_name = players_name[id]
+		var player = players[id]
+		players.erase(id)
+		players_name.erase(id)
+		spectator.del_player(player)
+		registration_manager.player_exit(player_name)
+		loaded_players_settings[player_name] = player.save()
+		player.queue_free()
 
 # Callback from SceneTree, only for clients (not server)
 func _connected_ok():
@@ -52,6 +59,9 @@ func _connected_fail():
 
 # called on server by connected player
 remote func register_player(id, new_player_name):
+	#  At first we check password, free_placec, etc.
+	registration_manager.player_joined(new_player_name, 0000, id)
+	
 	rpc_id(id, "add_new_player", 1, player_name)
 	for p_id in players_name: 
 		rpc_id(id, "add_new_player", p_id, players_name[p_id])
@@ -130,6 +140,7 @@ func create_player(p_id):
 	
 	if loaded_players_settings.has(name):
 		var settings = loaded_players_settings[name]
+		loaded_players_settings.erase(name)
 		spawn_pos = Vector2(settings.position_x, settings.position_y)
 		player.set_settings(settings.settings)
 		player.set_complited_tasks(settings["complited_tasks"].enemy, settings["complited_tasks"].arrow)
@@ -143,10 +154,10 @@ func create_player(p_id):
 	world.add_child(player)
 
 func remote_start(id, late = false):
-	rpc_id(id, "remote_create_game", world.map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
+	rpc_id(id, "remote_create_game", world.current_map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
 	
 func remote_start_late(id, _name):
-	rpc_id(id, "remote_create_game", world.map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
+	rpc_id(id, "remote_create_game", world.current_map, world.paths_map, world.exit_pos, world.spawn_positions, players_name)
 	for p_id in players_name:
 		if p_id != id:
 			rpc_id(p_id, "remote_add_player", id)
@@ -213,8 +224,8 @@ func load_game(file):
 			spawn_pos.append(Vector2(pos.position_x, pos.position_y))
 		world.set_map(line["map"], line["paths_map"], Vector2(line["exit_x"], line["exit_y"]), spawn_pos)
 		
-		for pl in line["players"]:
-			loaded_players_settings[pl] = line["players"][pl]
+		for name in line["players"]:
+			loaded_players_settings[name] = line["players"][name]
 		
 	save_game.close()
 	
@@ -223,6 +234,10 @@ func load_game(file):
 	load_spectator()
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
+remote func remote_end_game():
+	get_tree().get_root().get_node("MainMenu").queue_free()
+	get_tree().get_root().add_child(preload("res://MainMenu.tscn").instance())
+	get_tree().set_network_peer(null)
 
 func end_game():
 	game_started = false

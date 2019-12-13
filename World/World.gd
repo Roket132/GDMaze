@@ -15,7 +15,7 @@ var height
 var width
 
 var map  # startly map without changes
-var curent_map  # map with changes
+var current_map  # map with changes
 var paths_map = null
 var exit_pos = Vector2()
 var items_by_position = {}
@@ -30,7 +30,6 @@ func _ready():
 	current_free_pos = gamestate.loaded_players_settings.size()
 	if get_tree().is_network_server():
 		material.set_light_mode(0) # Normal mode
-
 
 func init(path, is_gen, progress):
 	if get_tree().is_network_server():
@@ -67,8 +66,9 @@ func map_ready():
 func setup():
 	clear_map()
 	draw_map(map)
-	curent_map = map.duplicate(true)
+	current_map = map.duplicate(true)
 	$Paths.init(map, exit_pos, paths_map)
+	paths_map = $Paths.paths_map
 
 func clear_map():
 	clear()
@@ -143,15 +143,15 @@ remotesync func draw_path(from, steps = -1):
 
 remotesync func hit_torch(pos):
 	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
-	curent_map[cell.y][cell.x] = "."
+	current_map[cell.y][cell.x] = "."
 
 remotesync func hit_arrow(pos):
 	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
-	curent_map[cell.y][cell.x] = "."
+	current_map[cell.y][cell.x] = "."
 
 remotesync func kill_enemy(pos):
 	var cell = Vector2((pos.x - DIFF) / BLOCK_SIZE, (pos.y - DIFF) / BLOCK_SIZE)
-	curent_map[cell.y][cell.x] = "."
+	current_map[cell.y][cell.x] = "."
 
 
 func save_players():
@@ -173,7 +173,7 @@ func save_tasks_archives():
 func save():
 	var save_dict = {
 		"players" : save_players(),
-		"map" : curent_map,
+		"map" : current_map,
 		"paths_map" : $Paths.get_paths_map(),
 		"exit_x" : exit_pos.x,
 		"exit_y" : exit_pos.y,
