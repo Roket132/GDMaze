@@ -8,6 +8,7 @@ var game_started = false
 var player_name = "Host" # Name for my player
 var progress = null  #  ref to progressBar from Lobby, init in Lobby
 
+onready var registration_manager = preload("res://Network/Registration.gd").new()
 var world = null
 var spectator = null
 
@@ -37,6 +38,7 @@ func _player_disconnected(id):
 		players.erase(id)
 		players_name.erase(id)
 		spectator.del_player(player)
+		registration_manager.player_exit(player_name)
 		loaded_players_settings[player_name] = player.save()
 		player.queue_free()
 
@@ -57,6 +59,9 @@ func _connected_fail():
 
 # called on server by connected player
 remote func register_player(id, new_player_name):
+	#  At first we check password, free_placec, etc.
+	registration_manager.player_joined(new_player_name, 0000, id)
+	
 	rpc_id(id, "add_new_player", 1, player_name)
 	for p_id in players_name: 
 		rpc_id(id, "add_new_player", p_id, players_name[p_id])
@@ -229,6 +234,10 @@ func load_game(file):
 	load_spectator()
 	get_tree().get_root().get_node("MainMenu").queue_free()
 
+remote func remote_end_game():
+	get_tree().get_root().get_node("MainMenu").queue_free()
+	get_tree().get_root().add_child(preload("res://MainMenu.tscn").instance())
+	get_tree().set_network_peer(null)
 
 func end_game():
 	game_started = false
