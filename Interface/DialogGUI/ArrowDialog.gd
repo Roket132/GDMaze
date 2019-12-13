@@ -14,6 +14,7 @@ func _on_Answer_pressed():
 	if mode == "task":
 		$TextureRect/Back.show()
 		$TextureRect/Text.text = ""
+		$TextureRect/Text.set_mouse_filter(0)  # STOP
 		$TextureRect/VBoxContainer/Answer.text = "Отправить!"
 		mode = "answer"
 	else:
@@ -30,5 +31,6 @@ func _on_Cancel_pressed():
 func _on_Back_pressed():
 	$TextureRect/Back.hide()
 	$TextureRect/Text.text = cur_task.task
+	$TextureRect/Text.set_mouse_filter(2)  # IGNORE
 	$TextureRect/VBoxContainer/Answer.text = "Ответить!"
 	mode = "task"

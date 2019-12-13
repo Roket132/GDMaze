@@ -40,7 +40,7 @@ func bfs(map, start):
 			var j = p.y + D[k][1]
 			if i >= n or j >= m or i < 0 or j < 0:
 				continue			
-			if map[i][j] != "1" and res_map[i][j] == 0:
+			if map[i][j] != "#" and res_map[i][j] == 0:
 				res_map[i][j] = res_map[p.x][p.y] + 1
 				queue.append(Vector2(i, j))
 	return res_map
