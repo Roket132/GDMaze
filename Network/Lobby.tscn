@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Network/Lobby.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/montserrat.otf" type="DynamicFontData" id=2]
@@ -17,6 +17,10 @@ font_data = ExtResource( 2 )
 [sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 4 )
 
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 4 )
+
 [node name="Lobby" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -26,6 +30,7 @@ script = ExtResource( 1 )
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = 3.0
 
 [node name="Start" type="Button" parent="Players"]
 margin_left = 806.199
@@ -68,12 +73,28 @@ margin_bottom = 883.228
 custom_fonts/font = SubResource( 3 )
 text = "Идет настройка игры. Пожалуйста подождите."
 
+[node name="Exit" type="Button" parent="Players"]
+margin_left = 93.6807
+margin_top = 965.294
+margin_right = 358.681
+margin_bottom = 1035.29
+custom_fonts/font = SubResource( 4 )
+text = "Выйти"
+
 [node name="err" type="AcceptDialog" parent="."]
 margin_right = 52.0
 margin_bottom = 58.0
 
 [node name="CreateGame" parent="." instance=ExtResource( 5 )]
 visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -960.0
+margin_top = -540.0
+margin_right = 960.0
+margin_bottom = 540.0
 
 [node name="StartGame" parent="." instance=ExtResource( 6 )]
 visible = false

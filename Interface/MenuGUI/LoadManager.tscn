@@ -7,11 +7,11 @@
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -60,7 +60,7 @@ custom_constants/separation = 10
 margin_right = 124.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Отмена"
 
 [node name="Ok" type="Button" parent="HBoxContainer"]
@@ -69,7 +69,7 @@ margin_right = 322.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Начать игру"
 [connection signal="pressed" from="HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
 [connection signal="pressed" from="HBoxContainer/Ok" to="." method="_on_Ok_pressed"]

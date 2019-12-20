@@ -11,6 +11,7 @@ func _ready():
 	
 	$CreateGame/Panel/Back.connect("pressed", self, "to_main_menu")
 	$StartGame/Panel/Back.connect("pressed", self, "to_main_menu")
+	$Players/Exit.connect("pressed", self, "to_main_menu")
 	
 	$CreateGame/Panel/CreateGame.connect("pressed", self, "_on_Host_pressed")
 	$StartGame/Panel/StartGame.connect("pressed", self, "_on_Join_pressed")
@@ -94,5 +95,7 @@ func _on_Start_pressed():
 	gamestate.start_game()
 
 func to_main_menu():
+	$Players.visible = false
 	$CreateGame.visible = false
 	$StartGame.visible = false
+

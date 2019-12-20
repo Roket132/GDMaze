@@ -9,7 +9,7 @@ var players = []
 var infos = {}  # in format player:info
 
 func _ready():
-	OS.set_window_fullscreen(true)
+	#OS.set_window_fullscreen(true)
 	set_offset(Vector2(0, -1))
 	make_current()
 
