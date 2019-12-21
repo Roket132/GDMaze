@@ -7,10 +7,12 @@ export var DIFF = 32
 var world = null
 
 puppet var puppet_pos = Vector2()
+remotesync var sync_with_server = true  # false if player don't take a step on server
 
 var new_pos = Vector2()
 var last_pos = Vector2()
 var player_cell = Vector2()
+
 
 var scroll_scene = preload("res://Interface/DialogGUI/EnemyDialog.tscn")
 var arrow_dialog_scene = preload("res://Interface/DialogGUI/ArrowDialog.tscn")
@@ -56,6 +58,7 @@ func _ready():
 		TasksArchives.create_for_player(self, _complited_eneme_tasks, _complited_arrow_tasks)
 		
 	settings["texture"] = $AnimatedSprite.frames.get_frame("stay_forward", 0)
+	
 
 func setup(world_, id_, name_, spawn_pos):
 	world = world_
@@ -69,7 +72,7 @@ func set_complited_tasks(_complited_enemy = [], _complited_arrow = []):
 
 func _physics_process(delta):
 	if is_network_master():
-		if not settings.stuck:
+		if not settings.stuck and sync_with_server:
 			if Input.is_action_pressed("ui_left"):
 				make_step(-1, 0)
 			if Input.is_action_pressed("ui_right"):
@@ -85,6 +88,8 @@ func _physics_process(delta):
 
 func make_step(x, y):
 	if new_pos == position: #if player don't motion
+		if is_network_master():
+			rset("sync_with_server", true)
 		$AnimatedSprite.animation = "move_forward"
 		last_pos = position
 		new_pos.x = position.x + BLOCK_SIZE * x
@@ -111,6 +116,8 @@ func move_player():
 		position.y = new_pos.y
 		player_cell = (position + Vector2(DIFF, DIFF)) / BLOCK_SIZE
 		$AnimatedSprite.animation = "stay_forward"
+		if get_tree().is_network_server():
+			rset("sync_with_server", true)
 	
 	if is_network_master():
 		if settings["rest_of_bonfire"] == 0:
@@ -119,6 +126,16 @@ func move_player():
 			$Light2D.set_texture_scale(2.76)
 		rset("puppet_pos", position)
 
+func _on_SyncTimer_timeout():
+	if is_network_master():
+		rpc("_sync_pos", new_pos)
+
+remote func _sync_pos(pos):
+	set_physics_process(false)
+	if abs(position.x - pos.x) > (BLOCK_SIZE + DIFF) or abs(position.y - pos.y) > (BLOCK_SIZE + DIFF):
+		position = pos
+		new_pos = pos
+	set_physics_process(true)
 
 remotesync func hit_bonfire():
 	if settings["have_a_torch"]:
@@ -210,3 +227,4 @@ func save():
 		
 func set_settings(_settings):
 	settings = _settings
+

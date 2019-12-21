@@ -115,7 +115,6 @@ text = "Создать игру"
 [node name="Menus" type="CanvasLayer" parent="."]
 
 [node name="Lobby" parent="Menus" instance=ExtResource( 5 )]
-visible = true
 margin_top = -1.67017
 margin_bottom = -1.67017
 mouse_filter = 2
