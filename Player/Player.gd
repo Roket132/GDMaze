@@ -196,7 +196,6 @@ func correct_answer():
 	$Light2D.show()
 	
 	rpc_id(1, "remote_update_score", ScoreSettings.get_value("lion" if current_enemy_lvl == 1 else "dragon"))
-	
 	emit_signal("kill")
 
 func _on_Player_input_event(viewport, event, shape_idx):

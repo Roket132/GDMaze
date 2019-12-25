@@ -16,6 +16,7 @@ func _on_Lion_body_entered(body):
 		var id = 0
 		# id????
 		if body.has_method("get_next_enemy_task"):
+			$CollisionShape2D.queue_free()
 			body.rpc("hit_lion", body.get_next_enemy_task(1))
 	
 func _get_texture():
@@ -26,6 +27,5 @@ func slot_kill():
 
 remotesync func kill():
 	connected_body.disconnect("kill", self, "slot_kill")
-	$CollisionShape2D.queue_free()
 	$Sprite.texture = load("res://Enemies/sprites/lion_dead.png")
 	gamestate.world.rpc("kill_enemy", position)

@@ -24,8 +24,6 @@ namespace {
         std::reverse(str.begin(), str.end());
     }
 
-
-
     std::string lower(const std::string &str) {
         std::string res = str;
         std::transform(res.begin(), res.end(), res.begin(),

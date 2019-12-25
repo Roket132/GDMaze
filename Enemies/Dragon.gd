@@ -16,6 +16,7 @@ func _on_Dragon_body_entered(body):
 		var id = 0
 		# id????
 		if body.has_method("get_next_enemy_task"):
+			$CollisionShape2D.queue_free()
 			body.rpc("hit_dragon", body.get_next_enemy_task(2))
 	
 func _get_texture():
