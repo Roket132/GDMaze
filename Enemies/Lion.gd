@@ -25,10 +25,10 @@ func _get_texture():
 	return $Sprite.get_texture()
 	
 func slot_kill():
-	print("kill ", get_path())
-	rpc("kill")
+	#rpc("kill")
+	kill()
 
-remotesync func kill():
+func kill():
 	print("rpc remotesync")
 	connected_body.disconnect("kill", self, "slot_kill")
 	$Sprite.texture = load("res://Enemies/sprites/lion_dead.png")

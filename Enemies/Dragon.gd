@@ -25,9 +25,10 @@ func _get_texture():
 	return $Sprite.get_texture()
 	
 func slot_kill():
-	rpc("kill")
+	#rpc("kill")
+	kill()
 
-remotesync func kill():
+func kill():
 	connected_body.disconnect("kill", self, "slot_kill")
 	$Sprite.texture = load("res://Enemies/sprites/dragon_off.png")
 	gamestate.world.rpc("kill_enemy", position)

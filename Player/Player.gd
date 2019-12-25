@@ -193,6 +193,9 @@ master func hit_dragon(task):
 	settings.stuck = true
 	$Light2D.hide()
 
+puppet func kill():
+	emit_signal("kill")
+
 # callde only on player
 func correct_answer():
 	scroll.queue_free()
@@ -201,6 +204,7 @@ func correct_answer():
 	
 	rpc_id(1, "remote_update_score", ScoreSettings.get_value("lion" if current_enemy_lvl == 1 else "dragon"))
 	emit_signal("kill")
+	rpc("kill")
 
 func _on_Player_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton \

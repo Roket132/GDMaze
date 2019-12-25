@@ -98,7 +98,6 @@ shadow_filter = 5
 shadow_filter_smooth = 32.0
 
 [node name="SyncTimer" type="Timer" parent="."]
-wait_time = 0.2
 autostart = true
 [connection signal="input_event" from="." to="." method="_on_Player_input_event"]
 [connection signal="timeout" from="SyncTimer" to="." method="_on_SyncTimer_timeout"]
