@@ -1,10 +1,15 @@
 extends Panel
 
-var SAVE_FOLDER = "res://saves/"
+var SAVE_FOLDER_PATH = "user://saves/"
+var SAVE_FOLDER_NAME = "saves"
 
 func _ready():
-	var files = list_files_in_directory("res://saves")
-	
+	var dir = Directory.new()
+	dir.open("user://")
+	if not dir.dir_exists(SAVE_FOLDER_NAME):
+		dir.make_dir(SAVE_FOLDER_NAME)
+		
+	var files = list_files_in_directory(SAVE_FOLDER_PATH)
 	for file in files:
 		$SaveFiles.add_item(file)
 
@@ -45,10 +50,11 @@ func _on_Ok_pressed():
 	
 	saving = true
 	save_thread = Thread.new()
-	save_thread.start(self, "_save_in_thread", SAVE_FOLDER + file)
+	save_thread.start(self, "_save_in_thread", SAVE_FOLDER_PATH + file)
 
 
 func _save_in_thread(file):
+	print("file = ", file)
 	gamestate.save_game(file)
 	
 	save_progress.call_deferred("set_max", 10)

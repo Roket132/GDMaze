@@ -1,10 +1,15 @@
 extends Panel
 
-var SAVE_FOLDER = "res://saves/"
+var SAVE_FOLDER_PATH = "user://saves/"
+var SAVE_FOLDER_NAME = "saves"
 
 func _ready():
-	var files = list_files_in_directory("res://saves")
+	var dir = Directory.new()
+	dir.open("user://")
+	if not dir.dir_exists(SAVE_FOLDER_NAME):
+		dir.make_dir(SAVE_FOLDER_NAME)
 	
+	var files = list_files_in_directory(SAVE_FOLDER_PATH)
 	for file in files:
 		$Files.add_item(file)
 
@@ -34,7 +39,7 @@ func _on_Ok_pressed():
 		file = $Files.get_item_text(arr[0])
 	
 	if file != "":
-		gamestate.load_game(SAVE_FOLDER + file)
+		gamestate.load_game(SAVE_FOLDER_PATH + file)
 
 
 func _on_Cancel_pressed():

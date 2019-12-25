@@ -10,7 +10,7 @@ puppet var puppet_pos = Vector2()
 remotesync var sync_with_server = true  # false if player don't take a step on server
 
 var new_pos = Vector2()
-var last_pos = Vector2()
+var last_pos = Vector2()  # every moment must be fit cell
 var player_cell = Vector2()
 
 
@@ -218,8 +218,8 @@ func get_settings():
 func save():
 	return {
 		"name" : settings.name,
-		"position_x" : position.x,
-		"position_y" : position.y,
+		"position_x" : last_pos.x,
+		"position_y" : last_pos.y,
 		"settings" : settings,
 		"complited_tasks" : TasksArchives.save_complited_tasks(self)
 		}
