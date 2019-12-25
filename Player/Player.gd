@@ -97,7 +97,12 @@ func make_step(x, y):
 		if settings["rest_of_bonfire"] != 0:
 			settings["rest_of_bonfire"] -= 1
 
+var last_puppet_pos = puppet_pos
+
 func make_puppet_step(puppet_pos):
+	if last_puppet_pos == puppet_pos:
+		return
+	last_puppet_pos = puppet_pos
 	var step = puppet_pos - position
 	if step != Vector2(0, 0):
 		make_step(1 if step.x > 0 else 0 if step.x == 0 else -1,
@@ -105,7 +110,6 @@ func make_puppet_step(puppet_pos):
 
 func move_player():
 	if get_slide_count() != 0:
-		var collision = get_slide_collision(0)
 		new_pos = last_pos
 		
 	var velocity = (new_pos - position).normalized() * speed
@@ -124,15 +128,15 @@ func move_player():
 			$Light2D.set_texture_scale(1.96)
 		else:
 			$Light2D.set_texture_scale(2.76)
-		rset("puppet_pos", position)
+		rset_unreliable("puppet_pos", position)
 
 func _on_SyncTimer_timeout():
 	if is_network_master():
-		rpc("_sync_pos", new_pos)
+		rpc_unreliable("_sync_pos", new_pos)
 
-remote func _sync_pos(pos):
+puppet func _sync_pos(pos):
 	set_physics_process(false)
-	if abs(position.x - pos.x) > (BLOCK_SIZE + DIFF) or abs(position.y - pos.y) > (BLOCK_SIZE + DIFF):
+	if abs(position.x - pos.x) > (BLOCK_SIZE - 1) or abs(position.y - pos.y) > (BLOCK_SIZE - 1):
 		position = pos
 		new_pos = pos
 	set_physics_process(true)
