@@ -25,7 +25,7 @@ func _get_texture():
 	return $Sprite.get_texture()
 	
 func slot_kill():
-	print("kill emit rpc")
+	print("kill ", get_path())
 	rpc("kill")
 
 remotesync func kill():
