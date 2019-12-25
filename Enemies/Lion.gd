@@ -13,6 +13,7 @@ func _on_Lion_body_entered(body):
 		connected_body = body
 	
 	if body.has_method("get_next_enemy_task"):
+		body.settings.stuck = true
 		$CollisionShape2D.queue_free()
 		
 	if get_tree().is_network_server():
