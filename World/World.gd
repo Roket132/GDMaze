@@ -120,6 +120,7 @@ func draw_map(map):
 			if type != "." and type != "#" and scenes_dictionary.has(type):
 				var item = Scenes[scenes_dictionary[map[i][j]]].instance()
 				add_child(item)
+				print("add ", item)
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
 				items_by_position[item.position] = item
 
