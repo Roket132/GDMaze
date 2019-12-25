@@ -120,6 +120,7 @@ func draw_map(map):
 			if type != "." and type != "#" and scenes_dictionary.has(type):
 				var item = Scenes[scenes_dictionary[map[i][j]]].instance()
 				add_child(item)
+				print("add ", item.get_path())
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
 				items_by_position[item.position] = item
 
@@ -159,6 +160,8 @@ func save_players():
 	for pl in gamestate.players:
 		var pl_dict = gamestate.players[pl].save()
 		players_save_dcits[pl_dict.name] = pl_dict
+	for pl in gamestate.loaded_players_settings:
+		players_save_dcits[pl] = gamestate.loaded_players_settings[pl]
 	return players_save_dcits
 
 func save_spawn_positions():

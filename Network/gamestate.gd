@@ -170,7 +170,8 @@ remote func remote_create_game(map_, paths_map_, exit_pos_, spawn_pos_, pls_name
 	world = load("res://World/World.tscn").instance()
 	world.set_map(map_, paths_map_, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
-	get_tree().get_root().get_node("MainMenu").queue_free()
+	if get_tree().get_root().has_node("MainMenu"):
+		get_tree().get_root().get_node("MainMenu").queue_free()
 	
 	players_name = pls_name
 	
@@ -232,10 +233,12 @@ func load_game(file):
 	world.current_free_pos = gamestate.loaded_players_settings.size()
 	
 	load_spectator()
-	get_tree().get_root().get_node("MainMenu").queue_free()
+	if get_tree().get_root().has_node("MainMenu"):
+		get_tree().get_root().get_node("MainMenu").queue_free()
 
 remote func remote_end_game():
-	get_tree().get_root().get_node("MainMenu").queue_free()
+	if get_tree().get_root().has_node("MainMenu"):
+		get_tree().get_root().get_node("MainMenu").queue_free()
 	get_tree().get_root().add_child(preload("res://MainMenu.tscn").instance())
 	get_tree().set_network_peer(null)
 

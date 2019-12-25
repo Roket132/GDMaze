@@ -65,7 +65,7 @@ func check_answer(player, answer, answers):
 	if cur_enemy_task[player]["name"] == "nullptr":
 		return true
 	for ans in answers:
-		if answer == ans:
+		if answer.to_lower() == ans.to_lower():
 			return true
 	return false
 	
@@ -73,7 +73,7 @@ func check_answer_for_task(answer, task):
 	if task.name == "nullptr":
 		return true
 	for ans in task.answers:
-		if answer == ans:
+		if answer.to_lower() == ans.to_lower():
 			return true
 	return false
 
