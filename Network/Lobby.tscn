@@ -99,3 +99,4 @@ margin_bottom = 540.0
 [node name="StartGame" parent="." instance=ExtResource( 6 )]
 visible = false
 [connection signal="pressed" from="Players/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="Players/Exit" to="." method="_on_Exit_pressed"]

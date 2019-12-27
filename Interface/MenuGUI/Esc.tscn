@@ -55,7 +55,7 @@ margin_top = 269.0
 margin_right = 265.0
 margin_bottom = 307.0
 custom_fonts/font = SubResource( 2 )
-text = "Выйти из игры"
+text = "Главное меню"
 
 [node name="Save" parent="." instance=ExtResource( 3 )]
 visible = false
