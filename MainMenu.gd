@@ -14,3 +14,7 @@ func _on_MainMenu_hide():
 
 func _on_Continue_pressed():
 	$Menus/LoadManager.show()
+
+
+func _on_Quit_pressed():
+	get_tree().quit()
