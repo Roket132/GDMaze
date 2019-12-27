@@ -113,7 +113,7 @@ func continue_start_game():
 	load_players()
 	load_spectator()
 	world.visible = true
-	get_tree().get_root().get_node("MainMenu").queue_free()
+	_exit_main_menu()
 	
 	end_start_game()
 
@@ -170,8 +170,7 @@ remote func remote_create_game(map_, paths_map_, exit_pos_, spawn_pos_, pls_name
 	world = load("res://World/World.tscn").instance()
 	world.set_map(map_, paths_map_, exit_pos_, spawn_pos_)
 	get_tree().get_root().add_child(world)
-	if get_tree().get_root().has_node("MainMenu"):
-		get_tree().get_root().get_node("MainMenu").queue_free()
+	_exit_main_menu()
 	
 	players_name = pls_name
 	
@@ -233,27 +232,30 @@ func load_game(file):
 	world.current_free_pos = gamestate.loaded_players_settings.size()
 	
 	load_spectator()
-	if get_tree().get_root().has_node("MainMenu"):
-		get_tree().get_root().get_node("MainMenu").queue_free()
+	_exit_main_menu()
 
 remote func remote_end_game():
-	if get_tree().get_root().has_node("MainMenu"):
-		get_tree().get_root().get_node("MainMenu").queue_free()
+	_exit_main_menu()
 	get_tree().get_root().add_child(preload("res://MainMenu.tscn").instance())
 	get_tree().set_network_peer(null)
+
+func _exit_main_menu():
+	print("try")
+	if get_tree().get_root().has_node("MainMenu"):
+		print("quit")
+		get_tree().get_root().get_node("MainMenu").queue_free()
 
 func end_game():
 	game_started = false
 	
 	for pl in players:
 		players[pl].queue_free()
-	
-	if spectator != null:
-		spectator.queue_free()
-		
-	if world != null:
-		world.queue_free()
 
+	_exit_main_menu()
+
+	if get_tree().get_root().has_node("World"):
+		get_tree().get_root().get_node("World").queue_free()
+		
 	emit_signal("game_ended")
 	players_name.clear()
 	players.clear()
