@@ -6,10 +6,15 @@ signal hit_exit
 
 const ITEM_NAME = "exit"
 
+
+var already_out = []
+
 func _on_Exit_body_entered(body):
 	if get_tree().is_network_server():
 		# to master
-		body.rpc("hit_exit")
+		if not body in already_out:
+			body.rpc("hit_exit")
+			already_out.append(body)
 	else:
 		body.synchronize(position)
 	
