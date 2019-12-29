@@ -42,4 +42,4 @@ func arrow_done():
 	var pos = pl_ref.position
 	var from = Vector2((pos.y - pl_ref.DIFF) / pl_ref.BLOCK_SIZE, (pos.x - pl_ref.DIFF) / pl_ref.BLOCK_SIZE)
 	pl_ref.world.rpc("draw_path", from, 5)
-	pl_ref.rpc_id(1, "remote_update_score", 75)
+	pl_ref.rpc("update_score_by_type", "arrow")

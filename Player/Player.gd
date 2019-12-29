@@ -23,7 +23,8 @@ var settings = {
 	rest_of_bonfire = 0,
 	have_a_torch = false,
 	stuck = false,
-	arrow_amount = 0
+	arrow_amount = 0,
+	score = 0
 }
 
 signal increase_score(dt)
@@ -147,7 +148,7 @@ remotesync func hit_bonfire():
 
 remotesync func hit_torch():
 	settings["have_a_torch"] = true
-	update_score(ScoreSettings.get_value("torch"))
+	rpc("update_score_by_type", "torch")
 
 remotesync func hit_arrow():
 	settings["arrow_amount"] += 1
@@ -158,6 +159,9 @@ remotesync func remove_arrow():
 # only master can add items
 master func add_item(name):
 	$Camera2D/CanvasLayer/PlayerPanel.add_item(name)
+
+master func hit_exit():
+	rpc("update_score_by_type", "exit")
 
 func get_next_enemy_task(lvl):
 	return TasksArchives.get_next_enemy_task(self, lvl)
@@ -202,7 +206,7 @@ func correct_answer():
 	settings.stuck = false
 	$Light2D.show()
 	
-	rpc_id(1, "remote_update_score", ScoreSettings.get_value("lion" if current_enemy_lvl == 1 else "dragon"))
+	rpc("update_score_by_type", "lion" if current_enemy_lvl == 1 else "dragon")
 	emit_signal("kill")
 	rpc("kill")
 
@@ -212,13 +216,15 @@ func _on_Player_input_event(viewport, event, shape_idx):
 	and event.pressed:
 		emit_signal("clicked", self)
 
-func update_score(dt):
+remote func update_score_by_type(type):
 	if get_tree().is_network_server():
-		emit_signal("increase_score", dt)
+		emit_signal("increase_score", ScoreSettings.get_value(type))
+	settings.score += ScoreSettings.get_value(type)
 		
-remote func remote_update_score(dt):
+remote func update_score_by_dt(dt):
 	if get_tree().is_network_server():
 		emit_signal("increase_score", dt)
+	settings.score += dt
 
 func get_settings():
 	return settings

@@ -8,7 +8,7 @@ var game_started = false
 var player_name = "Host" # Name for my player
 var progress = null  #  ref to progressBar from Lobby, init in Lobby
 
-onready var registration_manager = preload("res://Network/Registration.gd").new()
+var registration_manager = null
 var world = null
 var spectator = null
 
@@ -49,7 +49,6 @@ func _connected_ok():
 
 # Callback from SceneTree, only for clients (not server)
 func _server_disconnected():
-	emit_signal("game_error", "Server disconnected")
 	end_game()
 
 # Callback from SceneTree, only for clients (not server)
@@ -84,6 +83,7 @@ func host_game():
 	var host = NetworkedMultiplayerENet.new()
 	host.create_server(DEFAULT_PORT, MAX_PEERS)
 	get_tree().set_network_peer(host)
+	registration_manager = preload("res://Network/Registration.gd").new()
 
 func join_game(ip, new_player_name):
 	player_name = new_player_name
@@ -247,6 +247,7 @@ func _exit_main_menu():
 
 func end_game():
 	game_started = false
+	get_tree().set_network_peer(null) # End networking
 	
 	for pl in players:
 		players[pl].queue_free()
@@ -260,7 +261,5 @@ func end_game():
 	players_name.clear()
 	players.clear()
 	loaded_players_settings.clear()
-	get_tree().set_network_peer(null) # End networking
-	
 	get_tree().get_root().add_child(preload("res://MainMenu.tscn").instance())
 

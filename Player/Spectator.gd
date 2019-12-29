@@ -45,6 +45,9 @@ func add_player(pl):
 	
 	pl.connect("increase_score", info, "increase_score")
 	
+	# init score
+	info.increase_score(pl.settings["score"])
+	
 	$CanvasLayer/PlayersPanel/Panel/VScrollBar/VBoxContainer.add_child(info)
 
 
