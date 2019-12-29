@@ -49,6 +49,7 @@ func _connected_ok():
 
 # Callback from SceneTree, only for clients (not server)
 func _server_disconnected():
+	print("server RIP")
 	end_game()
 
 # Callback from SceneTree, only for clients (not server)
@@ -240,9 +241,8 @@ remote func remote_end_game():
 	get_tree().set_network_peer(null)
 
 func _exit_main_menu():
-	print("try")
 	if get_tree().get_root().has_node("MainMenu"):
-		print("quit")
+
 		get_tree().get_root().get_node("MainMenu").queue_free()
 
 func end_game():

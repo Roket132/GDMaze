@@ -13,6 +13,8 @@ func _on_Torch_body_entered(body):
 		gamestate.world.rpc("hit_torch", position)
 		# to master
 		body.rpc("add_item" , ITEM_NAME)
+	else:
+		body.synchronize(position)
 	queue_free()
 	
 func _get_texture():

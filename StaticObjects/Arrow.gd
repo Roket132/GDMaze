@@ -13,6 +13,8 @@ func _on_Arrow_body_entered(body):
 		gamestate.world.rpc("hit_arrow", position)
 		# to master
 		body.rpc("add_item" , ITEM_NAME)
+	else:
+		body.synchronize(position)
 	queue_free()
 	
 func _get_texture():
