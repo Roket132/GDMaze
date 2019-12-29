@@ -7,12 +7,13 @@ export var DIFF = 32
 var world = null
 
 puppet var puppet_pos = Vector2()
+puppet var puppet_new_pos = Vector2()
+
 remotesync var sync_with_server = true  # false if player don't take a step on server
 
 var new_pos = Vector2()
 var last_pos = Vector2()  # every moment must be fit cell
 var player_cell = Vector2()
-
 
 var scroll_scene = preload("res://Interface/DialogGUI/EnemyDialog.tscn")
 var arrow_dialog_scene = preload("res://Interface/DialogGUI/ArrowDialog.tscn")
@@ -75,19 +76,19 @@ func _physics_process(delta):
 	if is_network_master():
 		if not settings.stuck and sync_with_server:
 			if Input.is_action_pressed("ui_left"):
-				make_step(-1, 0)
+				rpc("make_step", -1, 0)
 			if Input.is_action_pressed("ui_right"):
-				make_step(1, 0)
+				rpc("make_step", 1, 0)
+				#make_step(1, 0)
 			if Input.is_action_pressed("ui_down"):
-				make_step(0, 1)
+				rpc("make_step", 0, 1)
+				#make_step(0, 1)
 			if Input.is_action_pressed("ui_up"):
-				make_step(0, -1)
-	else:
-		# add check on permission for move
-		make_puppet_step(puppet_pos)
+				rpc("make_step", 0, -1)
+				#make_step(0, -1)
 	move_player()
 
-func make_step(x, y):
+remotesync func make_step(x, y):
 	if new_pos == position: #if player don't motion
 		if is_network_master():
 			rset("sync_with_server", true)
@@ -95,19 +96,10 @@ func make_step(x, y):
 		last_pos = position
 		new_pos.x = position.x + BLOCK_SIZE * x
 		new_pos.y = position.y + BLOCK_SIZE * y
+		#rset("puppet_pos", position)
+		#rset("puppet_new_pos", new_pos)
 		if settings["rest_of_bonfire"] != 0:
 			settings["rest_of_bonfire"] -= 1
-
-var last_puppet_pos = puppet_pos
-
-func make_puppet_step(puppet_pos):
-	if last_puppet_pos == puppet_pos:
-		return
-	last_puppet_pos = puppet_pos
-	var step = puppet_pos - position
-	if step != Vector2(0, 0):
-		make_step(1 if step.x > 0 else 0 if step.x == 0 else -1,
-				  1 if step.y > 0 else 0 if step.y == 0 else -1)
 
 func move_player():
 	if get_slide_count() != 0:
