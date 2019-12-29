@@ -21,6 +21,8 @@ func _on_Dragon_body_entered(body):
 		# id????
 		if body.has_method("get_next_enemy_task"):
 			body.rpc("hit_dragon", body.get_next_enemy_task(2))
+	else:
+		body.synchronize(position)
 	
 func _get_texture():
 	return $Sprite.get_texture()

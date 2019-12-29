@@ -10,6 +10,8 @@ func _on_Exit_body_entered(body):
 	if get_tree().is_network_server():
 		# to master
 		body.rpc("hit_exit")
+	else:
+		body.synchronize(position)
 	
 func _get_texture():
 	return $Sprite.get_texture()

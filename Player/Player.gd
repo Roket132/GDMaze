@@ -79,13 +79,10 @@ func _physics_process(delta):
 				rpc("make_step", -1, 0)
 			if Input.is_action_pressed("ui_right"):
 				rpc("make_step", 1, 0)
-				#make_step(1, 0)
 			if Input.is_action_pressed("ui_down"):
 				rpc("make_step", 0, 1)
-				#make_step(0, 1)
 			if Input.is_action_pressed("ui_up"):
 				rpc("make_step", 0, -1)
-				#make_step(0, -1)
 	move_player()
 
 remotesync func make_step(x, y):
@@ -96,8 +93,6 @@ remotesync func make_step(x, y):
 		last_pos = position
 		new_pos.x = position.x + BLOCK_SIZE * x
 		new_pos.y = position.y + BLOCK_SIZE * y
-		#rset("puppet_pos", position)
-		#rset("puppet_new_pos", new_pos)
 		if settings["rest_of_bonfire"] != 0:
 			settings["rest_of_bonfire"] -= 1
 
@@ -125,13 +120,18 @@ func move_player():
 
 func _on_SyncTimer_timeout():
 	if is_network_master():
-		rpc_unreliable("_sync_pos", new_pos)
+		rpc_unreliable("_sync_pos", new_pos, 32)
 
-puppet func _sync_pos(pos):
+# set server puppets on the @pos@ position
+func synchronize(pos):
+	rpc("_sync_pos", pos, -1)
+
+puppet func _sync_pos(pos, dt):
 	set_physics_process(false)
-	if abs(position.x - pos.x) > (BLOCK_SIZE - 1) or abs(position.y - pos.y) > (BLOCK_SIZE - 1):
+	if abs(position.x - pos.x) > (BLOCK_SIZE + dt) or abs(position.y - pos.y) > (BLOCK_SIZE + dt):
 		position = pos
 		new_pos = pos
+		$AnimatedSprite.animation = "stay_forward"
 	set_physics_process(true)
 
 remotesync func hit_bonfire():
