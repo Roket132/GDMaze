@@ -240,4 +240,3 @@ func save():
 		
 func set_settings(_settings):
 	settings = _settings
-
