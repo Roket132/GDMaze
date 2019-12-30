@@ -119,6 +119,9 @@ func draw_map(map):
 				set_cell(j, i, 0)
 			if type != "." and type != "#" and scenes_dictionary.has(type):
 				var item = Scenes[scenes_dictionary[map[i][j]]].instance()
+				if item.has_method("init_shape"):
+					item.init_shape(map[i - 1][j], map[i][j + 1], 
+									map[i + 1][j], map[i][j - 1])
 				add_child(item)
 				print("add ", item.get_path())
 				item.position = Vector2(j * BLOCK_SIZE + DIFF, i * BLOCK_SIZE + DIFF)
