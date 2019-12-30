@@ -22,6 +22,8 @@ namespace godot {
 
 		void add_file(String path);
 
+		void add_task(Dictionary task_);
+
 		Dictionary get_next_task(int lvl);
 
 	private:

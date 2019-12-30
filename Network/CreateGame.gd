@@ -20,3 +20,22 @@ func get_error():
 
 func set_error(text):
 	$Panel/VBoxContainer/NameBlock/Error.text = text
+
+var generate
+
+func is_generate():
+	return generate
+
+func _on_GenCheckBox_pressed():
+	$Panel/VBoxContainer/NameBlock/HBoxContainer/Choice.disabled = not $Panel/VBoxContainer/NameBlock/HBoxContainer/Choice.disabled
+	if $Panel/VBoxContainer/NameBlock/HBoxContainer/Choice.disabled:
+		$Panel/VBoxContainer/NameBlock/PathContainer/Path.text = "Лабиринт будет сгенерирован!"
+		generate = true
+	else:
+		generate = false
+
+var gen_settings_scene = preload("res://Interface/MenuGUI/GenSettingsGUI.tscn")
+
+func _on_BtnGenSettigns_pressed():
+	var gen_setttings = gen_settings_scene.instance()
+	add_child(gen_setttings)

@@ -9,9 +9,12 @@ const ITEM_NAME = "torch"
 func _on_Torch_body_entered(body):
 	if get_tree().is_network_server():
 		# to all
-		body.rpc("hit_torch", self)
+		body.rpc("hit_torch")
+		gamestate.world.rpc("hit_torch", position)
 		# to master
-		body.rpc("add_item" , ITEM_NAME, _get_texture().get_load_path())
+		body.rpc("add_item" , ITEM_NAME)
+	else:
+		body.synchronize(position)
 	queue_free()
 	
 func _get_texture():

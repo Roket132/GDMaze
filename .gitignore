@@ -10,4 +10,7 @@ export_presets.cfg
 .directory
 *~
 
+^saves$
+*.save
+
 .sconsign.dblite

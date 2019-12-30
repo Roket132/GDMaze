@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-
 class Task {
 public:
     Task(std::string name = "", std::string text = "", std::string lvl = "1", std::vector<std::string> answers = std::vector<std::string>());

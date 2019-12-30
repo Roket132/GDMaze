@@ -6,11 +6,11 @@ func _ready():
 	gamestate.connect("connection_failed", self, "_on_connection_failed")
 	gamestate.connect("connection_succeeded", self, "_on_connection_success")
 	gamestate.connect("player_list_changed", self, "refresh_lobby")
-	gamestate.connect("game_ended", self, "_on_game_ended")
 	gamestate.connect("game_error", self, "_on_game_error")
 	
 	$CreateGame/Panel/Back.connect("pressed", self, "to_main_menu")
 	$StartGame/Panel/Back.connect("pressed", self, "to_main_menu")
+	$Players/Exit.connect("pressed", self, "to_main_menu")
 	
 	$CreateGame/Panel/CreateGame.connect("pressed", self, "_on_Host_pressed")
 	$StartGame/Panel/StartGame.connect("pressed", self, "_on_Join_pressed")
@@ -22,6 +22,8 @@ func create_game():
 func start_game():
 	$StartGame.show()
 
+var thread_load_game
+
 func _on_Host_pressed():
 	if $CreateGame.get_maze_path() == "":
 		$Connect/Error.text = "Invalid path!"
@@ -31,10 +33,13 @@ func _on_Host_pressed():
 	$Players.show()
 	$CreateGame.set_error("")
 	
-	GlobalSettings.set_maze_path($CreateGame.get_maze_path())
-	GlobalSettings.set_enemy_taskFiles($CreateGame.get_enemy_taskFiles_list())
-	GlobalSettings.set_arrow_taskFiles($CreateGame.get_arrow_taskFiles_list())
+	GameSettings.set_maze_gen($CreateGame.is_generate())
+	GameSettings.set_maze_path($CreateGame.get_maze_path())
+	GameSettings.set_enemy_taskFiles($CreateGame.get_enemy_taskFiles_list())
+	GameSettings.set_arrow_taskFiles($CreateGame.get_arrow_taskFiles_list())
 	
+	gamestate.progress = $Players/Progress
+		
 	gamestate.host_game()
 	refresh_lobby()
 
@@ -54,7 +59,7 @@ func _on_Join_pressed():
 	
 	var player_name = $StartGame/Panel/Name.text
 	gamestate.join_game(ip, player_name)
-	
+
 
 func _on_connection_success():
 	get_node("StartGame").hide()
@@ -64,12 +69,6 @@ func _on_connection_failed():
 	$Connect/Host.disabled = false
 	$Connect/Join.disabled = false
 	$Connect/Error.set_text("Connection failed.")
-
-func _on_game_ended():
-	show()
-	$Connect.show()
-	$Players.hide()
-	$Connect/Host.disabled = false
 
 func _on_game_error(errtxt):
 	get_node("err").dialog_text = errtxt
@@ -86,8 +85,12 @@ func refresh_lobby():
 	$Players/Start.disabled = not get_tree().is_network_server()
 
 func _on_Start_pressed():
-	gamestate.begin_game()
+	gamestate.start_game()
 
 func to_main_menu():
+	$Players.visible = false
 	$CreateGame.visible = false
 	$StartGame.visible = false
+
+func _on_Exit_pressed():
+	get_tree().set_network_peer(null)

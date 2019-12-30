@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Network/CreateGame.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/18367.ttf" type="DynamicFontData" id=2]
@@ -20,16 +20,23 @@ size = 32
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
 size = 32
 outline_size = 2
 outline_color = Color( 0.917647, 0.137255, 0.137255, 1 )
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=7]
 size = 40
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=8]
+size = 40
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -39,12 +46,14 @@ anchor_bottom = 1.0
 script = ExtResource( 1 )
 
 [node name="Panel" type="Panel" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1.50732
-margin_top = -10.5514
-margin_right = -1.50732
-margin_bottom = -10.5514
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -960.0
+margin_top = -540.0
+margin_right = 960.0
+margin_bottom = 550.0
 theme = SubResource( 2 )
 
 [node name="CreateGame" type="Button" parent="Panel"]
@@ -110,21 +119,43 @@ custom_fonts/font = SubResource( 4 )
 text = "C/Что-то там"
 valign = 1
 
+[node name="GenCheckBox" type="CheckBox" parent="Panel/VBoxContainer/NameBlock/PathContainer"]
+margin_left = 327.0
+margin_right = 463.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 5 )
+text = "Сгенерировать"
+
 [node name="Error" type="Label" parent="Panel/VBoxContainer/NameBlock"]
 margin_top = 112.0
 margin_right = 920.0
 margin_bottom = 144.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 
-[node name="Choice" type="Button" parent="Panel/VBoxContainer/NameBlock"]
-margin_left = 377.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/NameBlock"]
 margin_top = 148.0
-margin_right = 542.0
+margin_right = 920.0
 margin_bottom = 194.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="Choice" type="Button" parent="Panel/VBoxContainer/NameBlock/HBoxContainer"]
+margin_left = 166.0
+margin_right = 331.0
+margin_bottom = 46.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 text = "Выбрать"
+
+[node name="BtnGenSettigns" type="Button" parent="Panel/VBoxContainer/NameBlock/HBoxContainer"]
+margin_left = 341.0
+margin_right = 754.0
+margin_bottom = 46.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 8 )
+text = "Настройка генерации"
 
 [node name="MazeBlock" type="VBoxContainer" parent="Panel/VBoxContainer"]
 margin_top = 219.0
@@ -141,7 +172,7 @@ margin_top = 68.0
 margin_right = 920.0
 margin_bottom = 423.0
 rect_min_size = Vector2( 0, 355 )
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 9 )
 
 [node name="Enemy" parent="Panel/VBoxContainer/MazeBlock/TabContainer" instance=ExtResource( 3 )]
 margin_left = 4.0
@@ -159,12 +190,14 @@ margin_bottom = -4.0
 [node name="FileDialog" type="FileDialog" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-window_title = "Открыть файл"
+window_title = "Open a File"
 mode = 0
 access = 2
 current_dir = "C:/Users/Dmitry/Desktop/GODOT PICTURE"
 current_file = "GDMaze.txt"
 current_path = "C:/Users/Dmitry/Desktop/GODOT PICTURE/GDMaze.txt"
 [connection signal="pressed" from="Panel/CreateGame" to="." method="_on_Start_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/Choice" to="." method="_on_Choice_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/PathContainer/GenCheckBox" to="." method="_on_GenCheckBox_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/HBoxContainer/Choice" to="." method="_on_Choice_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/NameBlock/HBoxContainer/BtnGenSettigns" to="." method="_on_BtnGenSettigns_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]

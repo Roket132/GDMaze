@@ -3,8 +3,8 @@
 [ext_resource path="res://Enemies/Dragon.gd" type="Script" id=1]
 [ext_resource path="res://Enemies/sprites/dragon_on.png" type="Texture" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 23.7722, 26.1417 )
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 8.90682, 9.33641 )
 
 [node name="Dragon" type="Area2D"]
 use_parent_material = true
@@ -14,8 +14,48 @@ script = ExtResource( 1 )
 use_parent_material = true
 texture = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-use_parent_material = true
-scale = Vector2( 3, 3 )
-shape = SubResource( 1 )
+[node name="UL" type="CollisionShape2D" parent="."]
+position = Vector2( -51.2533, -53.1272 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="ML" type="CollisionShape2D" parent="."]
+position = Vector2( -51.2533, 1.14878 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="DL" type="CollisionShape2D" parent="."]
+position = Vector2( -51.2298, 55.2358 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="UM" type="CollisionShape2D" parent="."]
+position = Vector2( 0.268044, -53.1272 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="MM" type="CollisionShape2D" parent="."]
+position = Vector2( 0.268044, 1.14878 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="DM" type="CollisionShape2D" parent="."]
+position = Vector2( 0.291611, 55.2358 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="UR" type="CollisionShape2D" parent="."]
+position = Vector2( 51.7894, -53.1346 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="MR" type="CollisionShape2D" parent="."]
+position = Vector2( 51.7894, 1.14138 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
+
+[node name="DR" type="CollisionShape2D" parent="."]
+position = Vector2( 51.813, 55.2284 )
+scale = Vector2( 2, 2 )
+shape = SubResource( 2 )
 [connection signal="body_entered" from="." to="." method="_on_Dragon_body_entered"]

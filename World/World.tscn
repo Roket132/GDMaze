@@ -1,16 +1,16 @@
 [gd_scene load_steps=18 format=2]
 
-[ext_resource path="res://Map/sprites/grass.png" type="Texture" id=1]
-[ext_resource path="res://Map/sprites/wall5.jpg" type="Texture" id=2]
-[ext_resource path="res://Map/Map.gd" type="Script" id=3]
+[ext_resource path="res://World/sprites/grass.png" type="Texture" id=1]
+[ext_resource path="res://World/sprites/wall5.jpg" type="Texture" id=2]
+[ext_resource path="res://World/World.gd" type="Script" id=3]
 [ext_resource path="res://StaticObjects/Bonfire.tscn" type="PackedScene" id=4]
 [ext_resource path="res://StaticObjects/Torch.tscn" type="PackedScene" id=5]
 [ext_resource path="res://StaticObjects/Arrow.tscn" type="PackedScene" id=6]
 [ext_resource path="res://StaticObjects/Exit.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Enemies/Lion.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Enemies/Dragon.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Map/sprites/Path.png" type="Texture" id=10]
-[ext_resource path="res://Map/Paths.gd" type="Script" id=11]
+[ext_resource path="res://World/sprites/Path.png" type="Texture" id=10]
+[ext_resource path="res://World/Paths.gd" type="Script" id=11]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 2
@@ -65,7 +65,9 @@ script = SubResource( 4 )
 0/shapes = [  ]
 0/z_index = 0
 
-[node name="Map" type="TileMap"]
+[node name="World" type="TileMap" groups=[
+"Persist",
+]]
 material = SubResource( 1 )
 position = Vector2( 2, -1 )
 tile_set = SubResource( 5 )

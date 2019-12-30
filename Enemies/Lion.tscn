@@ -3,8 +3,8 @@
 [ext_resource path="res://Enemies/Lion.gd" type="Script" id=1]
 [ext_resource path="res://Enemies/sprites/lion_alive.png" type="Texture" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 28.803, 27.2482 )
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 30.6356, 29.3608 )
 
 [node name="Lion" type="Area2D"]
 use_parent_material = true
@@ -14,8 +14,48 @@ script = ExtResource( 1 )
 use_parent_material = true
 texture = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-use_parent_material = true
-scale = Vector2( 3, 3 )
-shape = SubResource( 1 )
+[node name="UL" type="CollisionShape2D" parent="."]
+position = Vector2( -60.4625, -57.2185 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="ML" type="CollisionShape2D" parent="."]
+position = Vector2( -60.4625, 0.590904 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="DL" type="CollisionShape2D" parent="."]
+position = Vector2( -60.4105, 58.4616 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="UM" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -57.2972 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="MM" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 0.512264 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="DM" type="CollisionShape2D" parent="."]
+position = Vector2( 0.0520401, 58.383 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="UR" type="CollisionShape2D" parent="."]
+position = Vector2( 60.3785, -57.3041 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="MR" type="CollisionShape2D" parent="."]
+position = Vector2( 60.3785, 0.505352 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
+
+[node name="DR" type="CollisionShape2D" parent="."]
+position = Vector2( 60.4306, 58.3761 )
+scale = Vector2( 0.8, 0.8 )
+shape = SubResource( 2 )
 [connection signal="body_entered" from="." to="." method="_on_Lion_body_entered"]
