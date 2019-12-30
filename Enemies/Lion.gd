@@ -11,13 +11,13 @@ var connected_body
 func init_shape(up, right, down, left):
 	print("shape ", up, " ", right, " ", down, " ", left)
 	if up == "#" and right == "#":
-		$UR.queue_free()
+		$UR.disabled = true
 	if right == "#" and down == "#":
-		$DR.queue_free()
+		$DR.disabled = true
 	if down == "#" and left == "#":
-		$DL.queue_free()
+		$DL.disabled = true
 	if left == "#" and up == "#":
-		$UL.queue_free()
+		$UL.disabled = true
 
 func _on_Lion_body_entered(body):
 	if body.has_method("get_next_enemy_task"):
@@ -46,16 +46,12 @@ func kill():
 	gamestate.world.rpc("kill_enemy", position)
 	
 func dell_shape():
-	if $UL != null:
-		$UL.queue_free()
+	$UL.queue_free()
 	$ML.queue_free()
-	if $DL != null:
-		$DL.queue_free()
+	$DL.queue_free()
 	$UM.queue_free()
 	$MM.queue_free()
 	$DM.queue_free()
-	if $UR != null:
-		$UR.queue_free()
+	$UR.queue_free()
 	$MR.queue_free()
-	if $DR != null:
-		$DR.queue_free()
+	$DR.queue_free()
