@@ -150,6 +150,7 @@ func create_player(p_id):
 	
 	players[p_id] = player
 	player.setup(world, p_id, name, spawn_pos)
+	player.set_name(str(p_id))
 	player.set_network_master(p_id)
 
 	world.add_child(player)
