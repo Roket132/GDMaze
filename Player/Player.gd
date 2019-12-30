@@ -88,7 +88,7 @@ func _physics_process(delta):
 remotesync func make_step(x, y):
 	if new_pos == position: #if player don't motion
 		if is_network_master():
-			rset("sync_with_server", true)
+			rset("sync_with_server", false)
 		$AnimatedSprite.animation = "move_forward"
 		last_pos = position
 		new_pos.x = position.x + BLOCK_SIZE * x
